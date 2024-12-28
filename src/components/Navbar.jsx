@@ -7,7 +7,7 @@ const Navbar = () => {
       ? "text-white bg-black hover:bg-gray-900 hover:text-white rounded-md px-3 py-2"
       : "text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2";
   return (
-    <nav className="bg-red-600 border-b border-red-500 p-2 flex items-center space-x-5">
+    <nav className="bg-red-600 border-b border-red-500 p-2 flex md:justify-center items-center space-x-5">
       <img className="h-10 w-auto rounded-full" src={logo} alt="React Jobs" />
       <h1 className="font-bold text-lg">🔥VAPO 🔥ABO MARIAM 🔥</h1>
       {/* <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
