@@ -87,25 +87,25 @@ const ProductsListing = ({ isHome = false }) => {
   ];
   // const recentJobs = isHome ? jobs.slice(0, 3) : jobs;
   const [serverJobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const res = await fetch(
-          "https://6742c465b7464b1c2a62a611.mockapi.io/Jobs"
-        );
-        const data = await res.json();
-        setJobs(data);
-      } catch (error) {
-        console.log("Error fetching data", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchJobs();
-  }, []);
-  const recentJobs = isHome ? serverJobs.slice(0, 3) : serverJobs;
+  // useEffect(() => {
+  //   const fetchJobs = async () => {
+  //     try {
+  //       const res = await fetch(
+  //         "https://6742c465b7464b1c2a62a611.mockapi.io/Jobs"
+  //       );
+  //       const data = await res.json();
+  //       setJobs(data);
+  //     } catch (error) {
+  //       console.log("Error fetching data", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchJobs();
+  // }, []);
+  // const recentJobs = isHome ? serverJobs.slice(0, 3) : serverJobs;
 
   return (
     <section className=" px-4 py-5">
