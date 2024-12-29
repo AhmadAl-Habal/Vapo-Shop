@@ -86,7 +86,6 @@ const ProductsListing = ({ isHome = false }) => {
       img: prodcutImg,
     },
   ];
-  // const recentJobs = isHome ? jobs.slice(0, 3) : jobs;
 
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
@@ -116,35 +115,22 @@ const ProductsListing = ({ isHome = false }) => {
   useEffect(() => {
     console.log("Items status:", getItemsStatus);
   }, [getItemsStatus]);
-  // const recentJobs = isHome ? serverJobs.slice(0, 3) : serverJobs;
 
   return (
-    <section className=" px-4 py-5">
-      <div className="container-xl lg:container m-auto">
-        <select className="p-2 rounded-full outline-none mb-5" name="" id="">
-          <option className="px-5 outline-none" value="test">
-            Category
-          </option>
-        </select>
-        <h2 className="text-3xl font-bold text-red-500 mb-6 text-center">
-          Browse Products
-        </h2>
-
-        {/* <Job /> */}
-        {loading ? (
-          <Spinner loading={loading} />
-        ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-            {items.length == 0 ? (
-              <p>There are no items to show</p>
-            ) : (
-              items.map((product, index) => (
-                <Product key={index} product={product} />
-              ))
-            )}
-          </div>
-        )}
-      </div>
+    <section className="px-4 py-5">
+      {loading ? (
+        <Spinner loading={loading} />
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
+          {items.length == 0 ? (
+            <p>There are no items to show</p>
+          ) : (
+            items.map((product, index) => (
+              <Product key={index} product={product} />
+            ))
+          )}
+        </div>
+      )}
     </section>
   );
 };

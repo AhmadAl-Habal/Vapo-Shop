@@ -9,24 +9,37 @@ const Navbar = () => {
   }, []);
   const logout = () => {
     localStorage.clear();
-    window.location.reload(); 
+    window.location.reload();
   };
   let linkClass = ({ isActive }) =>
     isActive
       ? "text-white bg-black hover:bg-gray-900 hover:text-white rounded-md px-3 py-2"
       : "text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2";
   return (
-    <nav className="bg-red-600 border-b border-red-500 p-2 flex md:justify-center items-center space-x-5">
-      <img className="h-10 w-auto rounded-full" src={logo} alt="React Jobs" />
-      <h1 className="font-bold text-lg">🔥VAPO 🔥ABO MARIAM 🔥</h1>
+    <nav className="bg-red-600 border-b border-red-500 p-2 flex justify-between items-center">
+      <div className="flex items-center space-x-2">
+        {" "}
+        <img
+          className="h-10 w-auto rounded-full cursor-pointer"
+          src={logo}
+          alt="React Jobs"
+        />
+        <p className="font-bold text-xs">🔥VAPO ABO MARIAM </p>
+      </div>
       <p>
         {token ? (
-          <p>
-            This is admin mode <button onClick={logout}>Logout here</button>
+          <p className=" text-xs">
+            <span className="text-yellow-400 mr-5"> Admin mode! </span>
+            <button
+              className="font-bold text-black border border-2 border-black p-1 rounded-full"
+              onClick={logout}
+            >
+              Logout
+            </button>
           </p>
         ) : (
-          <p>
-            This is guest mode <Link to={"/login"}>Login here</Link>
+          <p className="font-bold text-xs text-black border border-2 border-black p-1 rounded-full">
+            <Link to={"/login"}>Login</Link>
           </p>
         )}
       </p>

@@ -1,16 +1,17 @@
 import React from "react";
 import Hero from "../components/Hero";
 import HomeCards from "../components/HomeCards";
-import ProductsListing from "../components/ProductsListing";
+import ProductsSection from "../components/ProductsSection";
 
 import ViewAllJobs from "../components/ViewAllJobs";
 
 const HomePage = () => {
   return (
-    <><div className="bg-blue-50">
-      <Hero />
-      <ProductsListing isHome={true} />
-      {/* <HomeCards />
+    <>
+      <div className="bg-blue-50">
+        <Hero />
+        <ProductsSection isHome={true} />
+        {/* <HomeCards />
       <ViewAllJobs /> */}
       </div>
     </>
