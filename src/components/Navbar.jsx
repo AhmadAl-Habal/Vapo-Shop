@@ -1,7 +1,16 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 const Navbar = () => {
+  const [token, setToken] = useState("");
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    setToken(storedToken || "");
+  }, []);
+  const logout = () => {
+    localStorage.clear();
+    window.location.reload(); 
+  };
   let linkClass = ({ isActive }) =>
     isActive
       ? "text-white bg-black hover:bg-gray-900 hover:text-white rounded-md px-3 py-2"
@@ -10,6 +19,18 @@ const Navbar = () => {
     <nav className="bg-red-600 border-b border-red-500 p-2 flex md:justify-center items-center space-x-5">
       <img className="h-10 w-auto rounded-full" src={logo} alt="React Jobs" />
       <h1 className="font-bold text-lg">🔥VAPO 🔥ABO MARIAM 🔥</h1>
+      <p>
+        {token ? (
+          <p>
+            This is admin mode <button onClick={logout}>Logout here</button>
+          </p>
+        ) : (
+          <p>
+            This is guest mode <Link to={"/login"}>Login here</Link>
+          </p>
+        )}
+      </p>
+
       {/* <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           <div className="flex flex-1 items-center justify-center md:items-stretch md:justify-start">
