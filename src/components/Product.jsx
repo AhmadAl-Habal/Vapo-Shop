@@ -41,11 +41,11 @@ const Product = ({ product }) => {
     //     </div>
     //   </div>
     // </div>
-   <div className="m-4"> <img className="mb-3 rounded-full" src={product.img} alt="" />
+   <div className="m-4"> <img className="mb-3 rounded-full" src={product.images[0]} alt="" />
   
    <div className="flex px-1 text-sm">
      <p className="w-3/4 ">{product.name} </p>
-     <p className="w-1/4 font-bold text-green-700">{product.price} </p>
+     <p className="w-1/4 font-bold text-green-700">{product.price} $</p>
    </div>
    </div>
   );
