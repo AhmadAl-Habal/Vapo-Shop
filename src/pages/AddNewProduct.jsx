@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "../api/axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 
 const AddNewProduct = () => {
   const navigate = useNavigate();
@@ -49,7 +49,9 @@ const AddNewProduct = () => {
   };
 
   return (
+    
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <p><Link to={"/"}>return to products page</Link></p>
       <div>
         <label>Name</label>
         <input
