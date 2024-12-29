@@ -1,13 +1,19 @@
 import React, { useState } from "react";
 import { FaMapMarker } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import axios from "../api/axios";
 const Product = ({ product }) => {
   const [showAllDesc, setShowAllDesc] = useState(false);
   // let description = product.description;
   // if (!showAllDesc) {
   //   description = description.substring(0, 80) + "...";
   // }
-
+  console.log(product._id);
+  const deleteItem = async () => {
+    try {
+      const response = await axios.delete(`/item/${product._id}`);
+    } catch (error) {}
+  };
   return (
     // <div className="bg-white rounded-xl shadow-md relative">
     //   <div className="p-4">
@@ -41,13 +47,15 @@ const Product = ({ product }) => {
     //     </div>
     //   </div>
     // </div>
-   <div className="m-4"> <img className="mb-3 rounded-full" src={product.images[0]} alt="" />
-  
-   <div className="flex px-1 text-sm">
-     <p className="w-3/4 ">{product.name} </p>
-     <p className="w-1/4 font-bold text-green-700">{product.price} $</p>
-   </div>
-   </div>
+    <div className="m-4">
+      {" "}
+      <img className="mb-3 rounded-full" src={product.images[0]} alt="" />
+      <div className="flex px-1 text-sm">
+        <p className="w-3/4 ">{product.name} </p>
+        <p className="w-1/4 font-bold text-green-700">{product.price} $</p>
+        <p onClick={deleteItem}>delete item</p>
+      </div>
+    </div>
   );
 };
 
