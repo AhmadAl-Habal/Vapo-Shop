@@ -97,9 +97,9 @@ const ProductsListing = ({ isHome = false }) => {
       try {
         const response = await axios.get("/item");
         if (response.status == "200") {
-          console.log("win", response);
+          // console.log("win", response);
           setGetItemsStatus(response.status);
-          setItems(response.data.data);
+          setItems(response.data);
         } else setGetItemsStatus(response.status);
       } catch (err) {
         setError(err.message);
@@ -110,10 +110,10 @@ const ProductsListing = ({ isHome = false }) => {
     fetchData();
   }, []);
   useEffect(() => {
-    console.log("Items updated:", items);
+    // console.log("Items updated:", items[0]);
   }, [items]);
   useEffect(() => {
-    console.log("Items status:", getItemsStatus);
+    // console.log("Items status:", getItemsStatus);
   }, [getItemsStatus]);
 
   return (
@@ -125,8 +125,12 @@ const ProductsListing = ({ isHome = false }) => {
           {items.length == 0 ? (
             <p>There are no items to show</p>
           ) : (
-            items.map((product, index) => (
-              <Product key={index} product={product} />
+            items.data.map((product, index) => (
+              <Product
+                key={index}
+                product={product}
+                category={product.main_category_id}
+              />
             ))
           )}
         </div>

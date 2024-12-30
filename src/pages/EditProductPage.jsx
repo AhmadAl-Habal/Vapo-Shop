@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import axios from "../api/axios";
 import { useNavigate, Link } from "react-router-dom";
 import hero from "../assets/bg.webp";
-const AddNewProduct = () => {
+const EditProductPage = () => {
   const navigate = useNavigate();
   const {
     register,
@@ -49,17 +49,13 @@ const AddNewProduct = () => {
   };
 
   return (
-    <div className="relative h-[100vh]">
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
-      ></div>
-
-      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-
+    <div
+      className="h-[100vh] pt-10 bg-cover "
+      style={{ backgroundImage: `url(${hero})`, opacity: 0.9 }}
+    >
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="relative space-y-4 w-[80vw] mx-auto bg-transparent py-10"
+        className="space-y-4 w-[80vw] mx-auto"
       >
         <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm">
           <Link className="mr-5 text-white" to={"/"}>
@@ -68,7 +64,7 @@ const AddNewProduct = () => {
         </p>
         <p className="text-center text-white font-bold">New Product Details</p>
         <div className="flex items-center">
-          <label className="text-white font-bold w-1/4">Name</label>
+          <label className=" text-white font-bold w-1/4">Name</label>
           <input
             type="text"
             {...register("name", { required: "Name is required" })}
@@ -78,8 +74,8 @@ const AddNewProduct = () => {
             <p className="text-red-500 ml-1">{errors.name.message}</p>
           )}
         </div>
-        <div className="flex">
-          <label className="text-white font-bold w-1/4">Price</label>
+        <div className="flex ">
+          <label className=" text-white font-bold w-1/4">Price</label>
           <input
             type="number"
             step="0.01"
@@ -96,7 +92,7 @@ const AddNewProduct = () => {
             <input
               type="file"
               {...register("image", { required: "Image is required" })}
-              className="border rounded p-2 text-white text-sm inline-block w-3/4"
+              className="border rounded p-2 text-white text-sm inline-block w-3/4 "
             />
             {errors.image && (
               <p className="ml-1 text-red-500">{errors.image.message}</p>
@@ -111,7 +107,7 @@ const AddNewProduct = () => {
               {loading ? "Loading..." : "Create"}
             </button>
             {statusMessage && (
-              <p className="text-red-500 font-bold">{statusMessage}</p>
+              <p className=" text-red-500 font-bold">{statusMessage}</p>
             )}
           </div>
         </div>
@@ -120,4 +116,4 @@ const AddNewProduct = () => {
   );
 };
 
-export default AddNewProduct;
+export default EditProductPage;

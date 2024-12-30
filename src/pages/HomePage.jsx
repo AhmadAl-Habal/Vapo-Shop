@@ -1,9 +1,7 @@
 import React from "react";
 import Hero from "../components/Hero";
-import HomeCards from "../components/HomeCards";
-import ProductsSection from "../components/ProductsSection";
 
-import ViewAllJobs from "../components/ViewAllJobs";
+import ProductsSection from "../components/ProductsSection";
 
 const HomePage = () => {
   return (
@@ -11,8 +9,6 @@ const HomePage = () => {
       <div className="bg-blue-50">
         <Hero />
         <ProductsSection isHome={true} />
-        {/* <HomeCards />
-      <ViewAllJobs /> */}
       </div>
     </>
   );

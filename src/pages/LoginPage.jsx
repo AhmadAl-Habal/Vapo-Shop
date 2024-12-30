@@ -52,13 +52,15 @@ const LoginPage = () => {
     }
   }, [authToken, navigate]);
   return (
-    <div
-      className="h-[100vh] pt-10 bg-blue-100 bg-cover"
-      style={{ backgroundImage: `url(${hero})`, opacity: 0.9 }}
-    >
+    <div className="relative h-[100vh]">
+      <div
+        className="bg-center bg-cover absolute inset-0"
+        style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
+      ></div>
+      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-4 w-[80vw] mx-auto"
+        className="relative space-y-4 w-[80vw] mx-auto bg-transparent pt-10"
       >
         <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm">
           <Link className="mr-5 text-white" to={"/"}>

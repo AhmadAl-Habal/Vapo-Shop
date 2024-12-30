@@ -8,10 +8,10 @@ import MainLayout from "./layouts/MainLayout.jsx";
 
 import HomePage from "./pages/HomePage.jsx";
 
-
 import NotFoundPage from "./pages/NotFoundPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import AddNewProduct from "./pages/AddNewProduct.jsx";
+import EditProductPage from "./pages/EditProductPage.jsx";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -19,6 +19,7 @@ function App() {
         <Route index element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/add-product" element={<AddNewProduct />} />
+        <Route path="/edit-product/:id" element={<EditProductPage />} />
 
         <Route path="*" element={<NotFoundPage />} />
         <Route path="/jobs/*" element={<NotFoundPage />} />

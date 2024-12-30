@@ -11,38 +11,29 @@ const Footer = () => {
     localStorage.clear();
     window.location.reload();
   };
-  let linkClass = ({ isActive }) =>
-    isActive
-      ? "text-white bg-black hover:bg-gray-900 hover:text-white rounded-md px-3 py-2"
-      : "text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2";
+
   return (
-    <footer className="bg-red-600 border-b border-red-500 p-2 flex justify-between items-center">
-      <div className="flex items-center space-x-2">
-        {" "}
-        <img
-          className="h-10 w-auto rounded-full cursor-pointer"
-          src={logo}
-          alt="React Jobs"
-        />
-        <p className="font-bold text-xs">🔥VAPO ABO MARIAM </p>
+    <footer className="bg-red-600 border-b border-red-500 p-1 flex justify-between items-center">
+      <div className="w-full flex justify-between items-center space-x-2">
+        <div className="flex justify-between items-center space-x-2">
+          {" "}
+          <img
+            className="h-[30px] w-[30px]  w-auto rounded-full cursor-pointer"
+            src={logo}
+            alt="React Jobs"
+          />{" "}
+          <p className="font-bold text-xs">
+            VAPO ABO MARIAM <br /> 099999999{" "}
+          </p>
+        </div>
+        <div className="flex justify-between items-center ml-auto">
+          {" "}
+          <p className="font-bold text-xs">
+            2024 All rights reserved © <br />
+            Made with ❤ in Syria
+          </p>
+        </div>
       </div>
-      <p>
-        {token ? (
-          <p className=" text-xs">
-            <span className="text-yellow-400 mr-5"> Admin mode! </span>
-            <button
-              className="font-bold text-black border border-2 border-black p-1 rounded-full"
-              onClick={logout}
-            >
-              Logout
-            </button>
-          </p>
-        ) : (
-          <p className="font-bold text-xs text-black border border-2 border-black p-1 rounded-full">
-            <Link to={"/login"}>Login</Link>
-          </p>
-        )}
-      </p>
     </footer>
   );
 };
