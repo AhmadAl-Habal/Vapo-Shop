@@ -4,7 +4,7 @@ import hero from "../assets/hero.webp";
 const Hero = () => {
   return (
     <>
-      <section className="mb-4 flex justify-center">
+      <section className="flex justify-center">
         <img className="w-full h-[300px]" src={hero} alt="" />
       </section>
     </>

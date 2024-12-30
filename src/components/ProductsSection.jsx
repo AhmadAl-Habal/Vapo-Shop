@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ProductsListing from "../components/ProductsListing";
 import { CiCirclePlus } from "react-icons/ci";
+import hero from "../assets/bg.webp";
 const ProductsSection = () => {
   const [token, setToken] = useState("");
   useEffect(() => {
@@ -9,8 +10,11 @@ const ProductsSection = () => {
     setToken(storedToken || "");
   }, []);
   return (
-    <section>
-      <h2 className="text-xl font-bold text-red-400 mb-2 text-center">
+    <section
+      className="bg-cover bg-black bg-opacity-60 pt-4"
+      //   style={{ backgroundImage: `url(${hero})`, opacity: 0.9 }}
+    >
+      <h2 className="text-xl font-bold text-red-500 mb-2 text-center">
         Browse Products
       </h2>
       <div className="flex justify-between items-center mb-5 px-2 text-xs">
@@ -20,7 +24,7 @@ const ProductsSection = () => {
           id=""
         >
           <option className="px-5 outline-none" value="test">
-            Category
+            All
           </option>
         </select>
         {token ? (

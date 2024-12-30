@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
-const Navbar = () => {
+const Footer = () => {
   const [token, setToken] = useState("");
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -16,7 +16,7 @@ const Navbar = () => {
       ? "text-white bg-black hover:bg-gray-900 hover:text-white rounded-md px-3 py-2"
       : "text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2";
   return (
-    <nav className="bg-red-600 border-b border-red-500 p-2 flex justify-between items-center">
+    <footer className="bg-red-600 border-b border-red-500 p-2 flex justify-between items-center">
       <div className="flex items-center space-x-2">
         {" "}
         <img
@@ -43,8 +43,8 @@ const Navbar = () => {
           </p>
         )}
       </p>
-    </nav>
+    </footer>
   );
 };
 
-export default Navbar;
+export default Footer;

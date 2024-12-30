@@ -17,11 +17,16 @@ const Product = ({ product }) => {
     window.location.reload();
   };
   return (
-    <div className="m-4">
-      <img className="mb-3 rounded-full" src={product.images[0]} alt="" />
-      <div dir="rtl">
+    <div className="m-4 flex flex-col justify-center items-center">
+      <img
+        className="mb-3 rounded-full w-full h-full max-w-[140px] max-h-[140px]"
+        //  w-[140px]
+        src={product.images[0]}
+        alt=""
+      />
+      <div dir="rtl" className="w-full">
         <p className="w-full text-center">{product.name} </p>
-        <div className="flex px-1 text-sm justify-around">
+        <div className="w-full flex px-1 text-sm justify-around items-center">
           <p className="font-bold text-green-700">{product.price}$</p>
 
           {token && (

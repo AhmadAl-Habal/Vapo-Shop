@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "../api/axios";
 import { Link, useNavigate } from "react-router-dom";
-
+import hero from "../assets/bg.webp";
 const LoginPage = () => {
   const navigate = useNavigate();
   const [authToken, setAuthToken] = useState(null);
@@ -13,7 +13,7 @@ const LoginPage = () => {
   } = useForm();
   const [loading, setLoading] = useState(false);
   const [loginStatus, setLoginStatus] = useState("");
-  
+
   const onSubmit = async (data) => {
     setLoading(true);
     setLoginStatus("");
@@ -45,8 +45,6 @@ const LoginPage = () => {
   useEffect(() => {
     if (authToken) {
       localStorage.setItem("token", authToken);
-      //   localStorage.setItem("userData", JSON.stringify(userInfo));
-      //   console.log(userInfo);
       const timeout = setTimeout(() => {
         navigate("/");
         window.location.reload();
@@ -54,41 +52,55 @@ const LoginPage = () => {
     }
   }, [authToken, navigate]);
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div>
-        <label>Username</label>
-        <input
-          type="text"
-            value="asss"
-          {...register("username", { required: "Username is required" })}
-          className="border rounded p-2"
-        />
-        {errors.username && (
-          <p className="text-red-500">{errors.username.message}</p>
-        )}
-      </div>
-      <div>
-        <label>Password</label>
-        <input
-          type="password"
-          value="ghassan232303"
-          {...register("password", { required: "Password is required" })}
-          className="border rounded p-2"
-        />
-        {errors.password && (
-          <p className="text-red-500">{errors.password.message}</p>
-        )}
-      </div>
-      <button
-        type="submit"
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-        disabled={loading}
+    <div
+      className="h-[100vh] pt-10 bg-blue-100 bg-cover"
+      style={{ backgroundImage: `url(${hero})`, opacity: 0.9 }}
+    >
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-4 w-[80vw] mx-auto"
       >
-        {loading ? "Loading..." : "Login"}
-      </button>
-
-      {loginStatus}
-    </form>
+        <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm">
+          <Link className="mr-5 text-white" to={"/"}>
+            Return to Products page
+          </Link>
+        </p>
+        <div>
+          <label className="mr-5 text-white">Username</label>
+          <input
+            type="text"
+            placeholder="ahmad"
+            {...register("username", { required: "Username is required" })}
+            className="border rounded p-1 bg-red-100 outline-none"
+          />
+          {errors.username && (
+            <p className="font-bold text-red-500">{errors.username.message}</p>
+          )}
+        </div>
+        <div>
+          <label className="mr-6 text-white">Password</label>
+          <input
+            type="password"
+            placeholder="1234"
+            {...register("password", { required: "Password is required" })}
+            className="border rounded p-1 bg-red-100 outline-none"
+          />
+          {errors.password && (
+            <p className="font-bold text-red-500">{errors.password.message}</p>
+          )}
+        </div>
+        <div className="flex">
+          <button
+            type="submit"
+            className="bg-red-600 text-white px-4 py-1 rounded mr-5"
+            disabled={loading}
+          >
+            {loading ? "Loading..." : "Login"}
+          </button>
+          <p className="text-red-500 font-bold">{loginStatus}</p>
+        </div>
+      </form>
+    </div>
   );
 };
 
