@@ -27,7 +27,7 @@ const Product = ({ product, category }) => {
       />
       <div dir="rtl" className="w-full">
         <p className="w-full text-center">{product.name} </p>
-        <p>{product.main_category_id.name}</p>
+        {product.main_category_id && <p>{product.main_category_id.name}</p>}
         <div className="w-full flex px-1 text-sm justify-around items-center">
           <p className="font-bold text-green-700">{product.price}$</p>
 
