@@ -117,7 +117,7 @@ const ProductsListing = ({ isHome = false }) => {
   }, [getItemsStatus]);
 
   return (
-    <section className="px-4 py-5">
+    <section className="px-4 py-5 font-bold">
       {loading ? (
         <Spinner loading={loading} />
       ) : (

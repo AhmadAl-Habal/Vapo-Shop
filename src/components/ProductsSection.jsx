@@ -11,7 +11,7 @@ const ProductsSection = () => {
   }, []);
   return (
     <section
-      className="bg-cover bg-black bg-opacity-60 pt-4"
+      className="bg-cover bg-black bg-opacity-50 pt-4"
       //   style={{ backgroundImage: `url(${hero})`, opacity: 0.9 }}
     >
       <h2 className="text-xl font-bold text-red-500 mb-2 text-center">
@@ -29,7 +29,7 @@ const ProductsSection = () => {
         </select>
         {token ? (
           <Link className="" to={"/add-product"}>
-            <CiCirclePlus size={30} color="red" className="g-gray-200" />
+            <CiCirclePlus size={30} color="white" className="g-gray-200" />
           </Link>
         ) : (
           ""

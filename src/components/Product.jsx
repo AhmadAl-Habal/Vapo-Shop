@@ -19,27 +19,35 @@ const Product = ({ product, category }) => {
     window.location.reload();
   };
   return (
-    <div className="m-4 flex flex-col justify-center items-center">
+    <div className="flex flex-col justify-center items-center border border-1 border-white rounded-lg bg-black bg-opacity-20 p-1 shadow-lg">
       <img
         className="mb-3 rounded-full w-full h-full max-w-[140px] max-h-[140px]"
         src={product.images[0]}
         alt=""
       />
       <div dir="rtl" className="w-full">
-        <p className="w-full text-center">{product.name} </p>
-        {product.main_category_id && <p>{product.main_category_id.name}</p>}
+        <p className="w-full text-center mb-1">
+          {product.name}{" "}
+          {product.main_category_id && (
+            <p className="inline-block border border-1 rounded-full text-xs p-1 bg-black bg-opacity-20">
+              {product.main_category_id.name}
+            </p>
+          )}
+        </p>
+
         <div className="w-full flex px-1 text-sm justify-around items-center">
           <p className="font-bold text-green-700">{product.price}$</p>
 
           {token && (
             <div className="flex justify-around items-center">
               <MdDelete
-                className="cursor-pointer"
+                className="cursor-pointer ml-1"
                 color="red"
                 onClick={deleteItem}
+                size={15}
               />
               <Link to={`/edit-product/${product._id}`}>
-                <FaEdit color="yellow" className="cursor-pointer" />
+                <FaEdit size={15} color="#d0bf4c" className="cursor-pointer" />
               </Link>
             </div>
           )}
