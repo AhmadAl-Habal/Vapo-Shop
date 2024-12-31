@@ -17,14 +17,15 @@ const ProductsSection = () => {
       <h2 className="text-xl font-bold text-red-500 mb-2 text-center">
         Browse Products
       </h2>
-      <div className="flex justify-between items-center mb-5 px-2 text-xs">
+      <div className="flex flex-row-reverse justify-between items-center mb-5 px-2 text-xs">
         <select
           className="p-2 rounded-full outline-none cursor-pointer bg-gray-200"
           name=""
           id=""
+          dir="rtl"
         >
           <option className="px-5 outline-none" value="test">
-            All
+            الكل
           </option>
         </select>
         {token ? (
