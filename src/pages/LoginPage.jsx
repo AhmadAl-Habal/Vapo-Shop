@@ -24,8 +24,8 @@ const LoginPage = () => {
       });
       console.log("Response received:", response.message);
       if (response.status == 200) {
-        console.log("Login successful:", response);
-        console.log("token", response.data.data.token);
+        // console.log("Login successful:", response);
+        // console.log("token", response.data.data.token);
         setAuthToken(response.data.data.token);
         setLoginStatus("Login successful, redirecting...");
       } else {

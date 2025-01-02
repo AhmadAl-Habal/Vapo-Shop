@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 const Navbar = () => {
+  const navigate = useNavigate();
   const [token, setToken] = useState("");
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -9,6 +10,7 @@ const Navbar = () => {
   }, []);
   const logout = () => {
     localStorage.clear();
+    navigate("/");
     window.location.reload();
   };
   let linkClass = ({ isActive }) =>
