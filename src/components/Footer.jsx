@@ -23,11 +23,11 @@ const Footer = () => {
             alt="React Jobs"
           />{" "}
           <p className="font-bold text-xs">
-            VAPO ABO MARIAM <br /> 099999999{" "}
+            VAPO ABO MARIAM <br />
+            <a href="https://wa.link/z0mvhm">099999999</a>{" "}
           </p>
         </div>
         <div className="flex justify-between items-center ml-auto">
-          {" "}
           <p className="font-bold text-xs">
             2024 All rights reserved © <br />
             Made with ❤ in Syria

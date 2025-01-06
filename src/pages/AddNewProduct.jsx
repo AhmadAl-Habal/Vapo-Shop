@@ -14,6 +14,7 @@ const AddNewProduct = () => {
     clearErrors,
     formState: { errors },
   } = useForm();
+  const [deletedCategoryId, setDeletedCategoryId] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [loadingCategories, setLoadingCategories] = useState(false);
@@ -128,21 +129,30 @@ const AddNewProduct = () => {
       setLoading(false);
     }
   };
-  const deleteCategory = async (id) => {
-    const response = await axios.delete(
-      `/category/${id}`,
+  const deleteCategory = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.delete(
+        `/category/${deletedCategoryId}`,
 
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Login failed:", error.response.data);
+    } finally {
+      setLoading(false);
+    }
+
+    setPopupView(false);
   };
   return (
     <>
       <div
-        // onClick={() => setPopupView((prevState) => !prevState)}
+   
         className={
           popupView
             ? "relative h-[100vh] bg-black bg-opacity-50 opacity-50"
@@ -204,7 +214,7 @@ const AddNewProduct = () => {
               <p className="ml-1 text-red-500">{errors.price.message}</p>
             )}
           </div>
-          <div className="flex">
+          {/* <div className="flex">
             <label className="text-white font-bold w-1/4">Discount</label>
             <input
               type="number"
@@ -215,10 +225,10 @@ const AddNewProduct = () => {
               )}
               className="border rounded p-2 w-3/4 bg-red-100"
             />
-            {/* {errors.discount && (
+            {errors.discount && (
               <p className="ml-1 text-red-500">{errors.discount.message}</p>
-            )} */}
-          </div>
+            )}
+          </div> */}
           <div className="flex">
             {loadingCategories ? (
               <p>Loading...</p>
@@ -239,35 +249,26 @@ const AddNewProduct = () => {
                         key={category._id}
                         value={category._id}
                       >
-                        <p>
-                          {category.name}
-                          <span
-                            onClick={() => {
-                              (e) => {
-                                e.stopPropagation();
-                                deleteCategory(category._id);
-                                setAllCategories((prev) =>
-                                  prev.filter(
-                                    (item) => item._id !== category._id
-                                  )
-                                );
-                              };
-                            }}
-                            className="mr-10"
-                          >
-                            X
-                          </span>
-                        </p>
+                        {category.name}
                       </option>
                     ))}
                   </select>
-                  <button
-                    type="button"
-                    className="absolute right-1 bg-green-500 text-white p-1 rounded-full text-xs"
-                    onClick={() => setPopupView(true)}
-                  >
-                    Add
-                  </button>
+                  <div className="flex items-center justify-end w-1/4 ml-5 space-x-2">
+                    <button
+                      type="button"
+                      className=" bg-green-500 text-white p-1 rounded-full text-xs"
+                      onClick={() => setPopupView("add")}
+                    >
+                      Add
+                    </button>
+                    <button
+                      type="button"
+                      className=" bg-red-500 text-white p-1 rounded-full text-xs"
+                      onClick={() => setPopupView("delete")}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </>
             )}
@@ -310,7 +311,7 @@ const AddNewProduct = () => {
           </div>
         </form>
       </div>
-      {popupView && (
+      {popupView === "add" && (
         <div className="bg-black z-10 inset-0 absolute bg-opacity-30">
           <button
             className="right-0 bg-red-600 p-2 absolute top-20 rounded-full w-[40px]"
@@ -337,6 +338,50 @@ const AddNewProduct = () => {
                 onClick={addCategory}
               >
                 {loading ? "loading" : "Add"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {popupView === "delete" && (
+        <div className="bg-black z-10 inset-0 absolute bg-opacity-30">
+          <button
+            className="right-0 bg-red-600 p-2 absolute top-20 rounded-full w-[40px]"
+            onClick={() => {
+              setPopupView(false);
+            }}
+          >
+            X
+          </button>
+          <div className="flex items-center justify-center h-100vh">
+            <div className="flex items-center absolute inset-50 bg-black p-2  top-[40vh] w-[80vw] rounded-lg ">
+              <select
+                onChange={(e) => setDeletedCategoryId(e.target.value)}
+                className="border rounded p-2 w-full bg-red-100 text-right w-3/4"
+              >
+                <option className="text-left" value="">
+                  Select a category
+                </option>
+                {allCategories.map((category) => (
+                  <option
+                    className="inline-block flex justify-between"
+                    key={category._id}
+                    value={category._id}
+                  >
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+
+              <button
+                className="text-white ml-2 p-1 bg-red-600 rounded"
+                onClick={() => {
+                  console.log(deletedCategoryId);
+                  deleteCategory();
+               
+                }}
+              >
+                {loading ? "loading" : "Delete"}
               </button>
             </div>
           </div>

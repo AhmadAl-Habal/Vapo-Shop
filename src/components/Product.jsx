@@ -23,13 +23,13 @@ const Product = ({ product, category }) => {
     <div
       className={
         visible
-          ? "flex flex-col justify-center items-center border border-1 border-white rounded-lg bg-black bg-opacity-20 p-2 shadow-lg"
-          : "hidden flex-col justify-center items-center border border-1 border-white rounded-lg bg-black bg-opacity-20 p-2 shadow-lg"
+          ? "flex flex-col justify-center items-center border border-1 border-white rounded-lg bg-white p-2 shadow-lg"
+          : "hidden flex-col justify-center items-center border border-1 border-white rounded-lg bg-white p-2 shadow-lg"
       }
     >
       <Link to={`/product/${product._id}`}>
         <img
-          className="mb-3 rounded-full w-full h-full max-w-[140px] max-h-[140px]"
+          className="mb-3 rounded-full w-full h-full max-w-[140px] max-h-[140px] h-[140px]"
           src={product.images[0]}
           alt=""
         />
@@ -38,7 +38,7 @@ const Product = ({ product, category }) => {
         <p className="w-full text-center mb-1">
           {product.name}
           {product.main_category_id && (
-            <p className="inline-block border border-1 rounded-full text-xs p-1 bg-red-600 bg-opacity-60 text-gray-300">
+            <p className="inline-block border border-1 rounded-full text-xs p-1 bg-red-600 bg-opacity-60 text-gray-300 mx-1">
               {product.main_category_id.name}
             </p>
           )}

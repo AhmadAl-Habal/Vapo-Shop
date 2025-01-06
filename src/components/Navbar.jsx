@@ -28,7 +28,7 @@ const Navbar = () => {
         />
         <p className="font-bold text-xs">🔥VAPO ABO MARIAM </p>
       </div>
-      <p>
+      <div>
         {token ? (
           <p className=" text-xs">
             <span className="text-yellow-400 mr-5"> Admin mode! </span>
@@ -44,7 +44,7 @@ const Navbar = () => {
             <Link to={"/login"}>Login</Link>
           </p>
         )}
-      </p>
+      </div>
     </nav>
   );
 };

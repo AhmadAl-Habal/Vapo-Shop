@@ -5,7 +5,11 @@ const Hero = () => {
   return (
     <>
       <section className="flex justify-center">
-        <img className="w-full h-[300px] opacity-90 " src={hero} alt="" />
+        <img
+          className="w-full h-[300px] opacity-90 shadow-lg"
+          src={hero}
+          alt=""
+        />
       </section>
     </>
   );

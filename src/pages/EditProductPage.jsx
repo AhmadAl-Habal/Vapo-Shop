@@ -1,17 +1,49 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "../api/axios";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import hero from "../assets/bg.webp";
 const EditProductPage = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
+  const [item, setItem] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/item/${id}`);
+        if (response.status == "200") {
+          console.log(response.data.data.name);
+
+          // setGetItemsStatus(response.status);
+          // setItem(response.data);
+          // console.log(item);
+
+          reset({
+            name: response.data.data.name || "",
+            price: response.data.data.price || "",
+            image: null, // File inputs can't be prefilled
+          });
+          console.log(response.data.name);
+        } else setGetItemsStatus(response.status);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+  // console.log("test");
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -22,20 +54,20 @@ const EditProductPage = () => {
       formData.append("price", data.price);
       formData.append("image", data.image[0]);
 
-      const response = await axios.post("/item", formData, {
+      const response = await axios.put(`/item/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      if (response.status === 201) {
-        console.log("Product created successfully:", response.data);
-        setStatusMessage("Product created successfully!, Redirecting ...");
+      if (response.status === 200) {
+        console.log("Product edited successfully:", response.data);
+        setStatusMessage("Product edited successfully!, Redirecting ...");
         setTimeout(() => {
           navigate("/");
         }, 2000);
       } else {
-        setStatusMessage("Failed to create the product.");
+        setStatusMessage("Failed to edit the product.");
       }
     } catch (error) {
       console.error(
@@ -104,7 +136,7 @@ const EditProductPage = () => {
               className="bg-red-600 text-white px-4 py-1 rounded mr-5"
               disabled={loading}
             >
-              {loading ? "Loading..." : "Create"}
+              {loading ? "Loading..." : "Edit"}
             </button>
             {statusMessage && (
               <p className=" text-red-500 font-bold">{statusMessage}</p>
