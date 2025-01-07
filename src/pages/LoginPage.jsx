@@ -57,7 +57,7 @@ const LoginPage = () => {
         className="bg-center bg-cover absolute inset-0"
         style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
       ></div>
-      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+      <div className="absolute inset-0 bg-black bg-opacity-80"></div>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="relative space-y-4 w-[80vw] mx-auto bg-transparent pt-10"

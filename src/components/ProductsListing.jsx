@@ -3,7 +3,7 @@ import Product from "./Product";
 import Spinner from "./Spinner";
 import prodcutImg from "../assets/product image.jpeg";
 import axios from "../api/axios";
-const ProductsListing = ({ isHome = false }) => {
+const ProductsListing = ({ filteredCategory }) => {
   const dummyProducts = [
     {
       name: "ايكس روس مع حراق خارق",
@@ -86,6 +86,7 @@ const ProductsListing = ({ isHome = false }) => {
       img: prodcutImg,
     },
   ];
+  console.log(filteredCategory);
 
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
@@ -98,6 +99,7 @@ const ProductsListing = ({ isHome = false }) => {
         const response = await axios.get("/item");
         if (response.status == "200") {
           // console.log("win", response);
+          console.log(response.data);
           setGetItemsStatus(response.status);
           setItems(response.data);
         } else setGetItemsStatus(response.status);
@@ -109,12 +111,12 @@ const ProductsListing = ({ isHome = false }) => {
     };
     fetchData();
   }, []);
-  useEffect(() => {
-    // console.log("Items updated:", items[0]);
-  }, [items]);
-  useEffect(() => {
-    // console.log("Items status:", getItemsStatus);
-  }, [getItemsStatus]);
+  // useEffect(() => {
+  //   console.log("Items updated:", items[0]);
+  // }, [items]);
+  // useEffect(() => {
+  //   console.log("Items status:", getItemsStatus);
+  // }, [getItemsStatus]);
 
   return (
     <section className="px-4 py-5 font-bold">
@@ -122,17 +124,48 @@ const ProductsListing = ({ isHome = false }) => {
         <Spinner loading={loading} />
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
-          {items.length == 0 ? (
+          {/* <p
+            onClick={() => {
+              console.log(items.data.items[0].main_category_id._id);
+            }}
+          >
+            test
+          </p> */}
+          {items.length === 0 ? (
             <p>There are no items to show</p>
           ) : (
-            items.data.map((product, index) => (
-              <Product
-                key={index}
-                product={product}
-                category={product.main_category_id}
-              />
-            ))
+            items.data.items
+              .filter(
+                (product) =>
+                  filteredCategory === "" ||
+                  (product.main_category_id &&
+                    product.main_category_id._id === filteredCategory)
+              )
+              .map((product, index) => (
+                <Product
+                  key={index}
+                  product={product}
+                  category={product.main_category_id}
+                />
+              ))
           )}
+          {/* {items.length === 0 ? (
+            <p>There are no items to show</p>
+          ) : (
+            items.data.items
+              .filter(
+                (product) =>
+                  filteredCategory === "" ||
+                  product.main_category_id._id === filteredCategory
+              )
+              .map((product, index) => (
+                <Product
+                  key={index}
+                  product={product}
+                  category={product.main_category_id}
+                />
+              ))
+          )} */}
         </div>
       )}
     </section>

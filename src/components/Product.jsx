@@ -7,7 +7,7 @@ const Product = ({ product, category }) => {
   const [visible, setVisible] = useState(true);
   const [showAllDesc, setShowAllDesc] = useState(false);
   const [token, setToken] = useState("");
-  console.log(product.description);
+ 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     setToken(storedToken || "");
@@ -35,14 +35,16 @@ const Product = ({ product, category }) => {
         />
       </Link>
       <div dir="rtl" className="w-full">
-        <p className="w-full text-center mb-1">
+      <Link to={`/product/${product._id}`}>
+      <div className="w-full text-center mb-1">
           {product.name}
           {product.main_category_id && (
             <p className="inline-block border border-1 rounded-full text-xs p-1 bg-red-600 bg-opacity-60 text-gray-300 mx-1">
               {product.main_category_id.name}
             </p>
           )}
-        </p>
+        </div>
+      </Link> 
 
         <div className="w-full flex px-1 text-sm justify-around items-center">
           <p className="font-bold text-green-700">{product.price}$</p>
