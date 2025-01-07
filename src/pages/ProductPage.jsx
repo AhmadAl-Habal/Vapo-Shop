@@ -33,7 +33,7 @@ const ProductPage = () => {
   }, []);
   return (
     <>
-      <div className="relative h-[100vh]">
+      <div className="relative">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
