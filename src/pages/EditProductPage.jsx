@@ -39,26 +39,26 @@ const EditProductPage = () => {
     };
     fetchData();
   }, [, popupView]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`/item/${id}`);
-        if (response.status == "200") {
-          // console.log(response.data.data.name);
-
-          // setGetItemsStatus(response.status);
-          // setItem(response.data);
-          // console.log(item);
-
+        if (response.status === 200) {
           reset({
             name: response.data.data.name || "",
             price: response.data.data.price || "",
             description: response.data.data.description || "",
             main_category_id: response.data.data.main_category_id._id || "",
-            // image: null,
           });
-          console.log(response.data.name);
-        } else setGetItemsStatus(response.status);
+
+          // Adjust the textarea height after setting the initial description
+          if (textareaRef.current) {
+            const textarea = textareaRef.current;
+            textarea.style.height = "auto"; // Reset height to calculate properly
+            textarea.style.height = `${textarea.scrollHeight}px`; // Adjust height to content
+          }
+        }
       } catch (err) {
         setError(err.message);
       } finally {
@@ -80,11 +80,11 @@ const EditProductPage = () => {
       formData.append("price", data.price);
       formData.append("description", data.description);
       formData.append("main_category_id", data.main_category_id);
-     if (data.image.length >= 1) {
-      Array.from(data.image).forEach((file) => {
-        formData.append("image", file);
-      });
-     }
+      if (data.image.length >= 1) {
+        Array.from(data.image).forEach((file) => {
+          formData.append("image", file);
+        });
+      }
       // formData.append("image", data.image[0]);
 
       const response = await axios.put(`/item/${id}`, formData, {
@@ -211,13 +211,18 @@ const EditProductPage = () => {
           </div>
           <div className="flex items-center">
             <label className="text-white font-bold w-1/4">Discription</label>
-            <input
-              type="text"
+            <textarea
               {...register("description", {
                 required: "Description is required",
               })}
-              className="border rounded p-2 w-3/4 bg-red-100"
-            />
+              className="border rounded p-2 w-3/4 bg-red-100 resize-none overflow-hidden"
+              rows={1}
+              
+              onInput={(e) => {
+                e.target.style.height = "auto";
+                e.target.style.height = `${e.target.scrollHeight}px`;
+              }}
+            ></textarea>
             {errors.name && (
               <p className="text-red-500 ml-1">{errors.name.message}</p>
             )}
@@ -402,70 +407,6 @@ const EditProductPage = () => {
         </div>
       )}
     </>
-    // <div
-    //   className="h-[100vh] pt-10 bg-cover "
-    //   style={{ backgroundImage: `url(${hero})`, opacity: 0.9 }}
-    // >
-    //   <form
-    //     onSubmit={handleSubmit(onSubmit)}
-    //     className="space-y-4 w-[80vw] mx-auto"
-    //   >
-    //     <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm">
-    //       <Link className="mr-5 text-white" to={"/"}>
-    //         Return to Products page
-    //       </Link>
-    //     </p>
-    //     <p className="text-center text-white font-bold">New Product Details</p>
-    //     <div className="flex items-center">
-    //       <label className=" text-white font-bold w-1/4">Name</label>
-    //       <input
-    //         type="text"
-    //         {...register("name", { required: "Name is required" })}
-    //         className="border rounded p-2 w-3/4 bg-red-100"
-    //       />
-    //       {errors.name && (
-    //         <p className="text-red-500 ml-1">{errors.name.message}</p>
-    //       )}
-    //     </div>
-    //     <div className="flex ">
-    //       <label className=" text-white font-bold w-1/4">Price</label>
-    //       <input
-    //         type="number"
-    //         step="0.01"
-    //         {...register("price", { required: "Price is required" })}
-    //         className="border rounded p-2 w-3/4 bg-red-100"
-    //       />
-    //       {errors.price && (
-    //         <p className="ml-1 text-red-500">{errors.price.message}</p>
-    //       )}
-    //     </div>
-    //     <div>
-    //       <div className="flex items-center">
-    //         <label className="text-white font-bold w-1/4">Image</label>
-    //         <input
-    //           type="file"
-    //           {...register("image", { required: "Image is required" })}
-    //           className="border rounded p-2 text-white text-sm inline-block w-3/4 "
-    //         />
-    //         {errors.image && (
-    //           <p className="ml-1 text-red-500">{errors.image.message}</p>
-    //         )}
-    //       </div>
-    //       <div className="flex mt-5">
-    //         <button
-    //           type="submit"
-    //           className="bg-red-600 text-white px-4 py-1 rounded mr-5"
-    //           disabled={loading}
-    //         >
-    //           {loading ? "Loading..." : "Edit"}
-    //         </button>
-    //         {statusMessage && (
-    //           <p className=" text-red-500 font-bold">{statusMessage}</p>
-    //         )}
-    //       </div>
-    //     </div>
-    //   </form>
-    // </div>
   );
 };
 

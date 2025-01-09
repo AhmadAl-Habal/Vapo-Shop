@@ -190,16 +190,18 @@ const AddNewProduct = () => {
           </div>
           <div className="flex items-center">
             <label className="text-white font-bold w-1/4">Discription</label>
-            <input
-              type="text"
+            <textarea
               {...register("description", {
                 required: "Description is required",
               })}
-              className="border rounded p-2 w-3/4 bg-red-100"
-            />
-            {errors.name && (
-              <p className="text-red-500 ml-1">{errors.name.message}</p>
-            )}
+              className="border rounded p-2 w-3/4 bg-red-100 resize-none overflow-hidden"
+              rows={1}
+              
+              onInput={(e) => {
+                e.target.style.height = "auto";
+                e.target.style.height = `${e.target.scrollHeight}px`;
+              }}
+            ></textarea>
           </div>
           <div className="flex">
             <label className="text-white font-bold w-1/4">Price</label>
