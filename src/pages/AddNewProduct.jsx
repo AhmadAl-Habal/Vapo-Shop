@@ -32,8 +32,14 @@ const AddNewProduct = () => {
     try {
       const formData = new FormData();
       formData.append("name", data.name);
-      formData.append("description", data.description);
+      if (data.description) {
+        formData.append("description",data.description );
+      }
       formData.append("price", data.price);
+      if (data.discount) {
+        formData.append("discount", data.discount);
+      }
+      
       formData.append("main_category_id", data.main_category_id);
       Array.from(data.image).forEach((file) => {
         formData.append("image", file);
@@ -191,12 +197,12 @@ const AddNewProduct = () => {
           <div className="flex items-center">
             <label className="text-white font-bold w-1/4">Discription</label>
             <textarea
-              {...register("description", {
-                required: "Description is required",
-              })}
+              {...register(
+                "description"
+             
+              )}
               className="border rounded p-2 w-3/4 bg-red-100 resize-none overflow-hidden"
               rows={1}
-              
               onInput={(e) => {
                 e.target.style.height = "auto";
                 e.target.style.height = `${e.target.scrollHeight}px`;
@@ -215,7 +221,7 @@ const AddNewProduct = () => {
               <p className="ml-1 text-red-500">{errors.price.message}</p>
             )}
           </div>
-          {/* <div className="flex">
+          <div className="flex">
             <label className="text-white font-bold w-1/4">Discount</label>
             <input
               type="number"
@@ -229,7 +235,7 @@ const AddNewProduct = () => {
             {errors.discount && (
               <p className="ml-1 text-red-500">{errors.discount.message}</p>
             )}
-          </div> */}
+          </div>
           <div className="flex">
             {loadingCategories ? (
               <p>Loading...</p>

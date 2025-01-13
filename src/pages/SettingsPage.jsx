@@ -6,167 +6,221 @@ import hero from "../assets/bg.webp";
 import Spinner from "../components/Spinner";
 
 const SettingsPage = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const {
-      register,
-      handleSubmit,
-      setValue,
-      clearErrors,
-      formState: { errors },
-    } = useForm();
-    const [deletedCategoryId, setDeletedCategoryId] = useState("");
-    const [imagePreview, setImagePreview] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [loadingCategories, setLoadingCategories] = useState(false);
-    const [statusMessage, setStatusMessage] = useState("");
-    const [allCategories, setAllCategories] = useState([]);
-    const [popupView, setPopupView] = useState(false);
-    const [categoryName, setCategoryName] = useState("");
-  
-    const onSubmit = async (data) => {
-      setLoading(true);
-      setStatusMessage("");
-      const selectedCategory = allCategories.find(
-        (category) => category._id === data.main_category_id
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    clearErrors,
+    formState: { errors },
+  } = useForm();
+  const [dollarValue, setDollarValue] = useState("");
+  const [settings, setSettings] = useState({});
+  const [heroImages, setHeroImages] = useState([]);
+  const [statusMessage, setStatusMessage] = useState("");
+  const [deletedCategoryId, setDeletedCategoryId] = useState("");
+  const [imagePreview, setImagePreview] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [loadingCategories, setLoadingCategories] = useState(false);
+
+  const [allCategories, setAllCategories] = useState([]);
+  const [popupView, setPopupView] = useState(false);
+  const [categoryName, setCategoryName] = useState("");
+
+  const addHeroImages = async (data) => {
+    setLoading(true);
+    setStatusMessage("");
+
+    try {
+      const formData = new FormData();
+
+      Array.from(heroImages).forEach((file) => {
+        formData.append("image", file);
+      });
+      // formData.append("image", data.image[0]);
+      console.log(data);
+
+      const response = await axios.post("/settings/hero", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.status === 201) {
+        // console.log("Product created successfully:", response.data);
+        setStatusMessage("Hero images added successfully!");
+        // setTimeout(() => {
+        //   navigate("/");
+        // }, 2000);
+      } else {
+        setStatusMessage("Failed to add Hero images");
+      }
+    } catch (error) {
+      console.error(
+        "Error creating product:",
+        error.response?.data || error.message
       );
+      setStatusMessage("Error creating product. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    const fetchData = async () => {
       try {
-        const formData = new FormData();
-        formData.append("name", data.name);
-        formData.append("description", data.description);
-        formData.append("price", data.price);
-        formData.append("main_category_id", data.main_category_id);
-        Array.from(data.image).forEach((file) => {
-          formData.append("image", file);
-        });
-        // formData.append("image", data.image[0]);
-        console.log(data);
-  
-        const response = await axios.post("/item", formData, {
+        const response = await axios.get("/settings");
+        if (response.status == "200") {
+          setDollarValue(response.data.data[0].dollar_price);
+          setSettings(response.data.data);
+        } else setSettings(response.status);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoadingCategories(false);
+      }
+    };
+    fetchData();
+  }, []);
+  const clearImage = () => {
+    setValue("image", null);
+    clearErrors("image");
+    setImagePreview(null);
+  };
+
+  const ChangeDollarValue = async () => {
+    setStatusMessage("");
+
+    setLoading(true);
+
+    try {
+      const response = await axios.put(
+        "/settings/dollar",
+        { dollar_price: dollarValue },
+        {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
           },
-        });
-  
-        if (response.status === 201) {
-          console.log("Product created successfully:", response.data);
-          setStatusMessage("Product created successfully!, Redirecting...");
-          setTimeout(() => {
-            navigate("/");
-          }, 2000);
-        } else {
-          setStatusMessage("Failed to create the product.");
         }
-      } catch (error) {
-        console.error(
-          "Error creating product:",
-          error.response?.data || error.message
-        );
-        setStatusMessage("Error creating product. Please try again.");
-      } finally {
-        setLoading(false);
+      );
+
+      if (response.status == 200) {
+        setStatusMessage("Dollar price changed successfully!");
+      } else {
+        setStatusMessage("Failed to change Dollar price");
+        //
       }
-    };
-    useEffect(() => {
-      setLoadingCategories(true);
-      const fetchData = async () => {
-        try {
-          const response = await axios.get("/category");
-          if (response.status == "200") {
-            setAllCategories(response.data.data);
-          } else setAllCategories(response.status);
-        } catch (err) {
-          setError(err.message);
-        } finally {
-          setLoadingCategories(false);
+    } catch (error) {
+      console.error("Login failed:", error.response.data);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setImagePreview(URL.createObjectURL(file));
+    }
+    console.log("changed");
+  };
+  const deleteCategory = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.delete(
+        `/category/${deletedCategoryId}`,
+
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      };
-      fetchData();
-    }, [, popupView]);
-    const clearImage = () => {
-      setValue("image", null);
-      clearErrors("image");
-      setImagePreview(null);
-    };
-    const handleFileChange = (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        setImagePreview(URL.createObjectURL(file));
-      }
-    };
-    const addCategory = async () => {
-      console.log(categoryName);
-  
-      setLoading(true);
-      // setLoginStatus("");
-      try {
-        const response = await axios.post(
-          "/category",
-          { name: categoryName },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        console.log("Response received:", response.message);
-        if (response.status == 201) {
-          console.log("Login successful:", response);
-          setPopupView(false);
-          // console.log("token", response.data.data.token);
-          // setAuthToken(response.data.data.token);
-          // setLoginStatus("Login successful, redirecting...");
-        } else {
-          // setLoginStatus(response.message);
-          console.log("tiz");
-          //
+      );
+    } catch (error) {
+      console.error("Login failed:", error.response.data);
+    } finally {
+      setLoading(false);
+    }
+
+    setPopupView(false);
+  };
+  return (
+    <>
+      <div
+        className={
+          popupView
+            ? "relative h-[100vh] bg-black bg-opacity-50 opacity-50"
+            : "relative h-[100vh]"
         }
-      } catch (error) {
-        console.error("Login failed:", error.response.data);
-        // setLoginStatus(error.response.data.message);
-  
-        //   alert("Login failed! Check your credentials.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    const deleteCategory = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.delete(
-          `/category/${deletedCategoryId}`,
-  
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-      } catch (error) {
-        console.error("Login failed:", error.response.data);
-      } finally {
-        setLoading(false);
-      }
-  
-      setPopupView(false);
-    };
-    return (
-      <>
+      >
         <div
-          className={
-            popupView
-              ? "relative h-[100vh] bg-black bg-opacity-50 opacity-50"
-              : "relative h-[100vh]"
-          }
-        >
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
-          ></div>
-  
-          <div className="absolute inset-0 bg-black bg-opacity-80"></div>
-  
-          {/* <form
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
+        ></div>
+
+        <div className="absolute inset-0 bg-black bg-opacity-80"></div>
+
+        <div className="relative space-y-4 w-[80vw] mx-auto bg-transparent py-10">
+          <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm">
+            <Link className="mr-5 text-white" to={"/"}>
+              Return to Products page
+            </Link>
+          </p>
+          <div>
+            <div className="flex items-center  mb-5 ">
+              <label className="text-white font-bold  w-1/4">
+                Dollar Value
+              </label>
+              <input
+                type="number"
+                value={dollarValue}
+                className="border rounded p-2 w-3/4 bg-red-100 "
+                onChange={(e) => setDollarValue(e.target.value)}
+              />
+
+              <button
+                className={`text-white ml-2 p-1 rounded ${
+                  loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
+                }`}
+                onClick={ChangeDollarValue}
+                disabled={loading}
+              >
+                {loading ? "loading" : "Save"}
+              </button>
+            </div>
+            <div className="flex items-center">
+              <label className="text-white font-bold w-1/4">Hero Images</label>
+              <input
+                type="file"
+                multiple
+                className="border rounded p-2 text-white text-sm inline-block w-3/4"
+                onChange={(e) => {
+                  const files = e.target.files;
+                  setHeroImages(Array.from(files));
+                  console.log(files);
+                }}
+              />
+              <button
+                type="button"
+                className="absolute right-20 bg-red-400 text-black p-1 rounded-full text-xs mx-1"
+                onClick={clearImage}
+              >
+                Clear
+              </button>
+              <button
+                className={`text-white ml-2 p-1 rounded ${
+                  loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
+                }`}
+                disabled={loading}
+                onClick={addHeroImages}
+              >
+                Save
+              </button>
+            </div>
+          </div>
+          <p className="text-lg text-red-700 font-bold"> {statusMessage}</p>
+        </div>
+        {/* <form
             onSubmit={handleSubmit(onSubmit)}
             className="relative space-y-4 w-[80vw] mx-auto bg-transparent py-10"
           >
@@ -312,8 +366,8 @@ const SettingsPage = () => {
               </div>
             </div>
           </form> */}
-        </div>
-        {/* {popupView === "add" && (
+      </div>
+      {/* {popupView === "add" && (
           <div className="bg-black z-10 inset-0 absolute bg-opacity-30">
             <button
               className="right-0 bg-red-600 p-2 absolute top-20 rounded-full w-[40px]"
@@ -388,8 +442,8 @@ const SettingsPage = () => {
             </div>
           </div>
         )} */}
-      </>
-    );
-}
+    </>
+  );
+};
 
-export default SettingsPage
+export default SettingsPage;

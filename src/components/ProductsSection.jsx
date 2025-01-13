@@ -43,7 +43,7 @@ const ProductsSection = () => {
       //   style={{ backgroundImage: `url(${hero})`, opacity: 0.9 }}
     >
       <h2 className="text-xl font-bold text-red-500 mb-2 text-center">
-        Browse items new update
+        Browse Products
       </h2>
       <div className="flex flex-row-reverse justify-between items-center mb-5 px-2 text-xs">
         {/* <select
