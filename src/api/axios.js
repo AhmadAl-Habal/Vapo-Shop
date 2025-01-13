@@ -7,5 +7,6 @@ const axiosInstance = axios.create({
     'Content-Type': 'application/json',
   },
 });
-
+// dev env https://abomariamvapestorebackend.onrender.com
+// prod env https://abomariambackend.vercel.app/
 export default axiosInstance;
