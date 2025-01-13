@@ -31,7 +31,7 @@ const Navbar = () => {
       <div>
         {token ? (
           <p className=" text-xs">
-            <span className="text-yellow-400 mr-5"> Admin mode! </span>
+            <span className="text-yellow-400 mr-5"><Link to={"/settings"}> Admin mode!</Link> </span>
             <button
               className="font-bold text-black border border-2 border-black p-1 rounded-full"
               onClick={logout}
