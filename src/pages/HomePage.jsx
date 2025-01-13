@@ -4,7 +4,7 @@ import Hero from "../components/Hero";
 import ProductsSection from "../components/ProductsSection";
 
 const HomePage = () => {
- 
+  // sessionStorage.setItem("selectedCategory", "");
   return (
     <>
       <div className="bg-blue-50">

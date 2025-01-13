@@ -18,6 +18,7 @@ const SettingsPage = () => {
   const [dollarValue, setDollarValue] = useState("");
   const [settings, setSettings] = useState({});
   const [heroImages, setHeroImages] = useState([]);
+  const [aboutUs, setAboutUs] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
   const [deletedCategoryId, setDeletedCategoryId] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
@@ -72,6 +73,7 @@ const SettingsPage = () => {
         const response = await axios.get("/settings");
         if (response.status == "200") {
           setDollarValue(response.data.data[0].dollar_price);
+          setAboutUs(response.data.data[0].about_us);
           setSettings(response.data.data);
         } else setSettings(response.status);
       } catch (err) {
@@ -108,6 +110,34 @@ const SettingsPage = () => {
         setStatusMessage("Dollar price changed successfully!");
       } else {
         setStatusMessage("Failed to change Dollar price");
+        //
+      }
+    } catch (error) {
+      console.error("Login failed:", error.response.data);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const changeAboutUs = async () => {
+    setStatusMessage("");
+
+    setLoading(true);
+
+    try {
+      const response = await axios.put(
+        "/settings/about_us",
+        { update_about_us: aboutUs },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status == 200) {
+        setStatusMessage("About us changed successfully!");
+      } else {
+        setStatusMessage("Failed to change About Us");
         //
       }
     } catch (error) {
@@ -188,7 +218,7 @@ const SettingsPage = () => {
                 {loading ? "loading" : "Save"}
               </button>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center  mb-5">
               <label className="text-white font-bold w-1/4">Hero Images</label>
               <input
                 type="file"
@@ -200,13 +230,13 @@ const SettingsPage = () => {
                   console.log(files);
                 }}
               />
-              <button
+              {/* <button
                 type="button"
-                className="absolute right-20 bg-red-400 text-black p-1 rounded-full text-xs mx-1"
+                className="absolute right-10 bg-red-400 text-black p-1 rounded-full text-xs mx-1"
                 onClick={clearImage}
               >
                 Clear
-              </button>
+              </button> */}
               <button
                 className={`text-white ml-2 p-1 rounded ${
                   loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
@@ -214,7 +244,115 @@ const SettingsPage = () => {
                 disabled={loading}
                 onClick={addHeroImages}
               >
-                Save
+                {loading ? "loading" : "Save"}
+              </button>
+            </div>
+            <div className="flex items-center  mb-5 ">
+              <label className="text-white font-bold w-1/4">About Us</label>
+              <textarea
+                className="border rounded p-2 w-3/4 bg-red-100 resize-none overflow-hidden"
+                rows={1}
+                onInput={(e) => {
+                  e.target.style.height = "auto";
+                  e.target.style.height = `${e.target.scrollHeight}px`;
+                }}
+                onChange={(e) => {
+                  setAboutUs(e.target.value);
+                }}
+              ></textarea>
+
+              <button
+                className={`text-white ml-2 p-1 rounded ${
+                  loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
+                }`}
+                onClick={changeAboutUs}
+                disabled={loading}
+              >
+                {loading ? "loading" : "Save"}
+              </button>
+            </div>
+            <div className="flex items-center  mb-5 ">
+              <label className="text-white font-bold  w-1/4">
+                Facebook Link
+              </label>
+              <input
+                type="text"
+                // value={dollarValue}
+                className="border rounded p-2 w-3/4 bg-red-100 "
+                onChange={(e) => setDollarValue(e.target.value)}
+              />
+
+              <button
+                className={`text-white ml-2 p-1 rounded ${
+                  loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
+                }`}
+                onClick={ChangeDollarValue}
+                disabled={loading}
+              >
+                {loading ? "loading" : "Save"}
+              </button>
+            </div>
+            <div className="flex items-center  mb-5 ">
+              <label className="text-white font-bold  w-1/4">
+                Telegram Link
+              </label>
+              <input
+                type="text"
+                // value={dollarValue}
+                className="border rounded p-2 w-3/4 bg-red-100 "
+                onChange={(e) => setDollarValue(e.target.value)}
+              />
+
+              <button
+                className={`text-white ml-2 p-1 rounded ${
+                  loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
+                }`}
+                onClick={ChangeDollarValue}
+                disabled={loading}
+              >
+                {loading ? "loading" : "Save"}
+              </button>
+            </div>
+            <div className="flex items-center  mb-5 ">
+              <label className="text-white font-bold  w-1/4">
+                Instagram Link
+              </label>
+              <input
+                type="text"
+                // value={dollarValue\}
+                className="border rounded p-2 w-3/4 bg-red-100 "
+                onChange={(e) => setDollarValue(e.target.value)}
+              />
+
+              <button
+                className={`text-white ml-2 p-1 rounded ${
+                  loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
+                }`}
+                onClick={ChangeDollarValue}
+                disabled={loading}
+              >
+                {loading ? "loading" : "Save"}
+              </button>
+            </div>
+            <div className="flex items-center  mb-5 ">
+              <label className="text-white font-bold  w-1/4">
+                Whatsapp numbers
+              </label>
+              <input
+                type="text"
+                // value={dollarValue}
+                className="border rounded p-2 w-3/4 bg-red-100 "
+                onChange={(e) => setDollarValue(e.target.value)}
+              />
+
+              <button
+                className={`text-white ml-2 p-1 rounded ${
+                  loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
+                }`}
+                onClick={ChangeDollarValue}
+                disabled={loading}
+              >
+                {loading ? "loading" : "Save"}
               </button>
             </div>
           </div>
