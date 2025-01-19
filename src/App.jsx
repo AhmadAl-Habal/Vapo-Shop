@@ -17,7 +17,7 @@ import SettingsPage from "./pages/SettingsPage.jsx";
 import AboutUsPage from "./pages/AboutUsPage.jsx";
 import FAQPage from "./pages/FAQPage.jsx";
 import EditFAQPage from "./pages/EditFAQPage.jsx";
-import AddNewFAQPage from "./pages/AddNewFAQPAge.jsx";
+import AddNewFAQPage from "./pages/AddNewFAQPage.jsx";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
