@@ -99,7 +99,7 @@ const ProductsListing = ({}) => {
         const response = await axios.get("/item");
         if (response.status == "200") {
           // console.log("win", response);
-          console.log(response.data);
+          // console.log(response.data);
           setGetItemsStatus(response.status);
           setItems(response.data);
         } else setGetItemsStatus(response.status);

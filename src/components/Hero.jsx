@@ -18,6 +18,10 @@ const Hero = () => {
           setDollarValue(response.data.data[0].dollar_price);
           setHeroImages(response.data.data[0].hero);
           setSettings(response.data.data);
+          sessionStorage.setItem(
+            "settings",
+            JSON.stringify(response.data.data[0])
+          );
           sessionStorage.setItem("dollar_value", dollarPrice);
         } else setSettings(response.status);
       } catch (err) {
@@ -27,7 +31,6 @@ const Hero = () => {
       }
     };
     fetchData();
-    console.log(settings);
   }, []);
   return (
     <>

@@ -1,12 +1,17 @@
 import React, { useRef, useState } from "react";
 import axios from "../api/axios";
-import { FaEdit } from "react-icons/fa";
+import { FaChevronDown, FaChevronUp, FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
-const ImageField = ({ faqDetails }) => {
-  const initialImages = faqDetails?.images || [];
+const ImageField = ({ inputDetails,endpoint }) => {
+  const initialImages = inputDetails?.images || [];
   const [imagePreviews, setImagePreviews] = useState([...initialImages]);
-  const [inputKeys, setInputKeys] = useState(initialImages.map(() => Date.now())); // Keys for resetting inputs
+  const [inputKeys, setInputKeys] = useState(
+    initialImages.map(() => Date.now())
+  ); // Keys for resetting inputs
+  const [visible, setVisible] = useState(false);
+  const [token, setToken] = useState("");
+  const [exist, setExist] = useState(true);
 
   const handleFileChange = (event, index) => {
     const file = event.target.files[0];
@@ -38,7 +43,7 @@ const ImageField = ({ faqDetails }) => {
 
   const deleteImage = async (index) => {
     try {
-      await axios.delete(`/faq/${faqDetails._id}/${index}`);
+      await axios.delete(`/${endpoint}/${inputDetails._id}/${index}`);
       setImagePreviews((prev) => {
         const updated = [...prev];
         updated.splice(index, 1); // Remove the deleted image
@@ -63,7 +68,7 @@ const ImageField = ({ faqDetails }) => {
       formData.append("image", updatedFile);
 
       const response = await axios.put(
-        `/faq/${faqDetails._id}/${index}`,
+        `/${endpoint}/${inputDetails._id}/${index}`,
         formData,
         {
           headers: {
@@ -79,59 +84,84 @@ const ImageField = ({ faqDetails }) => {
       alert("Failed to update image.");
     }
   };
-
+  const setExpand = () => {
+    setVisible(!visible);
+  };
   return (
     <>
-      {imagePreviews.map((image, index) => (
-        <div key={index} className="border border-2 rounded-lg px-1 py-2 mb-5">
-          <div className="flex items-center mb-3">
-            <label className="text-white w-1/4">Image {index + 1}</label>
-            <input
-              key={inputKeys[index]} // Unique key to force re-render
-              type="file"
-              className="border rounded p-2 w-3/4 text-white"
-              onChange={(event) => handleFileChange(event, index)}
-            />
-            <button
-              type="button"
-              onClick={() => clearImage(index)}
-              className="ml-2 bg-red-400 text-black p-1 rounded text-xs"
-            >
-              Clear
-            </button>
-          </div>
-
-          {image && (
-            <div className="flex justify-center items-center mt-3">
-              <img
-                src={
-                  typeof image === "string" ? image : URL.createObjectURL(image)
-                }
-                alt={`Preview ${index}`}
-                className="rounded w-[350px] h-[250px] object-contain"
-              />
-            </div>
+      <div className=''>
+        <div className={`flex items-center justify-between cursor-pointer px-1 py-2 ${visible && "mb-5"} ${!visible && "border border-2 rounded-lg"}`}  onClick={setExpand}>
+          <p
+            className="w-100 text-md text-white font-bold"
+          
+          >
+            Current Images
+          </p>
+          {visible ? (
+            <FaChevronUp className="text-white " />
+          ) : (
+            <FaChevronDown className="text-white" />
           )}
-          <div className="flex items-center space-x-2">
-            <button
-              type="button"
-              onClick={() => deleteImage(index)}
-              className="flex bg-red-400 text-black p-1 rounded text-xs items-center"
-            >
-              Delete
-              <MdDelete className="ml-1" size={15} />
-            </button>
-            <button
-              type="button"
-              onClick={() => editImage(index)}
-              className="flex bg-green-400 text-black p-1 rounded text-xs items-center"
-            >
-              Edit
-              <FaEdit className="ml-1" size={15} />
-            </button>
-          </div>
         </div>
-      ))}
+        <div className={`${visible ? "block" : "hidden"}`}>
+          {" "}
+          {imagePreviews.map((image, index) => (
+            <div
+              key={index}
+              className="border border-2 rounded-lg px-1 py-2 mb-5"
+            >
+              <div className="flex items-center mb-3">
+                <label className="text-white w-1/4">Image {index + 1}</label>
+                <input
+                  key={inputKeys[index]} // Unique key to force re-render
+                  type="file"
+                  className="border rounded p-2 w-3/4 text-white"
+                  onChange={(event) => handleFileChange(event, index)}
+                />
+                <button
+                  type="button"
+                  onClick={() => clearImage(index)}
+                  className="absolute right-1 ml-2 bg-red-400 text-black p-1 rounded-full text-xs"
+                >
+                  Clear
+                </button>
+              </div>
+
+              {image && (
+                <div className="flex justify-center items-center mt-3">
+                  <img
+                    src={
+                      typeof image === "string"
+                        ? image
+                        : URL.createObjectURL(image)
+                    }
+                    alt={`Preview ${index}`}
+                    className="rounded w-[350px] h-[250px] object-contain"
+                  />
+                </div>
+              )}
+              <div className="flex items-center space-x-2">
+                <button
+                  type="button"
+                  onClick={() => deleteImage(index)}
+                  className="flex bg-red-400 text-black p-1 rounded text-xs items-center"
+                >
+                  Delete
+                  <MdDelete className="ml-1" size={15} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => editImage(index)}
+                  className="flex bg-green-400 text-black p-1 rounded text-xs items-center"
+                >
+                  Edit
+                  <FaEdit className="ml-1" size={15} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </>
   );
 };

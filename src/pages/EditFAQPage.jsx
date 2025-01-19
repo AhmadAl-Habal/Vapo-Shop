@@ -3,6 +3,7 @@ import { set, useForm } from "react-hook-form";
 import axios from "../api/axios";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import ImageField from "../components/ImageField";
+import BulkImageUploadForm from "../components/BulkImageUploadForm";
 import hero from "../assets/bg.webp";
 
 const EditFAQPage = () => {
@@ -16,23 +17,21 @@ const EditFAQPage = () => {
   } = useForm();
 
   const storedToken = localStorage.getItem("token");
-  // const [popupView, setPopupView] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
-const [faqDetails, setFaqDetails] = useState({})
-  const [imagePreview, setImagePreview] = useState(null);
+  const [faqDetails, setFaqDetails] = useState({});
+
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     const fetchData = async () => {
       try {
         const response = await axios.get(`/faq/${id}`);
-        console.log(response.data.data);
-
+     
         if (response.status === 200) {
-          setFaqDetails(response.data.data)
-          
+          setFaqDetails(response.data.data);
           reset({
             question: response.data.data.question || "",
             answer: response.data.data.answer || "",
@@ -46,31 +45,25 @@ const [faqDetails, setFaqDetails] = useState({})
     };
 
     fetchData();
-    console.log(faqDetails);
-    
   }, []);
 
   const onSubmit = async (data) => {
     setLoading(true);
     setStatusMessage("");
-  
     try {
       const formData = new FormData();
-      console.log(data);
-  
       formData.append("question", data.question);
       formData.append("answer", data.answer);
-  
-      faqImages.forEach((file) => {
-        if (file) {
-          console.log(file);
-          
-          formData.append(`image`, file);
-        }
-      });
-  
+      // faqImages.forEach((file) => {
+      //   if (file) {
+      //     console.log(file);
+
+      //     formData.append(`image`, file);
+      //   }
+      // });
+
       const response = await axios.put(`/faq/${id}`, formData, {});
-  
+
       if (response.status === 200) {
         console.log("FAQ edited successfully:", response.data);
         setStatusMessage("FAQ edited successfully!, Redirecting ...");
@@ -88,26 +81,7 @@ const [faqDetails, setFaqDetails] = useState({})
     }
   };
 
-  const clearImage = () => {
-    setValue("image", null);
-    clearErrors("image");
-    setImagePreview(null);
-  };
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setImagePreview(URL.createObjectURL(file));
-    }
-  };
-  const [faqImages, setFaqImages] = useState([]);
 
-const handleImageChange = (index, file) => {
-  setFaqImages((prev) => {
-    const updated = [...prev];
-    updated[index] = file; // Update the file at the given index
-    return updated;
-  });
-};
   if (!storedToken) {
     return (
       <div className={"relative min-h-[100vh]"}>
@@ -197,36 +171,6 @@ const handleImageChange = (index, file) => {
           </div>
 
           <div>
-            <div>
-
-            {loading ? <p>test</p> : <ImageField faqDetails={faqDetails} onImageChange={handleImageChange} register={register} />
-          }
-
-            {/* {faqDetails.images.map((image,index)=>( 
-              
-            //   <div className="flex items-center">
-            //   <label className="text-white font-bold w-1/4">Images</label>
-            //   <input
-            //     type="file"
-            //     {...register("image")}
-            //     multiple
-            //     className="border rounded p-2 text-white text-sm inline-block w-3/4"
-            //     onChange={handleFileChange}
-            //   />
-            //   <button
-            //     type="button"
-            //     className="absolute right-1 bg-red-400 text-black p-1 rounded-full text-xs"
-            //     onClick={clearImage}
-            //   >
-            //     Clear
-            //   </button>
-            //   <img src={imagePreview[index]} alt="" />
-            // </div>
-            // <ImageInputList faqDetails={faqDetails} register={register} />
-
-          ))} */}
-             
-            </div>
             <div className="flex mt-5">
               <button
                 type="submit"
@@ -241,8 +185,19 @@ const handleImageChange = (index, file) => {
             </div>
           </div>
         </form>
+        <div className="relative w-[80vw] mx-auto py-5">
+         
+         {!loading && faqDetails?.images && (
+           <BulkImageUploadForm inputDetails={faqDetails} endpoint={"faq"} />
+         )}
+       </div>
+        <div className="relative w-[80vw] mx-auto py-5">
+         
+          {!loading && faqDetails?.images && (
+            <ImageField inputDetails={faqDetails} endpoint={"faq"} />
+          )}
+        </div>
       </div>
-  
     </>
   );
 };
