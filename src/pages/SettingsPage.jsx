@@ -4,7 +4,7 @@ import axios from "../api/axios";
 import { useNavigate, Link } from "react-router-dom";
 import hero from "../assets/bg.webp";
 import Spinner from "../components/Spinner";
-
+import Whatsapp from "../components/social links/Whatsapp";
 const SettingsPage = () => {
   const navigate = useNavigate();
 
@@ -29,6 +29,11 @@ const SettingsPage = () => {
   const [popupView, setPopupView] = useState(false);
   const [categoryName, setCategoryName] = useState("");
 
+  const [facebookLink, setFacebookLink] = useState("");
+  const [telegramLink, setTelegramLink] = useState("");
+  const [instagramLink, setInstagramLink] = useState("");
+  const [whatsappLink, setWhatsappLink] = useState("");
+  const storedToken = localStorage.getItem("token");
   const addHeroImages = async (data) => {
     setLoading(true);
     setStatusMessage("");
@@ -71,13 +76,21 @@ const SettingsPage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get("/settings");
+        // console.log(response.data.data[0].social_media.whatsapp);
+
         if (response.status == "200") {
           setDollarValue(response.data.data[0].dollar_price);
           setAboutUs(response.data.data[0].about_us);
-          setSettings(response.data.data);
+          setFacebookLink(response.data.data[0].social_media.facebook);
+          setTelegramLink(response.data.data[0].social_media.telegram);
+          setInstagramLink(response.data.data[0].social_media.instagram);
+          setWhatsappLink(response.data.data[0].social_media.whatsapp);
+
+          setSettings(response.data.data[0]);
         } else setSettings(response.status);
       } catch (err) {
-        setError(err.message);
+        // setError(err.message);
+        console.log("error");
       } finally {
         setLoadingCategories(false);
       }
@@ -118,6 +131,89 @@ const SettingsPage = () => {
       setLoading(false);
     }
   };
+  const ChangeFacebookLink = async () => {
+    setStatusMessage("");
+
+    setLoading(true);
+
+    try {
+      const response = await axios.put(
+        "/settings/facebook",
+        { facebook: facebookLink },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status == 200) {
+        setStatusMessage("Facebook link changed successfully!");
+      } else {
+        setStatusMessage("Failed to change Facebook link ");
+      }
+    } catch (error) {
+      console.error("Login failed:", error.response.data);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const ChangeTelegramLink = async () => {
+    setStatusMessage("");
+
+    setLoading(true);
+
+    try {
+      const response = await axios.put(
+        "/settings/telegram",
+        { telegram: telegramLink },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status == 200) {
+        setStatusMessage("Telegram link changed successfully!");
+      } else {
+        setStatusMessage("Failed to change Telegram link ");
+      }
+    } catch (error) {
+      console.error("Login failed:", error.response.data);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const ChangeInstagramLink = async () => {
+    setStatusMessage("");
+
+    setLoading(true);
+
+    try {
+      const response = await axios.put(
+        "/settings/instagram",
+        { instagram: instagramLink },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status == 200) {
+        setStatusMessage("Instagram link changed successfully!");
+      } else {
+        setStatusMessage("Failed to change Instagram link ");
+      }
+    } catch (error) {
+      console.error("Login failed:", error.response.data);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const changeAboutUs = async () => {
     setStatusMessage("");
 
@@ -126,7 +222,7 @@ const SettingsPage = () => {
     try {
       const response = await axios.put(
         "/settings/about_us",
-        { update_about_us: aboutUs },
+        { about_us: aboutUs },
         {
           headers: {
             "Content-Type": "application/json",
@@ -174,13 +270,40 @@ const SettingsPage = () => {
 
     setPopupView(false);
   };
+
+   if (!storedToken) {
+      return (
+        <div className={"relative min-h-[100vh]"}>
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
+          ></div>
+  
+          <div className="absolute inset-0 bg-black bg-opacity-80"></div>
+          <div className="relative  w-[80vw] mx-auto bg-transparent py-10">
+            <h1 className="text-2xl font-bold text-red-500 mb-5">
+              Access Denied
+            </h1>
+            <p className="text-white mb-5">
+              You must be logged in to access this page.
+            </p>
+            <Link
+              to="/"
+              className="text-white font-bold text-sm border border-2 rounded-full py-1 px-2"
+            >
+              Return to Homepage
+            </Link>
+          </div>
+        </div>
+      );
+    }
   return (
     <>
       <div
         className={
           popupView
-            ? "relative h-[100vh] bg-black bg-opacity-50 opacity-50"
-            : "relative h-[100vh]"
+            ? "relative min-h-[100vh] bg-black bg-opacity-50 opacity-50"
+            : "relative min-h-[100vh]"
         }
       >
         <div
@@ -193,7 +316,7 @@ const SettingsPage = () => {
         <div className="relative space-y-4 w-[80vw] mx-auto bg-transparent py-10">
           <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm">
             <Link className="mr-5 text-white" to={"/"}>
-              Return to Products page
+              Return to Homepage
             </Link>
           </p>
           <div>
@@ -277,16 +400,16 @@ const SettingsPage = () => {
               </label>
               <input
                 type="text"
-                // value={dollarValue}
+                value={facebookLink}
                 className="border rounded p-2 w-3/4 bg-red-100 "
-                onChange={(e) => setDollarValue(e.target.value)}
+                onChange={(e) => setFacebookLink(e.target.value)}
               />
 
               <button
                 className={`text-white ml-2 p-1 rounded ${
                   loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
                 }`}
-                onClick={ChangeDollarValue}
+                onClick={ChangeFacebookLink}
                 disabled={loading}
               >
                 {loading ? "loading" : "Save"}
@@ -298,16 +421,16 @@ const SettingsPage = () => {
               </label>
               <input
                 type="text"
-                // value={dollarValue}
+                value={telegramLink}
                 className="border rounded p-2 w-3/4 bg-red-100 "
-                onChange={(e) => setDollarValue(e.target.value)}
+                onChange={(e) => setTelegramLink(e.target.value)}
               />
 
               <button
                 className={`text-white ml-2 p-1 rounded ${
                   loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
                 }`}
-                onClick={ChangeDollarValue}
+                onClick={ChangeTelegramLink}
                 disabled={loading}
               >
                 {loading ? "loading" : "Save"}
@@ -319,267 +442,26 @@ const SettingsPage = () => {
               </label>
               <input
                 type="text"
-                // value={dollarValue\}
+                value={instagramLink}
                 className="border rounded p-2 w-3/4 bg-red-100 "
-                onChange={(e) => setDollarValue(e.target.value)}
+                onChange={(e) => setInstagramLink(e.target.value)}
               />
 
               <button
                 className={`text-white ml-2 p-1 rounded ${
                   loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
                 }`}
-                onClick={ChangeDollarValue}
+                onClick={ChangeInstagramLink}
                 disabled={loading}
               >
                 {loading ? "loading" : "Save"}
               </button>
             </div>
-            <div className="flex items-center  mb-5 ">
-              <label className="text-white font-bold  w-1/4">
-                Whatsapp numbers
-              </label>
-              <input
-                type="text"
-                // value={dollarValue}
-                className="border rounded p-2 w-3/4 bg-red-100 "
-                onChange={(e) => setDollarValue(e.target.value)}
-              />
-
-              <button
-                className={`text-white ml-2 p-1 rounded ${
-                  loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
-                }`}
-                onClick={ChangeDollarValue}
-                disabled={loading}
-              >
-                {loading ? "loading" : "Save"}
-              </button>
-            </div>
+            <Whatsapp accounts={whatsappLink} />
           </div>
           <p className="text-lg text-red-700 font-bold"> {statusMessage}</p>
         </div>
-        {/* <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="relative space-y-4 w-[80vw] mx-auto bg-transparent py-10"
-          >
-            <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm">
-              <Link className="mr-5 text-white" to={"/"}>
-                Return to Products page
-              </Link>
-            </p>
-            <p className="text-center text-white font-bold">
-              New Product Details
-            </p>
-            <div className="flex items-center">
-              <label className="text-white font-bold w-1/4">Name</label>
-              <input
-                type="text"
-                {...register("name", { required: "Name is required" })}
-                className="border rounded p-2 w-3/4 bg-red-100"
-              />
-              {errors.name && (
-                <p className="text-red-500 ml-1">{errors.name.message}</p>
-              )}
-            </div>
-            <div className="flex items-center">
-              <label className="text-white font-bold w-1/4">Discription</label>
-              <textarea
-                {...register("description", {
-                  required: "Description is required",
-                })}
-                className="border rounded p-2 w-3/4 bg-red-100 resize-none overflow-hidden"
-                rows={1}
-                
-                onInput={(e) => {
-                  e.target.style.height = "auto";
-                  e.target.style.height = `${e.target.scrollHeight}px`;
-                }}
-              ></textarea>
-            </div>
-            <div className="flex">
-              <label className="text-white font-bold w-1/4">Price</label>
-              <input
-                type="number"
-                step="0.01"
-                {...register("price", { required: "Price is required" })}
-                className="border rounded p-2 w-3/4 bg-red-100"
-              />
-              {errors.price && (
-                <p className="ml-1 text-red-500">{errors.price.message}</p>
-              )}
-            </div>
-            <div className="flex">
-              <label className="text-white font-bold w-1/4">Discount</label>
-              <input
-                type="number"
-                step="0.01"
-                {...register(
-                  "discount"
-                  // , { required: "discount is required" }
-                )}
-                className="border rounded p-2 w-3/4 bg-red-100"
-              />
-              {errors.discount && (
-                <p className="ml-1 text-red-500">{errors.discount.message}</p>
-              )}
-            </div>
-            <div className="flex">
-              {loadingCategories ? (
-                <p>Loading...</p>
-              ) : (
-                <>
-                  <label className="text-white font-bold w-1/4">Cagtegory</label>
-                  <div className="flex items-center">
-                    <select
-                      {...register("main_category_id")}
-                      className="border rounded p-2 w-full bg-red-100 text-right w-3/4"
-                    >
-                      <option className="text-left" value="">
-                        Select a category
-                      </option>
-                      {allCategories.map((category) => (
-                        <option
-                          className="inline-block flex justify-between"
-                          key={category._id}
-                          value={category._id}
-                        >
-                          {category.name}
-                        </option>
-                      ))}
-                    </select>
-                    <div className="flex items-center justify-end w-1/4 ml-5 space-x-2">
-                      <button
-                        type="button"
-                        className=" bg-green-500 text-white p-1 rounded-full text-xs"
-                        onClick={() => setPopupView("add")}
-                      >
-                        Add
-                      </button>
-                      <button
-                        type="button"
-                        className=" bg-red-500 text-white p-1 rounded-full text-xs"
-                        onClick={() => setPopupView("delete")}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-            <div>
-              <div className="flex items-center">
-                <label className="text-white font-bold w-1/4">Image</label>
-                <input
-                  type="file"
-                  {...register("image", {
-                    required: "At least one image is required",
-                  })}
-                  multiple
-                  className="border rounded p-2 text-white text-sm inline-block w-3/4"
-                  onChange={handleFileChange}
-                />
-                <button
-                  type="button"
-                  className="absolute right-1 bg-red-400 text-black p-1 rounded-full text-xs"
-                  onClick={clearImage}
-                >
-                  Clear
-                </button>
-                {errors.image && (
-                  <p className="ml-1 text-red-500">{errors.image.message}</p>
-                )}
-              </div>
-              <div className="flex mt-5">
-                <button
-                  type="submit"
-                  className="bg-red-600 text-white px-4 py-1 rounded mr-5"
-                  disabled={loading}
-                >
-                  {loading ? "Loading..." : "Create"}
-                </button>
-                {statusMessage && (
-                  <p className="text-red-500 font-bold">{statusMessage}</p>
-                )}
-              </div>
-            </div>
-          </form> */}
       </div>
-      {/* {popupView === "add" && (
-          <div className="bg-black z-10 inset-0 absolute bg-opacity-30">
-            <button
-              className="right-0 bg-red-600 p-2 absolute top-20 rounded-full w-[40px]"
-              onClick={() => {
-                setPopupView(false);
-              }}
-            >
-              X
-            </button>
-            <div className="flex items-center justify-center h-100vh">
-              <div className="flex items-center absolute inset-50 bg-black p-2  top-[40vh] w-[80vw] rounded-lg ">
-                <label className="text-white font-bold w-1/4">
-                  Category Name
-                </label>
-                <input
-                  type="text"
-                  required
-                  className="border rounded p-2 w-3/4 bg-red-100 "
-                  onChange={(e) => setCategoryName(e.target.value)}
-                />
-  
-                <button
-                  className="text-white ml-2 p-1 bg-red-600 rounded"
-                  onClick={addCategory}
-                >
-                  {loading ? "loading" : "Add"}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-        {popupView === "delete" && (
-          <div className="bg-black z-10 inset-0 absolute bg-opacity-30">
-            <button
-              className="right-0 bg-red-600 p-2 absolute top-20 rounded-full w-[40px]"
-              onClick={() => {
-                setPopupView(false);
-              }}
-            >
-              X
-            </button>
-            <div className="flex items-center justify-center h-100vh">
-              <div className="flex items-center absolute inset-50 bg-black p-2  top-[40vh] w-[80vw] rounded-lg ">
-                <select
-                  onChange={(e) => setDeletedCategoryId(e.target.value)}
-                  className="border rounded p-2 w-full bg-red-100 text-right w-3/4"
-                >
-                  <option className="text-left" value="">
-                    Select a category
-                  </option>
-                  {allCategories.map((category) => (
-                    <option
-                      className="inline-block flex justify-between"
-                      key={category._id}
-                      value={category._id}
-                    >
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
-  
-                <button
-                  className="text-white ml-2 p-1 bg-red-600 rounded"
-                  onClick={() => {
-                    console.log(deletedCategoryId);
-                    deleteCategory();
-                  }}
-                >
-                  {loading ? "loading" : "Delete"}
-                </button>
-              </div>
-            </div>
-          </div>
-        )} */}
     </>
   );
 };

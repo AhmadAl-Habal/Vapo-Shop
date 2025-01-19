@@ -84,7 +84,7 @@ const EditProductPage = () => {
         formData.append("discount", data.discount);
       }
       if (data.description) {
-        formData.append("description",data.description );
+        formData.append("description", data.description);
       }
       formData.append("main_category_id", data.main_category_id);
       if (data.image.length >= 1) {
@@ -182,8 +182,8 @@ const EditProductPage = () => {
       <div
         className={
           popupView
-            ? "relative h-[100vh] bg-black bg-opacity-50 opacity-50"
-            : "relative h-[100vh]"
+            ? "relative min-h-[100vh] bg-black bg-opacity-50 opacity-50"
+            : "relative min-h-[100vh]"
         }
       >
         <div
@@ -199,7 +199,7 @@ const EditProductPage = () => {
         >
           <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm">
             <Link className="mr-5 text-white" to={"/"}>
-              Return to Products page
+              Return to Homepage
             </Link>
           </p>
           <p className="text-center text-white font-bold">
@@ -222,7 +222,6 @@ const EditProductPage = () => {
               {...register("description")}
               className="border rounded p-2 w-3/4 bg-red-100 resize-none overflow-hidden"
               rows={1}
-              
               onInput={(e) => {
                 e.target.style.height = "auto";
                 e.target.style.height = `${e.target.scrollHeight}px`;
@@ -245,20 +244,20 @@ const EditProductPage = () => {
             )}
           </div>
           <div className="flex">
-              <label className="text-white font-bold w-1/4">Discount</label>
-              <input
-                type="number"
-                step="0.01"
-                {...register(
-                  "discount"
-                  // , { required: "discount is required" }
-                )}
-                className="border rounded p-2 w-3/4 bg-red-100"
-              />
-              {errors.discount && (
-                <p className="ml-1 text-red-500">{errors.discount.message}</p>
+            <label className="text-white font-bold w-1/4">Discount</label>
+            <input
+              type="number"
+              step="0.01"
+              {...register(
+                "discount"
+                // , { required: "discount is required" }
               )}
-            </div>
+              className="border rounded p-2 w-3/4 bg-red-100"
+            />
+            {errors.discount && (
+              <p className="ml-1 text-red-500">{errors.discount.message}</p>
+            )}
+          </div>
           <div className="flex">
             {loadingCategories ? (
               <p>Loading...</p>

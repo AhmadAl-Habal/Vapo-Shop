@@ -43,7 +43,7 @@ const ProductPage = () => {
         <div className="relative w-[80vw] mx-auto bg-transparent py-10 text-white">
           <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm mb-5 ">
             <Link className="mr-5 text-white" to={"/"}>
-              Return to Products page
+              Return to Homepage
             </Link>
           </p>
 

@@ -3,37 +3,39 @@ import { useParams, Link } from "react-router-dom";
 import axios from "../api/axios";
 import Spinner from "../components/Spinner";
 import hero from "../assets/bg.webp";
-const AboutUsPage = () => {
+import FAQ from "../components/FAQ";
+import { CiCirclePlus } from "react-icons/ci";
+const FAQPage = () => {
   const { id } = useParams();
   const [productDetails, setProductDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [mainImage, setMainImage] = useState("");
+
   const [settings, setSettings] = useState({});
-  const [aboutUs, setAboutUs] = useState("");
+  const [faqs, setFaqs] = useState([]);
   const [dollarValue, setDollarValue] = useState("");
   const [heroImages, setHeroImages] = useState([]);
+  const [token, setToken] = useState("");
   useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    setToken(storedToken || "");
+
     const fetchData = async () => {
+      setLoading(true);
       try {
-        const response = await axios.get("/settings");
+        const response = await axios.get("/faq");
 
+       
         if (response.status === 200) {
-          const settingsData = response.data.data[0];
+          const settingsData = response.data.data;
 
-          console.log("About Us from response:", settingsData.about_us);
 
-          setDollarValue(settingsData.dollar_price);
-          setHeroImages(settingsData.hero);
-          setSettings(settingsData);
-          setAboutUs(settingsData.about_us);
-          sessionStorage.setItem("dollar_value", settingsData.dollar_price);
+          setFaqs(settingsData);
         } else {
-          setSettings(null);
-          setAboutUs(null);
+          setFaqs(null);
         }
       } catch (err) {
-        console.error("Error fetching settings:", err.message);
+        console.error("Error fetching FAQs:", err.message);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -59,13 +61,34 @@ const AboutUsPage = () => {
           </p>
           <div>
             {loading ? (
-              <p>Loading...</p>
-            ) : error ? (
-              <p>Error: {error}</p>
+              <Spinner loading={loading} />
             ) : (
               <div>
-                <h1>About Us</h1>
-                <p>{aboutUs || "No content available"}</p>
+                <div className="flex justify-between mb-5" dir="rtl">
+                  <p className="text-right text-2xl">الأسئلة الشائعة</p>
+                  {token && (
+                    <Link className="" to={"/add-faq"}>
+                      <CiCirclePlus
+                        size={30}
+                        color="white"
+                        className="g-gray-200"
+                      />
+                    </Link>
+                  )}
+                </div>
+
+                {faqs.length === 0 ? (
+                  <p>There are no FAQ to show</p>
+                ) : (
+                  faqs.map((faq) => (
+                    <FAQ
+                      question={faq.question}
+                      answer={faq.answer}
+                      images={faq.images}
+                      id={faq._id}
+                    />
+                  ))
+                )}
               </div>
             )}
           </div>
@@ -129,4 +152,4 @@ const AboutUsPage = () => {
   );
 };
 
-export default AboutUsPage;
+export default FAQPage;

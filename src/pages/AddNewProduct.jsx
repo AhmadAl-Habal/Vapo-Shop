@@ -33,13 +33,13 @@ const AddNewProduct = () => {
       const formData = new FormData();
       formData.append("name", data.name);
       if (data.description) {
-        formData.append("description",data.description );
+        formData.append("description", data.description);
       }
       formData.append("price", data.price);
       if (data.discount) {
         formData.append("discount", data.discount);
       }
-      
+
       formData.append("main_category_id", data.main_category_id);
       Array.from(data.image).forEach((file) => {
         formData.append("image", file);
@@ -160,8 +160,8 @@ const AddNewProduct = () => {
       <div
         className={
           popupView
-            ? "relative h-[100vh] bg-black bg-opacity-50 opacity-50"
-            : "relative h-[100vh]"
+            ? "relative min-h-[100vh] bg-black bg-opacity-50 opacity-50"
+            : "relative min-h-[100vh]"
         }
       >
         <div
@@ -177,7 +177,7 @@ const AddNewProduct = () => {
         >
           <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm">
             <Link className="mr-5 text-white" to={"/"}>
-              Return to Products page
+              Return to Homepage
             </Link>
           </p>
           <p className="text-center text-white font-bold">
@@ -197,10 +197,7 @@ const AddNewProduct = () => {
           <div className="flex items-center">
             <label className="text-white font-bold w-1/4">Discription</label>
             <textarea
-              {...register(
-                "description"
-             
-              )}
+              {...register("description")}
               className="border rounded p-2 w-3/4 bg-red-100 resize-none overflow-hidden"
               rows={1}
               onInput={(e) => {

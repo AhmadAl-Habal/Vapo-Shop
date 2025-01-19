@@ -52,7 +52,7 @@ const LoginPage = () => {
     }
   }, [authToken, navigate]);
   return (
-    <div className="relative h-[100vh]">
+    <div className="relative min-h-[100vh]">
       <div
         className="bg-center bg-cover absolute inset-0"
         style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
@@ -64,7 +64,7 @@ const LoginPage = () => {
       >
         <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm">
           <Link className="mr-5 text-white" to={"/"}>
-            Return to Products page
+            Return to Homepage
           </Link>
         </p>
         <div>
