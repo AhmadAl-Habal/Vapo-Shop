@@ -20,16 +20,16 @@ const EditFAQPage = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [faqDetails, setFaqDetails] = useState({});
-
 
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
       try {
         const response = await axios.get(`/faq/${id}`);
-     
+
         if (response.status === 200) {
           setFaqDetails(response.data.data);
           reset({
@@ -37,6 +37,7 @@ const EditFAQPage = () => {
             answer: response.data.data.answer || "",
           });
         }
+        // setRefresh(false)
       } catch (err) {
         setError(err.message);
       } finally {
@@ -45,7 +46,7 @@ const EditFAQPage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [refresh]);
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -54,22 +55,14 @@ const EditFAQPage = () => {
       const formData = new FormData();
       formData.append("question", data.question);
       formData.append("answer", data.answer);
-      // faqImages.forEach((file) => {
-      //   if (file) {
-      //     console.log(file);
-
-      //     formData.append(`image`, file);
-      //   }
-      // });
 
       const response = await axios.put(`/faq/${id}`, formData, {});
 
       if (response.status === 200) {
-        console.log("FAQ edited successfully:", response.data);
-        setStatusMessage("FAQ edited successfully!, Redirecting ...");
-        setTimeout(() => {
-          navigate("/faq");
-        }, 2000);
+        setStatusMessage("FAQ edited successfully!");
+        // setTimeout(() => {
+        //   navigate("/faq");
+        // }, 2000);
       } else {
         setStatusMessage("Failed to edit the FAQ.");
       }
@@ -80,7 +73,6 @@ const EditFAQPage = () => {
       setLoading(false);
     }
   };
-
 
   if (!storedToken) {
     return (
@@ -186,13 +178,16 @@ const EditFAQPage = () => {
           </div>
         </form>
         <div className="relative w-[80vw] mx-auto py-5">
-         
-         {!loading && faqDetails?.images && (
-           <BulkImageUploadForm inputDetails={faqDetails} endpoint={"faq"} />
-         )}
-       </div>
+          {!loading && faqDetails?.images && (
+            <BulkImageUploadForm
+              inputDetails={faqDetails}
+              endpoint={"faq"}
+              refresh={refresh}
+              setRefresh={setRefresh}
+            />
+          )}
+        </div>
         <div className="relative w-[80vw] mx-auto py-5">
-         
           {!loading && faqDetails?.images && (
             <ImageField inputDetails={faqDetails} endpoint={"faq"} />
           )}

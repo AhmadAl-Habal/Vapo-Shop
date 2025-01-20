@@ -18,7 +18,7 @@ const Footer = () => {
     setToken(storedToken || "");
   }, []);
   if (!settings) {
-    return <p>Loading settings...</p>; // Show a loading message if settings are not loaded yet
+    return <p>Loading settings...</p>; 
   }
   return (
     <footer className="bg-red-600 border-b border-red-500 p-1 flex justify-between items-center">

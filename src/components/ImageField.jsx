@@ -3,7 +3,7 @@ import axios from "../api/axios";
 import { FaChevronDown, FaChevronUp, FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
-const ImageField = ({ inputDetails,endpoint }) => {
+const ImageField = ({ inputDetails, endpoint }) => {
   const initialImages = inputDetails?.images || [];
   const [imagePreviews, setImagePreviews] = useState([...initialImages]);
   const [inputKeys, setInputKeys] = useState(
@@ -12,6 +12,7 @@ const ImageField = ({ inputDetails,endpoint }) => {
   const [visible, setVisible] = useState(false);
   const [token, setToken] = useState("");
   const [exist, setExist] = useState(true);
+  const [statusMessage, setStatusMessage] = useState("");
 
   const handleFileChange = (event, index) => {
     const file = event.target.files[0];
@@ -44,12 +45,13 @@ const ImageField = ({ inputDetails,endpoint }) => {
   const deleteImage = async (index) => {
     try {
       await axios.delete(`/${endpoint}/${inputDetails._id}/${index}`);
+      setStatusMessage(`Image ${index + 1} deleted successfully`);
       setImagePreviews((prev) => {
         const updated = [...prev];
         updated.splice(index, 1); // Remove the deleted image
         return updated;
       });
-      alert(`Image ${index + 1} deleted successfully.`);
+    //   alert(`Image ${index + 1} deleted successfully.`);
     } catch (error) {
       console.error("Error deleting image:", error);
       alert("Failed to delete image.");
@@ -87,16 +89,24 @@ const ImageField = ({ inputDetails,endpoint }) => {
   const setExpand = () => {
     setVisible(!visible);
   };
+  if (imagePreviews.length == 0) {
+    return (
+      <>
+        <p className="w-100 text-md text-white font-bold mb-3">Current Images</p>
+        <p className="w-100 text-sm text-gray-400 font-bold">
+          This FAQ has no Images!
+        </p>
+      </>
+    );
+  }
   return (
     <>
-      <div className=''>
-        <div className={`flex items-center justify-between cursor-pointer px-1 py-2 ${visible && "mb-5"} ${!visible && "border border-2 rounded-lg"}`}  onClick={setExpand}>
-          <p
-            className="w-100 text-md text-white font-bold"
-          
-          >
-            Current Images
-          </p>
+      <div className="">
+        <div
+          className={`flex items-center justify-between cursor-pointer px-1 py-2 ${visible && "mb-5"} ${!visible && "border border-2 rounded-lg"}`}
+          onClick={setExpand}
+        >
+          <p className="w-100 text-md text-white font-bold">Current Images</p>
           {visible ? (
             <FaChevronUp className="text-white " />
           ) : (
@@ -115,13 +125,13 @@ const ImageField = ({ inputDetails,endpoint }) => {
                 <input
                   key={inputKeys[index]} // Unique key to force re-render
                   type="file"
-                  className="border rounded p-2 w-3/4 text-white"
+                  className="border rounded p-2 w-3/4 text-white text-sm"
                   onChange={(event) => handleFileChange(event, index)}
                 />
                 <button
                   type="button"
                   onClick={() => clearImage(index)}
-                  className="absolute right-1 ml-2 bg-red-400 text-black p-1 rounded-full text-xs"
+                  className="absolute right-3 ml-2 bg-red-400 text-black p-1 rounded-full text-xs"
                 >
                   Clear
                 </button>
@@ -157,6 +167,7 @@ const ImageField = ({ inputDetails,endpoint }) => {
                   Edit
                   <FaEdit className="ml-1" size={15} />
                 </button>
+                {/* <p>{statusMessage}</p> */}
               </div>
             </div>
           ))}

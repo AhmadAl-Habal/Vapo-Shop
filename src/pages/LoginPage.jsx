@@ -24,20 +24,14 @@ const LoginPage = () => {
       });
       console.log("Response received:", response.message);
       if (response.status == 200) {
-        // console.log("Login successful:", response);
-        // console.log("token", response.data.data.token);
         setAuthToken(response.data.data.token);
         setLoginStatus("Login successful, redirecting...");
       } else {
         setLoginStatus(response.message);
-        console.log("tiz");
-        //
       }
     } catch (error) {
       console.error("Login failed:", error.response.data);
       setLoginStatus(error.response.data.message);
-
-      //   alert("Login failed! Check your credentials.");
     } finally {
       setLoading(false);
     }

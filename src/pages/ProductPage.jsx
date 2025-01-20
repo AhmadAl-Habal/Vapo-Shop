@@ -85,7 +85,7 @@ const ProductPage = () => {
                 <p className="mb-2">
                   الصنف:
                   <span className="inline-block border border-1 rounded-full text-xs p-1 bg-red-600 bg-opacity-60 text-gray-300 mx-1">
-                    {" "}
+                  
                     {productDetails.main_category_id &&
                       productDetails.main_category_id.name}
                   </span>

@@ -57,15 +57,17 @@ const AboutUsPage = () => {
               Return to Homepage
             </Link>
           </p>
-          <div>
+          <div dir="rtl">
             {loading ? (
               <p>Loading...</p>
             ) : error ? (
               <p>Error: {error}</p>
             ) : (
               <div>
-                <h1>About Us</h1>
-                <p>{aboutUs || "No content available"}</p>
+                <h1 className="text-2xl font-bold mb-5">لمحة عن Vapo</h1>
+                <p className="w-full whitespace-pre-wrap text-white text-md font-bold">
+                  {aboutUs || "No content available"}
+                </p>
               </div>
             )}
           </div>

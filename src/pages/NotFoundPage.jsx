@@ -1,20 +1,31 @@
 import React from "react";
 import { FaExclamationTriangle } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import hero from "../assets/bg.webp";
 const NotFoundPage = () => {
   return (
-    <section className="text-center flex flex-col justify-center items-center h-96">
-      <FaExclamationTriangle className="text-yellow-400 text-6xl mb-4" />
-      <i className="fas fa-exclamation-triangle text-yellow-400 fa-4x mb-4"></i>
-      <h1 className="text-6xl font-bold mb-4">404 Not Found</h1>
-      <p className="text-xl mb-5">This page does not exist</p>
-      <Link
-        to="/"
-        className="text-white bg-red-700 hover:bg-red-900 rounded-md px-3 py-2 mt-4"
-      >
-        Go Back
-      </Link>
-    </section>
+    <div className={"relative min-h-[100vh]"}>
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
+      ></div>
+
+      <div className="absolute inset-0 bg-black bg-opacity-80"></div>
+      <div className="relative  w-[80vw] mx-auto bg-transparent py-10">
+        <section className="text-center flex flex-col justify-center items-center h-96 text-white">
+          <FaExclamationTriangle className="text-yellow-400 text-6xl mb-4" />
+          <i className="fas fa-exclamation-triangle text-yellow-400 fa-4x mb-4"></i>
+          <h1 className="text-4xl font-bold mb-4">404 Not Found</h1>
+          <p className="text-xl mb-5">This page does not exist</p>
+          <Link
+            to="/"
+            className="text-white bg-red-700 hover:bg-red-900 rounded-md px-3 py-2 mt-4"
+          >
+            Go Back
+          </Link>
+        </section>
+      </div>
+    </div>
   );
 };
 
