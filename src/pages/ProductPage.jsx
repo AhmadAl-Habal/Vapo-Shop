@@ -179,30 +179,31 @@ const ProductPage = () => {
       </div>
       {popupView && (
         <div
-          className="bg-black z-10 inset-0 absolute bg-opacity-70"
-          onClick={(e) => {
-            setPopupView(false);
-          }}
+          className="min-h-screen w-full bg-black z-10 fixed top-0 left-0 bg-opacity-70"
+          onClick={() => setPopupView(false)}
         >
+          {/* Close button */}
           <button
-            className="right-0 cursor-pointer p-3 text-white absolute top-20 rounded-full w-[40px]"
-            onClick={() => {
+            className="right-4 top-4 cursor-pointer p-3 text-white fixed rounded-full w-[40px] text-2xl"
+            onClick={(e) => {
+              // Prevent closing the popup
               setPopupView(false);
             }}
           >
             X
           </button>
+
+          {/* Popup content */}
           <div
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-            className="flex items-center justify-center h-100vh"
+            className="flex items-center justify-center min-h-screen overflow-y-auto"
+            // Prevent closing the popup when clicking inside
           >
             <div
               dir="rtl"
-              className="flex flex-col text-white absolute inset-50 bg-black p-4  top-[40vh] w-[80vw] rounded-lg "
+              className="flex flex-col text-white bg-black p-6 rounded-lg w-[80vw] max-w-[600px] mx-auto my-10"
+              onClick={(e) => e.stopPropagation()}
             >
-              {whatsappAccounts.length != 0 ? (
+              {whatsappAccounts.length !== 0 ? (
                 <>
                   <p className="font-bold mb-5">أختر الادمن المناسب:</p>
                   <ul className="space-y-2 text-gray-400">
@@ -212,8 +213,7 @@ const ProductPage = () => {
                         className="flex items-center justify-between bg-black bg-opacity-40 p-3 rounded"
                       >
                         <div>
-                          <p className="font-bold ">{account.name}</p>
-
+                          <p className="font-bold">{account.name}</p>
                           <p className="text-sm">{account.phone_number}+</p>
                         </div>
                         <button className="bg-red-600 text-white py-1 px-2 rounded">
