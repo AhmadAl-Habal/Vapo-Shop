@@ -7,7 +7,7 @@ import axios from "axios";
 // const baseURL = import.meta.env.VITE_DATABASE_URL;
 
 const axiosInstance = axios.create({
-  baseURL: "https://abomariambackend.vercel.app/",
+  baseURL: "https://abomariamvapestorebackend.onrender.com/",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
