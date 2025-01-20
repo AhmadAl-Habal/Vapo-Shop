@@ -268,7 +268,7 @@ const SettingsPage = () => {
 
   if (!storedToken) {
     return (
-      <div className={"relative min-h-[100vh]"}>
+      <div className={"relative min-h-[100vh] h-auto"}>
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
