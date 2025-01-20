@@ -110,12 +110,10 @@ const ProductPage = () => {
                   <p className="font-bold text-lg mb-2">السعر:</p>
                   {productDetails.discount ? (
                     <div className="flex flex-col items-start gap-2">
-                      {/* Original Price */}
                       <span className="flex items-center text-gray-400 text-sm line-through">
                         السعر الأصلي: ${productDetails.price}
                       </span>
 
-                      {/* Discounted Price */}
                       <span className="flex items-center text-green-400 text-xl font-bold">
                         السعر بعد الخصم: $
                         {(
@@ -124,7 +122,6 @@ const ProductPage = () => {
                         ).toFixed(2)}
                       </span>
 
-                      {/* Price in Local Currency */}
                       <span className="text-sm text-gray-300">
                         ما يعادل:{" "}
                         {(
@@ -140,7 +137,6 @@ const ProductPage = () => {
                     </div>
                   ) : (
                     <div className="flex flex-col items-start gap-2">
-                      {/* Price without discount */}
                       <span className="text-gray-300 text-xl font-bold">
                         ${productDetails.price}
                       </span>
@@ -165,7 +161,6 @@ const ProductPage = () => {
 
                 <a
                   onClick={() => setPopupView(true)}
-                  // href="https://wa.link/z0mvhm"
                   className="block text-center bg-red-500 hover:bg-red-600 transition duration-200 text-white font-bold py-2 rounded-lg cursor-pointer"
                 >
                   أطلب الآن
@@ -182,22 +177,16 @@ const ProductPage = () => {
           className="min-h-screen w-full bg-black z-10 fixed top-0 left-0 bg-opacity-70"
           onClick={() => setPopupView(false)}
         >
-          {/* Close button */}
           <button
             className="right-4 top-4 cursor-pointer p-3 text-white fixed rounded-full w-[40px] text-2xl"
             onClick={(e) => {
-              // Prevent closing the popup
               setPopupView(false);
             }}
           >
             X
           </button>
 
-          {/* Popup content */}
-          <div
-            className="flex items-center justify-center min-h-screen overflow-y-auto"
-            // Prevent closing the popup when clicking inside
-          >
+          <div className="flex items-center justify-center min-h-screen overflow-y-auto">
             <div
               dir="rtl"
               className="flex flex-col text-white bg-black p-6 rounded-lg w-[80vw] max-w-[600px] mx-auto my-10"

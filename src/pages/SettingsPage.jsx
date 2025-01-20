@@ -33,6 +33,7 @@ const SettingsPage = () => {
   const [telegramLink, setTelegramLink] = useState("");
   const [instagramLink, setInstagramLink] = useState("");
   const [whatsappLink, setWhatsappLink] = useState("");
+  const [youtubeLink, setYoutubeLink] = useState("");
   const storedToken = localStorage.getItem("token");
 
   const addHeroImages = async (data) => {
@@ -86,8 +87,13 @@ const SettingsPage = () => {
           setTelegramLink(response.data.data[0].social_media.telegram);
           setInstagramLink(response.data.data[0].social_media.instagram);
           setWhatsappLink(response.data.data[0].social_media.whatsapp);
+          setYoutubeLink(response.data.data[0].social_media.youtube);
 
           setSettings(response.data.data[0]);
+          sessionStorage.setItem(
+            "settings",
+            JSON.stringify(response.data.data[0])
+          );
         } else setSettings(response.status);
       } catch (err) {
         // setError(err.message);
@@ -127,7 +133,7 @@ const SettingsPage = () => {
         //
       }
     } catch (error) {
-      console.error("Login failed:", error.response.data);
+      console.error("Change Failed", error.response.data);
     } finally {
       setLoading(false);
     }
@@ -154,7 +160,7 @@ const SettingsPage = () => {
         setStatusMessage("Failed to change Facebook link ");
       }
     } catch (error) {
-      console.error("Login failed:", error.response.data);
+      console.error("Change Failed", error.response.data);
     } finally {
       setLoading(false);
     }
@@ -181,7 +187,7 @@ const SettingsPage = () => {
         setStatusMessage("Failed to change Telegram link ");
       }
     } catch (error) {
-      console.error("Login failed:", error.response.data);
+      console.error("Change Failed", error.response.data);
     } finally {
       setLoading(false);
     }
@@ -209,7 +215,34 @@ const SettingsPage = () => {
         setStatusMessage("Failed to change Instagram link ");
       }
     } catch (error) {
-      console.error("Login failed:", error.response.data);
+      console.error("Change Failed", error.response.data);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const ChangeYoutubeLink = async () => {
+    setStatusMessage("");
+
+    setLoading(true);
+
+    try {
+      const response = await axios.put(
+        "/settings/youtube",
+        { youtube: youtubeLink },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status == 200) {
+        setStatusMessage("Youtube link changed successfully!");
+      } else {
+        setStatusMessage("Failed to change Youtube link ");
+      }
+    } catch (error) {
+      console.error("Change Failed", error.response.data);
     } finally {
       setLoading(false);
     }
@@ -238,7 +271,7 @@ const SettingsPage = () => {
         //
       }
     } catch (error) {
-      console.error("Login failed:", error.response.data);
+      console.error("Change Failed", error.response.data);
     } finally {
       setLoading(false);
     }
@@ -264,7 +297,7 @@ const SettingsPage = () => {
         }
       );
     } catch (error) {
-      console.error("Login failed:", error.response.data);
+      console.error("Change Failed", error.response.data);
     } finally {
       setLoading(false);
     }
@@ -454,6 +487,27 @@ const SettingsPage = () => {
                   loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
                 }`}
                 onClick={ChangeInstagramLink}
+                disabled={loading}
+              >
+                {loading ? "loading" : "Save"}
+              </button>
+            </div>
+            <div className="flex items-center  mb-5 ">
+              <label className="text-white font-bold  w-1/4">
+                Youtube Link
+              </label>
+              <input
+                type="text"
+                value={youtubeLink}
+                className="border rounded p-2 w-3/4 bg-red-100 "
+                onChange={(e) => setYoutubeLink(e.target.value)}
+              />
+
+              <button
+                className={`text-white ml-2 p-1 rounded ${
+                  loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
+                }`}
+                onClick={ChangeYoutubeLink}
                 disabled={loading}
               >
                 {loading ? "loading" : "Save"}
