@@ -64,67 +64,15 @@ const AboutUsPage = () => {
               <p>Error: {error}</p>
             ) : (
               <div>
-                <h1 className="text-2xl font-bold mb-5">لمحة عن Vapo كسم بشار</h1>
+                <h1 className="text-2xl font-bold mb-5">
+                  لمحة عن Vapo كسم بشار
+                </h1>
                 <p className="w-full whitespace-pre-wrap text-white text-md font-bold">
                   {aboutUs || "No content available"}
                 </p>
               </div>
             )}
           </div>
-          {/* {loading ? (
-            <Spinner />
-          ) : productDetails ? (
-            <>
-              <div className="w-full">
-                <div className="w-full flex justify-center items-center mb-5">
-                  <img
-                    src={mainImage}
-                    alt="Main Product"
-                    className="rounded w-[350px] h-[350px] object-contain"
-                  />
-                </div>
-
-                {productDetails.images?.length > 1 && (
-                  <div
-                    dir="rtl"
-                    className="flex w-full justify-center items-center mb-5"
-                  >
-                    {productDetails.images.map((image, index) => (
-                      <img
-                        key={index}
-                        src={image}
-                        alt={`Product Image ${index + 1}`}
-                        className="rounded-full w-10 h-10 mx-1 cursor-pointer object-cover"
-                        onClick={() => setMainImage(image)}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div dir="rtl">
-                <p className="mb-2">الاسم: {productDetails.name}</p>
-                <p className="mb-2">الوصف: {productDetails.description}</p>
-                <p className="mb-2">السعر: {productDetails.price}$</p>
-                <p className="mb-2">
-                  الصنف:
-                  <span className="inline-block border border-1 rounded-full text-xs p-1 bg-red-600 bg-opacity-60 text-gray-300 mx-1">
-                    {" "}
-                    {productDetails.main_category_id &&
-                      productDetails.main_category_id.name}
-                  </span>
-                </p>
-                <a
-                  href="https://wa.link/z0mvhm"
-                  className="p-1 bg-red-500 text-xs font-bold rounded-lg"
-                >
-                  أطلب الآن
-                </a>
-              </div>
-            </>
-          ) : (
-            <p>No product details available.</p>
-          )} */}
         </div>
       </div>
     </>

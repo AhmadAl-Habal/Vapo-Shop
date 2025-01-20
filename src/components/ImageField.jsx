@@ -70,15 +70,11 @@ const ImageField = ({ inputDetails, endpoint, name }) => {
       const formData = new FormData();
       formData.append("image", updatedFile);
 
-      await axios.put(
-        `/${endpoint}/${inputDetails._id}/${index}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await axios.put(`/${endpoint}/${inputDetails._id}/${index}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       alert(`Image ${index + 1} updated successfully.`);
     } catch (error) {
@@ -94,7 +90,9 @@ const ImageField = ({ inputDetails, endpoint, name }) => {
   if (imagePreviews.length === 0) {
     return (
       <>
-        <p className="w-100 text-md text-white font-bold mb-3">Current Images</p>
+        <p className="w-100 text-md text-white font-bold mb-3">
+          Current Images
+        </p>
         <p className="w-100 text-sm text-gray-400 font-bold">
           This {name} has no Images!
         </p>
@@ -157,18 +155,18 @@ const ImageField = ({ inputDetails, endpoint, name }) => {
               <button
                 type="button"
                 onClick={() => deleteImage(index)}
-                className="flex bg-red-400 text-black p-1 rounded text-xs items-center"
+                className="flex bg-red-400 text-black p-1 rounded text-xs items-center m-1"
               >
                 Delete
-                <MdDelete className="ml-1" size={15} />
+                <MdDelete className="ml-1" size={20} />
               </button>
               <button
                 type="button"
                 onClick={() => editImage(index)}
-                className="flex bg-green-400 text-black p-1 rounded text-xs items-center"
+                className="flex bg-green-400 text-black p-1 rounded text-xs items-center m-1"
               >
                 Edit
-                <FaEdit className="ml-1" size={15} />
+                <FaEdit className="ml-1" size={20} />
               </button>
             </div>
           </div>

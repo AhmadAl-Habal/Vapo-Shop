@@ -65,23 +65,26 @@ const Product = ({ product, category }) => {
               )}
             </p>
             <p className="">
-            {product.discount ? (
+              {product.discount ? (
                 <span>
                   {/* <span className="text-gray-400 line-through mr-2">
                     {product.price}$
                   </span> */}
                   <span>
-                    {((product.price*storedDollarValue) * (1 - product.discount / 100)).toFixed(2)} ل.س 
+                    {(
+                      product.price *
+                      storedDollarValue *
+                      (1 - product.discount / 100)
+                    ).toFixed(2)}{" "}
+                    ل.س
                   </span>
                 </span>
               ) : (
-                `${(product.price*storedDollarValue).toLocaleString('en-US')} ل.س `
+                `${(product.price * storedDollarValue).toLocaleString("en-US")} ل.س `
               )}
-              
-              
+
               {/* {product.price * storedDollarValue} ل.س  */}
-              
-              </p>
+            </p>
             {/* <p className="">
              
               {product.discount && product.price
@@ -98,10 +101,10 @@ const Product = ({ product, category }) => {
                 className="cursor-pointer ml-1"
                 color="red"
                 onClick={deleteItem}
-                size={15}
+                size={20}
               />
               <Link to={`/edit-product/${product._id}`}>
-                <FaEdit size={15} color="#d0bf4c" className="cursor-pointer" />
+                <FaEdit size={20} color="#d0bf4c" className="cursor-pointer" />
               </Link>
             </div>
           )}
