@@ -5,32 +5,23 @@ import Spinner from "../components/Spinner";
 import hero from "../assets/bg.webp";
 const AboutUsPage = () => {
   const { id } = useParams();
-  const [productDetails, setProductDetails] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [mainImage, setMainImage] = useState("");
-  const [settings, setSettings] = useState({});
+
   const [aboutUs, setAboutUs] = useState("");
-  const [dollarValue, setDollarValue] = useState("");
-  const [heroImages, setHeroImages] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const response = await axios.get("/settings");
 
         if (response.status === 200) {
           const settingsData = response.data.data[0];
 
-          console.log("About Us from response:", settingsData.about_us);
-
-          setDollarValue(settingsData.dollar_price);
-          setHeroImages(settingsData.hero);
-          setSettings(settingsData);
           setAboutUs(settingsData.about_us);
           sessionStorage.setItem("dollar_value", settingsData.dollar_price);
-        } else {
-          setSettings(null);
-          setAboutUs(null);
         }
       } catch (err) {
         console.error("Error fetching settings:", err.message);
@@ -59,7 +50,7 @@ const AboutUsPage = () => {
           </p>
           <div dir="rtl">
             {loading ? (
-              <p>Loading...</p>
+              <Spinner></Spinner>
             ) : error ? (
               <p>Error: {error}</p>
             ) : (
@@ -68,7 +59,7 @@ const AboutUsPage = () => {
                   لمحة عن Vapo كسم بشار
                 </h1>
                 <p className="w-full whitespace-pre-wrap text-white text-md font-bold">
-                  {aboutUs || "No content available"}
+                  {aboutUs}
                 </p>
               </div>
             )}
