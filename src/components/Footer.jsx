@@ -11,14 +11,13 @@ const Footer = () => {
 
     if (storedSettings) {
       const settingsObject = JSON.parse(storedSettings);
-      console.log(settingsObject);
 
       setSettings(settingsObject);
     }
     setToken(storedToken || "");
   }, []);
   if (!settings) {
-    return <p>Loading settings...</p>; 
+    return <p>Loading settings...</p>;
   }
   return (
     <footer className="bg-red-600 border-b border-red-500 p-1 flex justify-between items-center">
@@ -33,7 +32,7 @@ const Footer = () => {
           <ul className="flex gap-4">
             <li>
               <a
-          href={settings.social_media?.facebook || "#"}
+                href={settings.social_media?.facebook || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-white hover:text-blue-500 transition-colors"
@@ -44,7 +43,7 @@ const Footer = () => {
             </li>
             <li>
               <a
-              href={settings.social_media?.instagram || "#"}
+                href={settings.social_media?.instagram || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-white hover:text-pink-500 transition-colors"
@@ -55,8 +54,8 @@ const Footer = () => {
             </li>
             <li>
               <a
-            //  href={settings.social_media?.telegram || "#"}
-             href={"https://telegram.org" || "#"}
+                //  href={settings.social_media?.telegram || "#"}
+                href={"https://telegram.org" || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-white hover:text-blue-400 transition-colors"
@@ -67,7 +66,7 @@ const Footer = () => {
             </li>
             <li>
               <a
-             href={settings.social_media?.youtube || "#"}
+                href={settings.social_media?.youtube || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-white hover:text-red-500 transition-colors"

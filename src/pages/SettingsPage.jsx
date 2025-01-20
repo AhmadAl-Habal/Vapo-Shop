@@ -34,6 +34,7 @@ const SettingsPage = () => {
   const [instagramLink, setInstagramLink] = useState("");
   const [whatsappLink, setWhatsappLink] = useState("");
   const storedToken = localStorage.getItem("token");
+
   const addHeroImages = async (data) => {
     setLoading(true);
     setStatusMessage("");
@@ -271,32 +272,32 @@ const SettingsPage = () => {
     setPopupView(false);
   };
 
-   if (!storedToken) {
-      return (
-        <div className={"relative min-h-[100vh]"}>
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
-          ></div>
-  
-          <div className="absolute inset-0 bg-black bg-opacity-80"></div>
-          <div className="relative  w-[80vw] mx-auto bg-transparent py-10">
-            <h1 className="text-2xl font-bold text-red-500 mb-5">
-              Access Denied
-            </h1>
-            <p className="text-white mb-5">
-              You must be logged in to access this page.
-            </p>
-            <Link
-              to="/"
-              className="text-white font-bold text-sm border border-2 rounded-full py-1 px-2"
-            >
-              Return to Homepage
-            </Link>
-          </div>
+  if (!storedToken) {
+    return (
+      <div className={"relative min-h-[100vh]"}>
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
+        ></div>
+
+        <div className="absolute inset-0 bg-black bg-opacity-80"></div>
+        <div className="relative  w-[80vw] mx-auto bg-transparent py-10">
+          <h1 className="text-2xl font-bold text-red-500 mb-5">
+            Access Denied
+          </h1>
+          <p className="text-white mb-5">
+            You must be logged in to access this page.
+          </p>
+          <Link
+            to="/"
+            className="text-white font-bold text-sm border border-2 rounded-full py-1 px-2"
+          >
+            Return to Homepage
+          </Link>
         </div>
-      );
-    }
+      </div>
+    );
+  }
   return (
     <>
       <div
@@ -375,6 +376,7 @@ const SettingsPage = () => {
               <textarea
                 className="border rounded p-2 w-3/4 bg-red-100 resize-none overflow-hidden"
                 rows={1}
+                value={aboutUs}
                 onInput={(e) => {
                   e.target.style.height = "auto";
                   e.target.style.height = `${e.target.scrollHeight}px`;

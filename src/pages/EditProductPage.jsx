@@ -45,7 +45,7 @@ const EditProductPage = () => {
       }
     };
     fetchData();
-  }, [ popupView]);
+  }, [popupView]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -78,7 +78,7 @@ const EditProductPage = () => {
     try {
       const formData = new FormData();
       formData.append("name", data.name);
-      formData.append("price", data.price);
+
       formData.append("price", data.price);
       if (data.discount) {
         formData.append("discount", data.discount);
@@ -94,16 +94,16 @@ const EditProductPage = () => {
       // }
 
       const response = await axios.put(`/item/${id}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        // headers: {
+        //   "Content-Type": "multipart/form-data",
+        // },
       });
 
       if (response.status === 200) {
         setStatusMessage("Product edited successfully!, Redirecting ...");
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
+        // setTimeout(() => {
+        //   navigate("/");
+        // }, 2000);
       } else {
         setStatusMessage("Failed to edit the product.");
       }
@@ -325,31 +325,13 @@ const EditProductPage = () => {
             )}
           </div>
           <div>
-            {/* <div className="flex items-center">
-              <label className="text-white font-bold w-1/4">Image</label>
-              <input
-                type="file"
-                {...register("image")}
-                multiple
-                className="border rounded p-2 text-white text-sm inline-block w-3/4"
-                onChange={handleFileChange}
-              />
-              <button
-                type="button"
-                className="absolute right-1 bg-red-400 text-black p-1 rounded-full text-xs"
-                onClick={clearImage}
-              >
-                Clear
-              </button>
-            </div> */}
-
             <div className="flex mt-5">
               <button
                 type="submit"
                 className="bg-red-600 text-white px-4 py-1 rounded mr-5"
                 disabled={loading}
               >
-                {loading ? "Loading..." : "Create"}
+                {loading ? "Loading..." : "ُEdit"}
               </button>
               {statusMessage && (
                 <p className="text-red-500 font-bold">{statusMessage}</p>
@@ -359,7 +341,6 @@ const EditProductPage = () => {
         </form>
 
         <div className="relative w-[80vw] mx-auto py-5">
-       
           {!loading && productDetails?.images && (
             <BulkImageUploadForm
               inputDetails={productDetails}
@@ -371,7 +352,11 @@ const EditProductPage = () => {
         </div>
         <div className="relative w-[80vw] mx-auto py-5">
           {!loading && productDetails?.images && (
-            <ImageField inputDetails={productDetails} endpoint={"item"} name={"Product"} />
+            <ImageField
+              inputDetails={productDetails}
+              endpoint={"item"}
+              name={"Product"}
+            />
           )}
         </div>
       </div>

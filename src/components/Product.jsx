@@ -24,8 +24,8 @@ const Product = ({ product, category }) => {
     <div
       className={
         visible
-          ? "flex flex-col justify-center items-center border border-1 border-white rounded-lg bg-white p-2 shadow-lg"
-          : "hidden flex-col justify-center items-center border border-1 border-white rounded-lg bg-white p-2 shadow-lg"
+          ? "flex flex-col justify-center items-center border border-1 border-white rounded-lg bg-white p-2 shadow-lg flex-wrap"
+          : "hidden flex-col justify-center items-center border border-1 border-white rounded-lg bg-white p-2 shadow-lg flex-wrap"
       }
     >
       <Link to={`/product/${product._id}`}>
@@ -54,14 +54,14 @@ const Product = ({ product, category }) => {
               {product.discount ? (
                 <span>
                   <span className="text-gray-400 line-through mr-2">
-                    {product.price}$
+                    ${product.price}
                   </span>
                   <span>
-                    {(product.price * (1 - product.discount / 100)).toFixed(2)}$
+                    ${(product.price * (1 - product.discount / 100)).toFixed(2)}
                   </span>
                 </span>
               ) : (
-                `${product.price}$`
+                `$${product.price}`
               )}
             </p>
             <p className="">
@@ -75,7 +75,10 @@ const Product = ({ product, category }) => {
                       product.price *
                       storedDollarValue *
                       (1 - product.discount / 100)
-                    ).toFixed(2)}{" "}
+                    ).toLocaleString("en-US", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
                     ل.س
                   </span>
                 </span>

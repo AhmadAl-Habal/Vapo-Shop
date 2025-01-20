@@ -6,7 +6,7 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 const Whatsapp = ({ accounts }) => {
   const [expanded, setExpanded] = useState(false);
   const [profiles, setProfiles] = useState([]);
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     if (accounts.length > 0) {
       setProfiles(accounts);
@@ -23,8 +23,7 @@ const Whatsapp = ({ accounts }) => {
   const toggleExpand = () => setExpanded((prev) => !prev);
 
   const addProfile = async (data) => {
-   
-
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("link", data.link);
@@ -38,21 +37,19 @@ const Whatsapp = ({ accounts }) => {
       });
 
       if (response.status === 201) {
-       
         setProfiles(response.data.data.social_media.whatsapp);
         reset();
       }
     } catch (error) {
       console.error("Error adding profile:", error);
-    
+    } finally {
+      setLoading(false);
     }
   };
 
   const deleteProfile = async (index) => {
     try {
       const response = await axios.delete(`/settings/whatsapp/${index}`);
-     
-     
 
       setProfiles((prev) => prev.filter((_, i) => i !== index));
       console.log("Profile deleted successfully!");
@@ -135,7 +132,7 @@ const Whatsapp = ({ accounts }) => {
               type="submit"
               className="w-full bg-red-600 text-white py-2 rounded"
             >
-              Add Profile
+              {loading ? "Loading" : "Add Profile"}
             </button>
           </form>
 
@@ -152,7 +149,9 @@ const Whatsapp = ({ accounts }) => {
                   >
                     <div>
                       <p className="font-bold">{account.name}</p>
-                      <p className="text-sm">{account.link}</p>
+                      <p className="text-sm">
+                        <a href={account.link}>{account.link}</a>
+                      </p>
                       <p className="text-sm">{account.phone_number}</p>
                     </div>
                     <button

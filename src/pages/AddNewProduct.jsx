@@ -18,6 +18,7 @@ const AddNewProduct = () => {
   const [deletedCategoryId, setDeletedCategoryId] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [allCategories, setAllCategories] = useState([]);
@@ -156,32 +157,32 @@ const AddNewProduct = () => {
 
     setPopupView(false);
   };
-   if (!storedToken) {
-      return (
-        <div className={"relative min-h-[100vh]"}>
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
-          ></div>
-  
-          <div className="absolute inset-0 bg-black bg-opacity-80"></div>
-          <div className="relative  w-[80vw] mx-auto bg-transparent py-10">
-            <h1 className="text-2xl font-bold text-red-500 mb-5">
-              Access Denied
-            </h1>
-            <p className="text-white mb-5">
-              You must be logged in to access this page.
-            </p>
-            <Link
-              to="/"
-              className="text-white font-bold text-sm border border-2 rounded-full py-1 px-2"
-            >
-              Return to Homepage
-            </Link>
-          </div>
+  if (!storedToken) {
+    return (
+      <div className={"relative min-h-[100vh]"}>
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
+        ></div>
+
+        <div className="absolute inset-0 bg-black bg-opacity-80"></div>
+        <div className="relative  w-[80vw] mx-auto bg-transparent py-10">
+          <h1 className="text-2xl font-bold text-red-500 mb-5">
+            Access Denied
+          </h1>
+          <p className="text-white mb-5">
+            You must be logged in to access this page.
+          </p>
+          <Link
+            to="/"
+            className="text-white font-bold text-sm border border-2 rounded-full py-1 px-2"
+          >
+            Return to Homepage
+          </Link>
         </div>
-      );
-    }
+      </div>
+    );
+  }
   return (
     <>
       <div
@@ -262,7 +263,7 @@ const AddNewProduct = () => {
           </div>
           <div className="flex">
             {loadingCategories ? (
-              <p>Loading...</p>
+              <p className="text-gray-600">Loading...</p>
             ) : (
               <>
                 <label className="text-white font-bold w-1/4">Cagtegory</label>
