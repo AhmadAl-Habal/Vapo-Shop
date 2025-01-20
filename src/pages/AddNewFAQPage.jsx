@@ -35,6 +35,7 @@ const AddNewFAQPage = () => {
       const response = await axios.post(`/faq`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          auth
         },
       });
 
