@@ -3,32 +3,43 @@ import { useParams, Link } from "react-router-dom";
 import axios from "../api/axios";
 import Spinner from "../components/Spinner";
 import hero from "../assets/bg.webp";
-const ProductPage = () => {
+const AboutUsPage = () => {
   const { id } = useParams();
   const [productDetails, setProductDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [mainImage, setMainImage] = useState("");
+  const [settings, setSettings] = useState({});
+  const [aboutUs, setAboutUs] = useState("");
+  const [dollarValue, setDollarValue] = useState("");
+  const [heroImages, setHeroImages] = useState([]);
   useEffect(() => {
-    setLoading(true);
     const fetchData = async () => {
       try {
-        const response = await axios.get(`/item/${id}`);
-        console.log(response);
-        if (response.status == "200") {
-          const data = response.data.data;
-          setProductDetails(data);
-          if (data.images?.length) {
-            setMainImage(data.images[0]);
-          }
-          // console.log(productDetails.images);
-        } else setProductDetails(response.status);
+        const response = await axios.get("/settings");
+
+        if (response.status === 200) {
+          const settingsData = response.data.data[0];
+
+          console.log("About Us from response:", settingsData.about_us);
+
+          setDollarValue(settingsData.dollar_price);
+          setHeroImages(settingsData.hero);
+          setSettings(settingsData);
+          setAboutUs(settingsData.about_us);
+          sessionStorage.setItem("dollar_value", settingsData.dollar_price);
+        } else {
+          setSettings(null);
+          setAboutUs(null);
+        }
       } catch (err) {
+        console.error("Error fetching settings:", err.message);
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
+
     fetchData();
   }, []);
   return (
@@ -46,8 +57,21 @@ const ProductPage = () => {
               Return to Homepage
             </Link>
           </p>
-
-          {loading ? (
+          <div dir="rtl">
+            {loading ? (
+              <p>Loading...</p>
+            ) : error ? (
+              <p>Error: {error}</p>
+            ) : (
+              <div>
+                <h1 className="text-2xl font-bold mb-5">لمحة عن Vapo</h1>
+                <p className="w-full whitespace-pre-wrap text-white text-md font-bold">
+                  {aboutUs || "No content available"}
+                </p>
+              </div>
+            )}
+          </div>
+          {/* {loading ? (
             <Spinner />
           ) : productDetails ? (
             <>
@@ -85,7 +109,7 @@ const ProductPage = () => {
                 <p className="mb-2">
                   الصنف:
                   <span className="inline-block border border-1 rounded-full text-xs p-1 bg-red-600 bg-opacity-60 text-gray-300 mx-1">
-                  
+                    {" "}
                     {productDetails.main_category_id &&
                       productDetails.main_category_id.name}
                   </span>
@@ -100,11 +124,11 @@ const ProductPage = () => {
             </>
           ) : (
             <p>No product details available.</p>
-          )}
+          )} */}
         </div>
       </div>
     </>
   );
 };
 
-export default ProductPage;
+export default AboutUsPage;

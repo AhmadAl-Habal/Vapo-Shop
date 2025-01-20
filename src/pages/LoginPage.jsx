@@ -24,20 +24,14 @@ const LoginPage = () => {
       });
       console.log("Response received:", response.message);
       if (response.status == 200) {
-        // console.log("Login successful:", response);
-        // console.log("token", response.data.data.token);
         setAuthToken(response.data.data.token);
         setLoginStatus("Login successful, redirecting...");
       } else {
         setLoginStatus(response.message);
-        console.log("tiz");
-        //
       }
     } catch (error) {
       console.error("Login failed:", error.response.data);
       setLoginStatus(error.response.data.message);
-
-      //   alert("Login failed! Check your credentials.");
     } finally {
       setLoading(false);
     }
@@ -52,7 +46,7 @@ const LoginPage = () => {
     }
   }, [authToken, navigate]);
   return (
-    <div className="relative h-[100vh]">
+    <div className="relative min-h-[100vh]">
       <div
         className="bg-center bg-cover absolute inset-0"
         style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
@@ -64,7 +58,7 @@ const LoginPage = () => {
       >
         <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm">
           <Link className="mr-5 text-white" to={"/"}>
-            Return to Products page
+            Return to Homepage
           </Link>
         </p>
         <div>

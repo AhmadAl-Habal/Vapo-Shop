@@ -5,6 +5,7 @@ import { CiCirclePlus } from "react-icons/ci";
 import hero from "../assets/bg.webp";
 import axios from "../api/axios";
 const ProductsSection = () => {
+  const filteredCategory = sessionStorage.getItem("selectedCategory");
   const [token, setToken] = useState("");
   const [filterCategory, setFilteredCategory] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
@@ -15,9 +16,10 @@ const ProductsSection = () => {
   const [allCategories, setAllCategories] = useState([]);
 
   const [categoryName, setCategoryName] = useState("");
-
+  sessionStorage.setItem("selectedCategory", filterCategory);
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
+
     setToken(storedToken || "");
   }, []);
 

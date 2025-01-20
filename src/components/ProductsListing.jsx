@@ -3,7 +3,7 @@ import Product from "./Product";
 import Spinner from "./Spinner";
 import prodcutImg from "../assets/product image.jpeg";
 import axios from "../api/axios";
-const ProductsListing = ({ filteredCategory }) => {
+const ProductsListing = ({}) => {
   const dummyProducts = [
     {
       name: "ايكس روس مع حراق خارق",
@@ -86,20 +86,20 @@ const ProductsListing = ({ filteredCategory }) => {
       img: prodcutImg,
     },
   ];
-  console.log(filteredCategory);
+  // console.log(filteredCategory);
 
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const [error, setError] = useState(null);
   const [getItemsStatus, setGetItemsStatus] = useState();
-
+  const filteredCategory = sessionStorage.getItem("selectedCategory");
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get("/item");
         if (response.status == "200") {
           // console.log("win", response);
-          console.log(response.data);
+          // console.log(response.data);
           setGetItemsStatus(response.status);
           setItems(response.data);
         } else setGetItemsStatus(response.status);

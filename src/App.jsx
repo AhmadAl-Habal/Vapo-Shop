@@ -13,6 +13,11 @@ import LoginPage from "./pages/LoginPage.jsx";
 import AddNewProduct from "./pages/AddNewProduct.jsx";
 import EditProductPage from "./pages/EditProductPage.jsx";
 import ProductPage from "./pages/ProductPage.jsx";
+import SettingsPage from "./pages/SettingsPage.jsx";
+import AboutUsPage from "./pages/AboutUsPage.jsx";
+import FAQPage from "./pages/FAQPage.jsx";
+import EditFAQPage from "./pages/EditFAQPage.jsx";
+import AddNewFAQPage from "./pages/AddNewFAQPage.jsx";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -22,6 +27,11 @@ function App() {
         <Route path="/add-product" element={<AddNewProduct />} />
         <Route path="/edit-product/:id" element={<EditProductPage />} />
         <Route path="/product/:id" element={<ProductPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/about-us" element={<AboutUsPage />} />
+        <Route path="/faq" element={<FAQPage />} />
+        <Route path="/edit-faq/:id" element={<EditFAQPage />} />
+        <Route path="/add-faq" element={<AddNewFAQPage />} />
 
         <Route path="*" element={<NotFoundPage />} />
         <Route path="/jobs/*" element={<NotFoundPage />} />

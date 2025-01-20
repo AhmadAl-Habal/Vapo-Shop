@@ -14,6 +14,7 @@ const AddNewProduct = () => {
     clearErrors,
     formState: { errors },
   } = useForm();
+  const storedToken = localStorage.getItem("token");
   const [deletedCategoryId, setDeletedCategoryId] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -32,8 +33,14 @@ const AddNewProduct = () => {
     try {
       const formData = new FormData();
       formData.append("name", data.name);
-      formData.append("description", data.description);
+      if (data.description) {
+        formData.append("description", data.description);
+      }
       formData.append("price", data.price);
+      if (data.discount) {
+        formData.append("discount", data.discount);
+      }
+
       formData.append("main_category_id", data.main_category_id);
       Array.from(data.image).forEach((file) => {
         formData.append("image", file);
@@ -149,13 +156,39 @@ const AddNewProduct = () => {
 
     setPopupView(false);
   };
+   if (!storedToken) {
+      return (
+        <div className={"relative min-h-[100vh]"}>
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
+          ></div>
+  
+          <div className="absolute inset-0 bg-black bg-opacity-80"></div>
+          <div className="relative  w-[80vw] mx-auto bg-transparent py-10">
+            <h1 className="text-2xl font-bold text-red-500 mb-5">
+              Access Denied
+            </h1>
+            <p className="text-white mb-5">
+              You must be logged in to access this page.
+            </p>
+            <Link
+              to="/"
+              className="text-white font-bold text-sm border border-2 rounded-full py-1 px-2"
+            >
+              Return to Homepage
+            </Link>
+          </div>
+        </div>
+      );
+    }
   return (
     <>
       <div
         className={
           popupView
-            ? "relative h-[100vh] bg-black bg-opacity-50 opacity-50"
-            : "relative h-[100vh]"
+            ? "relative min-h-[100vh] bg-black bg-opacity-50 opacity-50"
+            : "relative min-h-[100vh]"
         }
       >
         <div
@@ -171,7 +204,7 @@ const AddNewProduct = () => {
         >
           <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm">
             <Link className="mr-5 text-white" to={"/"}>
-              Return to Products page
+              Return to Homepage
             </Link>
           </p>
           <p className="text-center text-white font-bold">
@@ -191,12 +224,9 @@ const AddNewProduct = () => {
           <div className="flex items-center">
             <label className="text-white font-bold w-1/4">Discription</label>
             <textarea
-              {...register("description", {
-                required: "Description is required",
-              })}
+              {...register("description")}
               className="border rounded p-2 w-3/4 bg-red-100 resize-none overflow-hidden"
               rows={1}
-              
               onInput={(e) => {
                 e.target.style.height = "auto";
                 e.target.style.height = `${e.target.scrollHeight}px`;
@@ -215,7 +245,7 @@ const AddNewProduct = () => {
               <p className="ml-1 text-red-500">{errors.price.message}</p>
             )}
           </div>
-          {/* <div className="flex">
+          <div className="flex">
             <label className="text-white font-bold w-1/4">Discount</label>
             <input
               type="number"
@@ -229,7 +259,7 @@ const AddNewProduct = () => {
             {errors.discount && (
               <p className="ml-1 text-red-500">{errors.discount.message}</p>
             )}
-          </div> */}
+          </div>
           <div className="flex">
             {loadingCategories ? (
               <p>Loading...</p>
