@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import axios from "../api/axios";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import hero from "../assets/bg.webp";
+import ImageField from "../components/ImageField";
+import BulkImageUploadForm from "../components/BulkImageUploadForm";
 const EditProductPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -12,9 +14,8 @@ const EditProductPage = () => {
     formState: { errors },
     reset,
   } = useForm();
-  const storedToken = localStorage.getItem("token");
 
-  const [item, setItem] = useState("");
+  const storedToken = localStorage.getItem("token");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
@@ -23,8 +24,12 @@ const EditProductPage = () => {
   const [allCategories, setAllCategories] = useState([]);
   const [categoryName, setCategoryName] = useState("");
   const [deletedCategoryId, setDeletedCategoryId] = useState("");
-  const [imagePreview, setImagePreview] = useState(null);
+  const [productDetails, setProductDetails] = useState({});
+  const [refresh, setRefresh] = useState(false);
 
+  useEffect(() => {
+    console.log("Refresh triggered:", refresh);
+  }, [refresh]);
   useEffect(() => {
     setLoadingCategories(true);
     const fetchData = async () => {
@@ -40,7 +45,7 @@ const EditProductPage = () => {
       }
     };
     fetchData();
-  }, [, popupView]);
+  }, [ popupView]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,13 +59,7 @@ const EditProductPage = () => {
             description: response.data.data.description || "",
             main_category_id: response.data.data.main_category_id._id || "",
           });
-
-          // Adjust the textarea height after setting the initial description
-          if (textareaRef.current) {
-            const textarea = textareaRef.current;
-            textarea.style.height = "auto"; // Reset height to calculate properly
-            textarea.style.height = `${textarea.scrollHeight}px`; // Adjust height to content
-          }
+          setProductDetails(response.data.data);
         }
       } catch (err) {
         setError(err.message);
@@ -70,8 +69,7 @@ const EditProductPage = () => {
     };
 
     fetchData();
-  }, []);
-  // console.log("test");
+  }, [refresh]);
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -89,12 +87,11 @@ const EditProductPage = () => {
         formData.append("description", data.description);
       }
       formData.append("main_category_id", data.main_category_id);
-      if (data.image.length >= 1) {
-        Array.from(data.image).forEach((file) => {
-          formData.append("image", file);
-        });
-      }
-      // formData.append("image", data.image[0]);
+      // if (data.image.length >= 1) {
+      //   Array.from(data.image).forEach((file) => {
+      //     formData.append("image", file);
+      //   });
+      // }
 
       const response = await axios.put(`/item/${id}`, formData, {
         headers: {
@@ -103,7 +100,6 @@ const EditProductPage = () => {
       });
 
       if (response.status === 200) {
-        console.log("Product edited successfully:", response.data);
         setStatusMessage("Product edited successfully!, Redirecting ...");
         setTimeout(() => {
           navigate("/");
@@ -133,9 +129,9 @@ const EditProductPage = () => {
       setImagePreview(URL.createObjectURL(file));
     }
   };
+
   const addCategory = async () => {
     setLoading(true);
-
     try {
       const response = await axios.post(
         "/category",
@@ -146,12 +142,10 @@ const EditProductPage = () => {
           },
         }
       );
-      console.log("Response received:", response.message);
+      // console.log("Response received:", response.message);
       if (response.status == 201) {
-        console.log("Login successful:", response);
+        // console.log("Login successful:", response);
         setPopupView(false);
-      } else {
-        console.log("tiz");
       }
     } catch (error) {
       console.error("Login failed:", error.response.data);
@@ -176,35 +170,35 @@ const EditProductPage = () => {
     } finally {
       setLoading(false);
     }
-
     setPopupView(false);
   };
-   if (!storedToken) {
-        return (
-          <div className={"relative min-h-[100vh]"}>
-            <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
-            ></div>
-    
-            <div className="absolute inset-0 bg-black bg-opacity-80"></div>
-            <div className="relative  w-[80vw] mx-auto bg-transparent py-10">
-              <h1 className="text-2xl font-bold text-red-500 mb-5">
-                Access Denied
-              </h1>
-              <p className="text-white mb-5">
-                You must be logged in to access this page.
-              </p>
-              <Link
-                to="/"
-                className="text-white font-bold text-sm border border-2 rounded-full py-1 px-2"
-              >
-                Return to Homepage
-              </Link>
-            </div>
-          </div>
-        );
-      }
+
+  if (!storedToken) {
+    return (
+      <div className={"relative min-h-[100vh]"}>
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
+        ></div>
+
+        <div className="absolute inset-0 bg-black bg-opacity-80"></div>
+        <div className="relative  w-[80vw] mx-auto bg-transparent py-10">
+          <h1 className="text-2xl font-bold text-red-500 mb-5">
+            Access Denied
+          </h1>
+          <p className="text-white mb-5">
+            You must be logged in to access this page.
+          </p>
+          <Link
+            to="/"
+            className="text-white font-bold text-sm border border-2 rounded-full py-1 px-2"
+          >
+            Return to Homepage
+          </Link>
+        </div>
+      </div>
+    );
+  }
   return (
     <>
       <div
@@ -331,7 +325,7 @@ const EditProductPage = () => {
             )}
           </div>
           <div>
-            <div className="flex items-center">
+            {/* <div className="flex items-center">
               <label className="text-white font-bold w-1/4">Image</label>
               <input
                 type="file"
@@ -347,7 +341,8 @@ const EditProductPage = () => {
               >
                 Clear
               </button>
-            </div>
+            </div> */}
+
             <div className="flex mt-5">
               <button
                 type="submit"
@@ -362,6 +357,23 @@ const EditProductPage = () => {
             </div>
           </div>
         </form>
+
+        <div className="relative w-[80vw] mx-auto py-5">
+       
+          {!loading && productDetails?.images && (
+            <BulkImageUploadForm
+              inputDetails={productDetails}
+              endpoint={"item"}
+              refresh={refresh}
+              setRefresh={setRefresh}
+            />
+          )}
+        </div>
+        <div className="relative w-[80vw] mx-auto py-5">
+          {!loading && productDetails?.images && (
+            <ImageField inputDetails={productDetails} endpoint={"item"} name={"Product"} />
+          )}
+        </div>
       </div>
       {popupView === "add" && (
         <div className="bg-black z-10 inset-0 absolute bg-opacity-30">

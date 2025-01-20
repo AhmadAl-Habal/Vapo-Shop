@@ -189,7 +189,7 @@ const EditFAQPage = () => {
         </div>
         <div className="relative w-[80vw] mx-auto py-5">
           {!loading && faqDetails?.images && (
-            <ImageField inputDetails={faqDetails} endpoint={"faq"} />
+            <ImageField inputDetails={faqDetails} endpoint={"faq"} name={"FAQ"} />
           )}
         </div>
       </div>
