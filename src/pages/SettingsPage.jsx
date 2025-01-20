@@ -5,6 +5,8 @@ import { useNavigate, Link } from "react-router-dom";
 import hero from "../assets/bg.webp";
 import Spinner from "../components/Spinner";
 import Whatsapp from "../components/social links/Whatsapp";
+import HeroImageField from "../components/HeroImageField";
+import HeroBulkImageUploadForm from "../components/HeroBulkImageUploadForm";
 const SettingsPage = () => {
   const navigate = useNavigate();
 
@@ -17,17 +19,13 @@ const SettingsPage = () => {
   } = useForm();
   const [dollarValue, setDollarValue] = useState("");
   const [settings, setSettings] = useState({});
-  const [heroImages, setHeroImages] = useState([]);
+
   const [aboutUs, setAboutUs] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
-  const [deletedCategoryId, setDeletedCategoryId] = useState("");
-  const [imagePreview, setImagePreview] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [loadingCategories, setLoadingCategories] = useState(false);
 
-  const [allCategories, setAllCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const [popupView, setPopupView] = useState(false);
-  const [categoryName, setCategoryName] = useState("");
 
   const [facebookLink, setFacebookLink] = useState("");
   const [telegramLink, setTelegramLink] = useState("");
@@ -35,45 +33,7 @@ const SettingsPage = () => {
   const [whatsappLink, setWhatsappLink] = useState("");
   const [youtubeLink, setYoutubeLink] = useState("");
   const storedToken = localStorage.getItem("token");
-
-  const addHeroImages = async (data) => {
-    setLoading(true);
-    setStatusMessage("");
-
-    try {
-      const formData = new FormData();
-
-      Array.from(heroImages).forEach((file) => {
-        formData.append("image", file);
-      });
-      // formData.append("image", data.image[0]);
-      console.log(data);
-
-      const response = await axios.post("/settings/hero", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      if (response.status === 201) {
-        // console.log("Product created successfully:", response.data);
-        setStatusMessage("Hero images added successfully!");
-        // setTimeout(() => {
-        //   navigate("/");
-        // }, 2000);
-      } else {
-        setStatusMessage("Failed to add Hero images");
-      }
-    } catch (error) {
-      console.error(
-        "Error creating product:",
-        error.response?.data || error.message
-      );
-      setStatusMessage("Error creating product. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [refresh, setRefresh] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -88,6 +48,7 @@ const SettingsPage = () => {
           setInstagramLink(response.data.data[0].social_media.instagram);
           setWhatsappLink(response.data.data[0].social_media.whatsapp);
           setYoutubeLink(response.data.data[0].social_media.youtube);
+          // console.log(response.data.data[0].hero);
 
           setSettings(response.data.data[0]);
           sessionStorage.setItem(
@@ -103,7 +64,7 @@ const SettingsPage = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [refresh]);
   const clearImage = () => {
     setValue("image", null);
     clearErrors("image");
@@ -375,35 +336,7 @@ const SettingsPage = () => {
                 {loading ? "loading" : "Save"}
               </button>
             </div>
-            <div className="flex items-center  mb-5">
-              <label className="text-white font-bold w-1/4">Hero Images</label>
-              <input
-                type="file"
-                multiple
-                className="border rounded p-2 text-white text-sm inline-block w-3/4"
-                onChange={(e) => {
-                  const files = e.target.files;
-                  setHeroImages(Array.from(files));
-                  console.log(files);
-                }}
-              />
-              {/* <button
-                type="button"
-                className="absolute right-10 bg-red-400 text-black p-1 rounded-full text-xs mx-1"
-                onClick={clearImage}
-              >
-                Clear
-              </button> */}
-              <button
-                className={`text-white ml-2 p-1 rounded ${
-                  loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
-                }`}
-                disabled={loading}
-                onClick={addHeroImages}
-              >
-                {loading ? "loading" : "Save"}
-              </button>
-            </div>
+
             <div className="flex items-center  mb-5 ">
               <label className="text-white font-bold w-1/4">About Us</label>
               <textarea
@@ -513,7 +446,25 @@ const SettingsPage = () => {
                 {loading ? "loading" : "Save"}
               </button>
             </div>
+
             <Whatsapp accounts={whatsappLink} />
+            {!loading && settings?.hero && (
+              <HeroBulkImageUploadForm
+                inputDetails={settings}
+                endpoint={"hero"}
+                refresh={refresh}
+                setRefresh={setRefresh}
+              />
+            )}
+            <div className="relative w-[80vw] mx-auto py-5">
+              {!loading && settings?.hero && (
+                <HeroImageField
+                  inputDetails={settings}
+                  endpoint={"hero"}
+                  name={"Hero"}
+                />
+              )}
+            </div>
           </div>
           <p className="text-lg text-red-700 font-bold"> {statusMessage}</p>
         </div>
