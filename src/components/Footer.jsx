@@ -23,12 +23,11 @@ const Footer = () => {
     <footer className="bg-red-600 border-b border-red-500 p-1 flex justify-between items-center">
       <div className="w-full flex justify-between items-center space-x-2">
         <div className="flex justify-between items-center space-x-2">
-          {" "}
           <img
             className="h-[30px] w-[30px]  w-auto rounded-full cursor-pointer mr-5"
             src={logo}
             alt="React Jobs"
-          />{" "}
+          />
           <ul className="flex gap-4">
             <li>
               <a

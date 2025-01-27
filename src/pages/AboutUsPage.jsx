@@ -56,8 +56,7 @@ const AboutUsPage = () => {
             ) : (
               <div>
                 <h1 className="text-2xl font-bold mb-5">
-                  لمحة عن Vapo
-                  {/* كسم بشار */}
+                  لمحة عن Vapo كسم بشار
                 </h1>
                 <p className="w-full whitespace-pre-wrap text-white text-md font-bold">
                   {aboutUs}

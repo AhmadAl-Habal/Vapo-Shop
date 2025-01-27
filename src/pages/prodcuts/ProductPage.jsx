@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import axios from "../api/axios";
-import Spinner from "../components/Spinner";
-import hero from "../assets/bg.webp";
+import axios from "../../api/axios";
+import Spinner from "../../components/Spinner";
+import hero from "../../assets/bg.webp";
 const ProductPage = () => {
   const { id } = useParams();
   const [productDetails, setProductDetails] = useState(null);

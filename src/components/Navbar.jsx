@@ -42,7 +42,7 @@ const Navbar = () => {
               alt="React Jobs"
             />
             <p className="font-bold text-xs">
-              <Link to={"/about-us"}>🔥VAPO ABO MARIAM</Link>
+              <Link to={"/"}>🔥VAPO ABO MARIAM</Link>
             </p>
           </div>
         </div>

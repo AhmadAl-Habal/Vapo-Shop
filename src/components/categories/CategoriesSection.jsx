@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import ProductsListing from "../components/ProductsListing";
+import CategoriesListing from "./CategoriesListing";
 import { CiCirclePlus } from "react-icons/ci";
-import hero from "../assets/bg.webp";
-import axios from "../api/axios";
-const ProductsSection = () => {
+import hero from "../../assets/bg.webp";
+import axios from "../../api/axios";
+
+const CategoriesSection = () => {
   const filteredCategory = sessionStorage.getItem("selectedCategory");
   const [token, setToken] = useState("");
   const [filterCategory, setFilteredCategory] = useState("");
@@ -14,7 +15,6 @@ const ProductsSection = () => {
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [allCategories, setAllCategories] = useState([]);
-
   const [categoryName, setCategoryName] = useState("");
   sessionStorage.setItem("selectedCategory", filterCategory);
   useEffect(() => {
@@ -45,20 +45,10 @@ const ProductsSection = () => {
       //   style={{ backgroundImage: `url(${hero})`, opacity: 0.9 }}
     >
       <h2 className="text-xl font-bold text-red-500 mb-2 text-center">
-        Browse Products dev 
+        الأقسام الرئيسية
       </h2>
-      <div className="flex flex-row-reverse justify-between items-center mb-5 px-2 text-xs">
+      <div className="flex flex-row-reverse justify-end items-center mb-5 px-2 text-xs">
         {/* <select
-          className="p-2 rounded-full outline-none cursor-pointer bg-gray-200"
-          name=""
-          id=""
-          dir="rtl"
-        >
-          <option className="px-5 outline-none" value="test">
-            الكل
-          </option>
-        </select> */}
-        <select
           onChange={(e) => setFilteredCategory(e.target.value)}
           className="border rounded p-2 bg-red-100 text-right"
           dir="rtl"
@@ -75,9 +65,9 @@ const ProductsSection = () => {
               {category.name}
             </option>
           ))}
-        </select>
+        </select> */}
         {token ? (
-          <Link className="" to={"/add-product"}>
+          <Link className="" to={"/add-category"}>
             <CiCirclePlus size={30} color="white" className="g-gray-200" />
           </Link>
         ) : (
@@ -85,9 +75,9 @@ const ProductsSection = () => {
         )}
       </div>
 
-      <ProductsListing filteredCategory={filterCategory} />
+      <CategoriesListing filteredCategory={filterCategory} />
     </section>
   );
 };
 
-export default ProductsSection;
+export default CategoriesSection;

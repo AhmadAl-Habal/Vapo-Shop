@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Hero from "../components/Hero";
 
-import ProductsSection from "../components/ProductsSection";
+import CategoriesSection from "../components/categories/CategoriesSection";
 
 const HomePage = () => {
-  // sessionStorage.setItem("selectedCategory", "");
   return (
     <>
       <div className="bg-blue-50">
         <Hero />
-        <ProductsSection isHome={true} />
+        <CategoriesSection isHome={true} />
       </div>
     </>
   );

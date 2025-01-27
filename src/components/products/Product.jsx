@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
-import axios from "../api/axios";
+import axios from "../../api/axios";
 import { FaEdit } from "react-icons/fa";
 
-const Product = ({ product, category }) => {
+const Product = ({ product }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [showAllDesc, setShowAllDesc] = useState(false);
   const [token, setToken] = useState("");
   const productRef = useRef(null);
   const storedDollarValue = sessionStorage.getItem("dollar_value");
+  console.log(storedDollarValue);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");

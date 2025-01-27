@@ -1,79 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "../api/axios";
-import { useNavigate, Link } from "react-router-dom";
-import hero from "../assets/bg.webp";
-import Spinner from "../components/Spinner";
-const AddNewProduct = () => {
+import axios from "../../api/axios";
+import { useNavigate, Link, useParams } from "react-router-dom";
+import hero from "../../assets/bg.webp";
+import ImageField from "../../components/ImageField";
+import BulkImageUploadForm from "../../components/BulkImageUploadForm";
+const EditProductPage = () => {
   const navigate = useNavigate();
-
+  const { id } = useParams();
   const {
     register,
     handleSubmit,
-    setValue,
-    clearErrors,
     formState: { errors },
+    reset,
   } = useForm();
+
   const storedToken = localStorage.getItem("token");
-  const [deletedCategoryId, setDeletedCategoryId] = useState("");
-  const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [loadingCategories, setLoadingCategories] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
-  const [allCategories, setAllCategories] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(false);
   const [popupView, setPopupView] = useState(false);
+  const [allCategories, setAllCategories] = useState([]);
   const [categoryName, setCategoryName] = useState("");
+  const [deletedCategoryId, setDeletedCategoryId] = useState("");
+  const [productDetails, setProductDetails] = useState({});
+  const [refresh, setRefresh] = useState(false);
 
-  const onSubmit = async (data) => {
-    setLoading(true);
-    setStatusMessage("");
-    const selectedCategory = allCategories.find(
-      (category) => category._id === data.main_category_id
-    );
-    try {
-      const formData = new FormData();
-      formData.append("name", data.name);
-      if (data.description) {
-        formData.append("description", data.description);
-      }
-      formData.append("price", data.price);
-      if (data.discount) {
-        formData.append("discount", data.discount);
-      }
-
-      formData.append("main_category_id", data.main_category_id);
-      Array.from(data.image).forEach((file) => {
-        formData.append("image", file);
-      });
-      // formData.append("image", data.image[0]);
-      console.log(data);
-
-      const response = await axios.post("/item", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      if (response.status === 201) {
-        console.log("Product created successfully:", response.data);
-        setStatusMessage("Product created successfully!, Redirecting...");
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
-      } else {
-        setStatusMessage("Failed to create the product.");
-      }
-    } catch (error) {
-      console.error(
-        "Error creating product:",
-        error.response?.data || error.message
-      );
-      setStatusMessage("Error creating product. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    console.log("Refresh triggered:", refresh);
+  }, [refresh]);
   useEffect(() => {
     setLoadingCategories(true);
     const fetchData = async () => {
@@ -89,7 +45,72 @@ const AddNewProduct = () => {
       }
     };
     fetchData();
-  }, [, popupView]);
+  }, [popupView]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/item/${id}`);
+        if (response.status === 200) {
+          reset({
+            name: response.data.data.name || "",
+            price: response.data.data.price || "",
+            discount: response.data.data.discount || "",
+            description: response.data.data.description || "",
+            main_category_id: response.data.data.main_category_id._id || "",
+          });
+          setProductDetails(response.data.data);
+        }
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [refresh]);
+
+  const onSubmit = async (data) => {
+    setLoading(true);
+    setStatusMessage("");
+
+    try {
+      const formData = new FormData();
+      formData.append("name", data.name);
+
+      formData.append("price", data.price);
+      if (data.discount) {
+        formData.append("discount", data.discount);
+      }
+      if (data.description) {
+        formData.append("description", data.description);
+      }
+      formData.append("main_category_id", data.main_category_id);
+      // if (data.image.length >= 1) {
+      //   Array.from(data.image).forEach((file) => {
+      //     formData.append("image", file);
+      //   });
+      // }
+
+      const response = await axios.put(`/item/${id}`, formData, {});
+
+      if (response.status === 200) {
+        setStatusMessage("Product edited successfully!, Redirecting ...");
+      } else {
+        setStatusMessage("Failed to edit the product.");
+      }
+    } catch (error) {
+      console.error(
+        "Error creating product:",
+        error.response?.data || error.message
+      );
+      setStatusMessage("Error creating product. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const clearImage = () => {
     setValue("image", null);
     clearErrors("image");
@@ -101,11 +122,9 @@ const AddNewProduct = () => {
       setImagePreview(URL.createObjectURL(file));
     }
   };
-  const addCategory = async () => {
-    console.log(categoryName);
 
+  const addCategory = async () => {
     setLoading(true);
-    // setLoginStatus("");
     try {
       const response = await axios.post(
         "/category",
@@ -116,23 +135,12 @@ const AddNewProduct = () => {
           },
         }
       );
-      console.log("Response received:", response.message);
+
       if (response.status == 201) {
-        console.log("Login successful:", response);
         setPopupView(false);
-        // console.log("token", response.data.data.token);
-        // setAuthToken(response.data.data.token);
-        // setLoginStatus("Login successful, redirecting...");
-      } else {
-        // setLoginStatus(response.message);
-        console.log("tiz");
-        //
       }
     } catch (error) {
       console.error("Login failed:", error.response.data);
-      // setLoginStatus(error.response.data.message);
-
-      //   alert("Login failed! Check your credentials.");
     } finally {
       setLoading(false);
     }
@@ -154,9 +162,9 @@ const AddNewProduct = () => {
     } finally {
       setLoading(false);
     }
-
     setPopupView(false);
   };
+
   if (!storedToken) {
     return (
       <div className={"relative min-h-[100vh]"}>
@@ -223,7 +231,7 @@ const AddNewProduct = () => {
             )}
           </div>
           <div className="flex items-center">
-            <label className="text-white font-bold w-1/4">Discription</label>
+            <label className="text-white font-bold w-1/4">Description</label>
             <textarea
               {...register("description")}
               className="border rounded p-2 w-3/4 bg-red-100 resize-none overflow-hidden"
@@ -233,6 +241,9 @@ const AddNewProduct = () => {
                 e.target.style.height = `${e.target.scrollHeight}px`;
               }}
             ></textarea>
+            {errors.name && (
+              <p className="text-red-500 ml-1">{errors.name.message}</p>
+            )}
           </div>
           <div className="flex">
             <label className="text-white font-bold w-1/4">Price</label>
@@ -263,7 +274,7 @@ const AddNewProduct = () => {
           </div>
           <div className="flex">
             {loadingCategories ? (
-              <p className="text-gray-600">Loading...</p>
+              <p>Loading...</p>
             ) : (
               <>
                 <label className="text-white font-bold w-1/4">Cagtegory</label>
@@ -306,35 +317,13 @@ const AddNewProduct = () => {
             )}
           </div>
           <div>
-            <div className="flex items-center">
-              <label className="text-white font-bold w-1/4">Image</label>
-              <input
-                type="file"
-                {...register("image", {
-                  required: "At least one image is required",
-                })}
-                multiple
-                className="border rounded p-2 text-white text-sm inline-block w-3/4"
-                onChange={handleFileChange}
-              />
-              <button
-                type="button"
-                className="absolute right-1 bg-red-400 text-black p-1 rounded-full text-xs"
-                onClick={clearImage}
-              >
-                Clear
-              </button>
-              {errors.image && (
-                <p className="ml-1 text-red-500">{errors.image.message}</p>
-              )}
-            </div>
             <div className="flex mt-5">
               <button
                 type="submit"
                 className="bg-red-600 text-white px-4 py-1 rounded mr-5"
                 disabled={loading}
               >
-                {loading ? "Loading..." : "Create"}
+                {loading ? "Loading..." : "ُEdit"}
               </button>
               {statusMessage && (
                 <p className="text-red-500 font-bold">{statusMessage}</p>
@@ -342,6 +331,26 @@ const AddNewProduct = () => {
             </div>
           </div>
         </form>
+
+        <div className="relative w-[80vw] mx-auto py-5">
+          {!loading && productDetails?.images && (
+            <BulkImageUploadForm
+              inputDetails={productDetails}
+              endpoint={"item"}
+              refresh={refresh}
+              setRefresh={setRefresh}
+            />
+          )}
+        </div>
+        <div className="relative w-[80vw] mx-auto py-5">
+          {!loading && productDetails?.images && (
+            <ImageField
+              inputDetails={productDetails}
+              endpoint={"item"}
+              name={"Product"}
+            />
+          )}
+        </div>
       </div>
       {popupView === "add" && (
         <div className="bg-black z-10 inset-0 absolute bg-opacity-30">
@@ -422,4 +431,4 @@ const AddNewProduct = () => {
   );
 };
 
-export default AddNewProduct;
+export default EditProductPage;
