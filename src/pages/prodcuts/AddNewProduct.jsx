@@ -4,6 +4,7 @@ import axios from "../../api/axios";
 import { useNavigate, Link } from "react-router-dom";
 import hero from "../../assets/bg.webp";
 import Spinner from "../../components/Spinner";
+
 const AddNewProduct = () => {
   const navigate = useNavigate();
 
@@ -21,6 +22,8 @@ const AddNewProduct = () => {
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [allCategories, setAllCategories] = useState([]);
+  const [allSubCategories, setAllSubCategories] = useState([]);
+  const [filteredSubCategories, setFilteredSubCategories] = useState([]);
   const [popupView, setPopupView] = useState(false);
   const [categoryName, setCategoryName] = useState("");
 
@@ -37,11 +40,16 @@ const AddNewProduct = () => {
         formData.append("description", data.description);
       }
       formData.append("price", data.price);
+
       if (data.discount) {
         formData.append("discount", data.discount);
       }
 
       formData.append("main_category_id", data.main_category_id);
+
+      if (data.sub_category_id) {
+        formData.append("sub_category_id", data.sub_category_id);
+      }
       Array.from(data.image).forEach((file) => {
         formData.append("image", file);
       });
@@ -70,6 +78,7 @@ const AddNewProduct = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     setLoadingCategories(true);
     const fetchData = async () => {
@@ -78,6 +87,14 @@ const AddNewProduct = () => {
         if (response.status == "200") {
           setAllCategories(response.data.data);
         } else setAllCategories(response.status);
+
+        const response2 = await axios.get("/sub_category");
+        console.log(response2.data.data);
+
+        if (response2.status == "200") {
+          setAllSubCategories(response2.data.data);
+          setFilteredSubCategories(response2.data.data);
+        }
       } catch (err) {
         setError(err.message);
       } finally {
@@ -85,70 +102,25 @@ const AddNewProduct = () => {
       }
     };
     fetchData();
-  }, [, popupView]);
+  }, [popupView]);
 
   const clearImage = () => {
     setValue("image", null);
     clearErrors("image");
-    setImagePreview(null);
   };
 
-  // const handleFileChange = (event) => {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     setImagePreview(URL.createObjectURL(file));
-  //   }
-  // };
+  const handleCategoryChange = (e) => {
+    const selectedCategoryId = e.target.value;
+    setSelectedCategoryId(selectedCategoryId);
 
-  // const addCategory = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await axios.post(
-  //       "/category",
-  //       { name: categoryName },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-  //     console.log("Response received:", response.message);
-  //     if (response.status == 201) {
-  //       console.log("Login successful:", response);
-  //       setPopupView(false);
+    const filtered = allSubCategories.filter(
+      (subCategory) =>
+        subCategory.main_category_id &&
+        subCategory.main_category_id._id === selectedCategoryId
+    );
+    setFilteredSubCategories(filtered);
+  };
 
-  //     } else {
-
-  //       console.log("tiz");
-
-  //     }
-  //   } catch (error) {
-  //     console.error("Login failed:", error.response.data);
-
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-  // const deleteCategory = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await axios.delete(
-  //       `/category/${deletedCategoryId}`,
-
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-  //   } catch (error) {
-  //     console.error("Login failed:", error.response.data);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-
-  //   setPopupView(false);
-  // };
   if (!storedToken) {
     return (
       <div className={"relative min-h-[100vh]"}>
@@ -175,6 +147,7 @@ const AddNewProduct = () => {
       </div>
     );
   }
+
   return (
     <>
       <div className={"relative min-h-[100vh]"}>
@@ -187,7 +160,7 @@ const AddNewProduct = () => {
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="relative space-y-4 w-[80vw] mx-auto bg-transparent py-10"
+          className="relative space-y-4 w-[90vw] mx-auto bg-transparent py-10"
         >
           <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm">
             <Link className="mr-5 text-white" to={"/"}>
@@ -233,7 +206,9 @@ const AddNewProduct = () => {
             )}
           </div>
           <div className="flex">
-            <label className="text-white font-bold w-1/4">Discount</label>
+            <label className="text-white font-bold w-1/4 text-sm">
+              Discount
+            </label>
             <input
               type="number"
               step="0.01"
@@ -244,47 +219,85 @@ const AddNewProduct = () => {
               <p className="ml-1 text-red-500">{errors.discount.message}</p>
             )}
           </div>
-          <div className="flex">
+          <div className="flex flex-col">
             {loadingCategories ? (
               <p className="text-gray-600">Loading...</p>
             ) : (
               <>
-                <label className="text-white font-bold w-1/4">Cagtegory</label>
-                <div className="flex items-center">
-                  <select
-                    {...register("main_category_id")}
-                    className="border rounded p-2 w-full bg-red-100 text-right w-3/4"
-                    onChange={(e) => setSelectedCategoryId(e.target.value)}
-                  >
-                    <option className="text-left" value="">
-                      Select a category
-                    </option>
-                    {allCategories.map((category) => (
-                      <option
-                        className="inline-block flex justify-between"
-                        key={category._id}
-                        value={category._id}
-                      >
-                        {category.name}
+                <div className="flex mb-4">
+                  <label className="text-white font-bold w-1/4">Category</label>
+                  <div className="flex items-center">
+                    <select
+                      {...register("main_category_id")}
+                      className="border rounded p-2 w-full bg-red-100 text-right w-3/4"
+                      onChange={handleCategoryChange}
+                    >
+                      <option className="text-left" value="">
+                        Select a category
                       </option>
-                    ))}
-                  </select>
-                  <div className="flex items-center justify-end w-1/4 ml-5 space-x-2">
-                    <Link
-                      className=" bg-green-500 text-white p-1 rounded-full text-xs"
-                      to={"/add-category"}
-                    >
-                      Add
-                    </Link>
-                    <button
-                      type="button"
-                      className=" bg-red-500 text-white p-1 rounded-full text-xs"
-                      onClick={() => {
-                        navigate(`/edit-category/${selectedCategoryId}`);
-                      }}
-                    >
-                      Edit
-                    </button>
+                      {allCategories.map((category) => (
+                        <option
+                          className="inline-block flex justify-between"
+                          key={category._id}
+                          value={category._id}
+                        >
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="flex items-center justify-end w-1/4 ml-5 space-x-2">
+                      <Link
+                        className=" bg-green-500 text-white p-1 rounded-full text-xs"
+                        to={"/add-category"}
+                      >
+                        Add
+                      </Link>
+                      <button
+                        type="button"
+                        className=" bg-red-500 text-white p-1 rounded-full text-xs"
+                        onClick={() => {
+                          navigate(`/edit-category/${selectedCategoryId}`);
+                        }}
+                      >
+                        Edit
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center">
+                  <label className="text-white font-bold w-1/4 break-all">
+                    SubCategory
+                  </label>
+                  <div className="flex items-center w-3/4">
+                    {selectedCategoryId ? (
+                      filteredSubCategories.length > 0 ? (
+                        <select
+                          {...register("sub_category_id")}
+                          className="border rounded p-2 bg-red-100 text-right w-full"
+                        >
+                          <option className="text-left" value="">
+                            Select a Subcategory
+                          </option>
+                          {filteredSubCategories.map((subCategory) => (
+                            <option
+                              className="inline-block flex justify-between"
+                              key={subCategory._id}
+                              value={subCategory._id}
+                            >
+                              {subCategory.name}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <p className="ml-2 text-red-600 font-bold">
+                          There are no subcategories for this category yet.
+                        </p>
+                      )
+                    ) : (
+                      <p className="ml-2 text-red-600 font-bold">
+                        Please select a main category first.
+                      </p>
+                    )}
                   </div>
                 </div>
               </>
@@ -300,7 +313,6 @@ const AddNewProduct = () => {
                 })}
                 multiple
                 className="border rounded p-2 text-white text-sm inline-block w-3/4"
-                // onChange={handleFileChange}
               />
               <button
                 type="button"
@@ -328,7 +340,14 @@ const AddNewProduct = () => {
           </div>
         </form>
       </div>
-      {/* {popupView === "add" && (
+    </>
+  );
+};
+
+export default AddNewProduct;
+
+{
+  /* {popupView === "add" && (
         <div className="bg-black z-10 inset-0 absolute bg-opacity-30">
           <button
             className="right-0 bg-red-600 p-2 absolute top-20 rounded-full w-[40px]"
@@ -402,9 +421,5 @@ const AddNewProduct = () => {
             </div>
           </div>
         </div>
-      )} */}
-    </>
-  );
-};
-
-export default AddNewProduct;
+      )} */
+}

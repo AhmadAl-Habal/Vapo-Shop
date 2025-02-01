@@ -46,7 +46,6 @@ const Category = ({ category }) => {
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
       } flex flex-col justify-center items-center border border-1 border-white rounded-lg bg-white p-3 shadow-lg`}
     >
-      {/* Parent Link */}
       <Link
         to={`/products/${category._id}`}
         state={{ categoryDetails: category }}
@@ -60,18 +59,17 @@ const Category = ({ category }) => {
         <p>{category.name}</p>
       </Link>
 
-      {/* Action Buttons */}
       {token && (
         <div className="w-full flex space-x-5 justify-center items-center">
           <MdDelete
             className="cursor-pointer"
             color="red"
             onClick={deleteItem}
-            size={20} // Adjusted size
+            size={20}
           />
           <Link
             to={`/edit-category/${category._id}`}
-            onClick={(e) => e.stopPropagation()} // Prevent parent `Link` from triggering
+            onClick={(e) => e.stopPropagation()}
           >
             <FaEdit size={20} color="#d0bf4c" className="cursor-pointer" />
           </Link>
