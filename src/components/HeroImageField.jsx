@@ -97,11 +97,14 @@ const HeroImageField = ({ inputDetails, endpoint, name }) => {
   }
 
   return (
-    <div>
+    <div className=" border border-2 rounded-lg">
       <div
         className={`flex items-center justify-between cursor-pointer p-5 ${
           visible && "mb-5"
-        } ${!visible && "border border-2 rounded-lg"}`}
+        }
+      
+         `}
+        // ${!visible && "border border-2 rounded-lg"}
         onClick={setExpand}
       >
         <p className="w-100 text-md text-white font-bold"> Hero Images</p>
@@ -113,10 +116,7 @@ const HeroImageField = ({ inputDetails, endpoint, name }) => {
       </div>
       <div className={`${visible ? "block" : "hidden"}`}>
         {imagePreviews.map((image, index) => (
-          <div
-            key={index}
-            className="border border-2 rounded-lg px-1 py-2 mb-5"
-          >
+          <div key={index} className="px-1 py-2 mb-5">
             <div className="flex items-center mb-3">
               <label className="text-white w-1/4">Image {index + 1}</label>
               <input

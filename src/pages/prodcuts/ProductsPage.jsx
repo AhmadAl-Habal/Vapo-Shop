@@ -115,7 +115,7 @@ const ProductsPage = () => {
                 </Link>
               )}
             </div>
-            <section className="px-4 py-5 font-bold">
+            <section className=" py-5 font-bold">
               {loading ? (
                 <Spinner />
               ) : (

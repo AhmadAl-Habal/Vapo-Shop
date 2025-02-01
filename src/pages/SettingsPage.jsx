@@ -308,7 +308,7 @@ const SettingsPage = () => {
 
         <div className="absolute inset-0 bg-black bg-opacity-80"></div>
 
-        <div className="relative space-y-4 w-[80vw] mx-auto bg-transparent py-10">
+        <div className="relative space-y-4 w-[90vw] mx-auto bg-transparent py-10">
           <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm">
             <Link className="mr-5 text-white" to={"/"}>
               Return to Homepage
@@ -447,16 +447,16 @@ const SettingsPage = () => {
               </button>
             </div>
 
-            <Whatsapp accounts={whatsappLink} />
-            {!loading && settings?.hero && (
-              <HeroBulkImageUploadForm
-                inputDetails={settings}
-                endpoint={"hero"}
-                refresh={refresh}
-                setRefresh={setRefresh}
-              />
-            )}
-            <div className="relative w-[80vw] mx-auto py-5">
+            <div className="relative w-[80vw] mx-auto py-5 space-y-5">
+              <Whatsapp accounts={whatsappLink} />
+              {!loading && settings?.hero && (
+                <HeroBulkImageUploadForm
+                  inputDetails={settings}
+                  endpoint={"hero"}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                />
+              )}
               {!loading && settings?.hero && (
                 <HeroImageField
                   inputDetails={settings}
