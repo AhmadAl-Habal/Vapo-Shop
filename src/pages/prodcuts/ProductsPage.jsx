@@ -124,7 +124,9 @@ const ProductsPage = () => {
                   className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2"
                 >
                   {filteredItems.length === 0 ? (
-                    <p>There are no items to show</p>
+                    <p className="text-lg text-white">
+                      There are no items to show
+                    </p>
                   ) : (
                     filteredItems.map((product, index) => (
                       <Product key={index} product={product} />

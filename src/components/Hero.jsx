@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import axios from "../api/axios";
 import { Carousel } from "@mantine/carousel";
 import Autoplay from "embla-carousel-autoplay";
-
+import SwiperCarousel from "./SwiperCarousel";
+// import DemoCarousel from "./DemoCarousel";
 const Hero = () => {
   const [heroImages, setHeroImages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -39,35 +40,37 @@ const Hero = () => {
   }, []);
 
   // Map over the heroImages to create slides
-  const slides = heroImages.map((url, index) => (
-    <Carousel.Slide key={index}>
-      <img
-        src={url}
-        alt={`Hero Slide ${index}`}
-        className="w-full h-full object-cover"
-      />
-    </Carousel.Slide>
-  ));
+  // const slides = heroImages.map((url, index) => (
+  //   <Carousel.Slide key={index}>
+  //     <img
+  //       src={url}
+  //       alt={`Hero Slide ${index}`}
+  //       className="w-full h-full object-cover"
+  //     />
+  //   </Carousel.Slide>
+  // ));
 
   return (
-    <div className="w-full">
+    <div className="w-full h-[300px]">
       {loading ? (
         <div className="text-center"></div>
       ) : (
-        <Carousel
-          slideSize="100%"
-          height={400} // Set the desired height
-          slideGap="md"
-          controlSize={24}
-          loop
-          withIndicators
-          withControls
-          // plugins={[autoplay.current]}
-          // onMouseEnter={() => autoplay.current?.stop()}
-          // onMouseLeave={() => autoplay.current?.reset()}
-        >
-          {slides}
-        </Carousel>
+        // <Carousel
+        //   slideSize="100%"
+        //   height={400}
+        //   slideGap="md"
+        //   controlSize={24}
+        //   loop
+        //   withIndicators
+        //   withControls
+        //   plugins={[autoplay.current]}
+        //   onMouseEnter={() => autoplay.current?.stop()}
+        //   onMouseLeave={() => autoplay.current?.reset()}
+        // >
+        //   {slides}
+        // </Carousel>
+        // <DemoCarousel />
+        <SwiperCarousel images={heroImages} />
       )}
     </div>
   );

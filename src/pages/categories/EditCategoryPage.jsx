@@ -66,14 +66,14 @@ const EditCategoryPage = () => {
       if (data.image && data.image[0]) {
         formData.append("image", data.image[0]);
       }
-      const response = await axios.post("/category", formData, {
+      const response = await axios.put(`/category/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      if (response.status === 201) {
-        setStatusMessage("Catgegory created successfully!");
+      if (response.status === 200) {
+        setStatusMessage("Catgegory Edited successfully!");
         setCategory(response.data.data);
         console.log(category);
 
@@ -83,15 +83,15 @@ const EditCategoryPage = () => {
         setRefresh((prev) => !prev);
         console.log(refresh);
       } else {
-        setStatusMessage("Failed to create the Catgegory.");
+        setStatusMessage("Failed to edit the Catgegory.");
       }
     } catch (error) {
       console.error(
-        "Error creating Category:",
+        "Error editing Category:",
         error.response?.data || error.message
       );
       console.log("Error response:", error.response);
-      setStatusMessage("Error creating Category. Please try again.");
+      setStatusMessage("Error editing Category. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -196,9 +196,12 @@ const EditCategoryPage = () => {
               <label className="text-white font-bold w-1/4">Image</label>
               <input
                 type="file"
-                {...register("image", {
-                  required: "Image is required",
-                })}
+                {...register(
+                  "image"
+                  //   , {
+                  //   required: "Image is required",
+                  // }
+                )}
                 className="border rounded p-2 text-white text-sm inline-block w-3/4"
                 // onChange={handleFileChange}
               />
@@ -209,9 +212,9 @@ const EditCategoryPage = () => {
               >
                 Clear
               </button>
-              {errors.image && (
+              {/* {errors.image && (
                 <p className="ml-1 text-red-500">{errors.image.message}</p>
-              )}
+              )} */}
             </div>
             {imagePreview && (
               <div className="mt-4 w-full flex justify-center">
