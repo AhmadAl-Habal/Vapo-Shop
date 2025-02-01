@@ -2,7 +2,7 @@ import axios from "axios";
 
 const axiosInstance = axios.create({
   baseURL: "https://abomariambackend.vercel.app/",
-  timeout: 100000,
+  timeout: 300000,
   headers: {
     "Content-Type": "application/json",
   },
