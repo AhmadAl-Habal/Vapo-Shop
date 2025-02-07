@@ -7,15 +7,15 @@ import { MantineProvider } from "@mantine/core";
 createRoot(document.getElementById("root")).render(
 
   <StrictMode>
-    <MantineProvider
+    {/* <MantineProvider
       withGlobalStyles
       withNormalizeCSS
       theme={{
         colorScheme: "light",
       }}
-    >
+    > */}
       <App />
-    </MantineProvider>
+    {/* </MantineProvider> */}
    </StrictMode>
    
 );

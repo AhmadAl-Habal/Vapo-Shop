@@ -3,17 +3,11 @@ import axios from "../api/axios";
 
 import SwiperCarousel from "./SwiperCarousel";
 import Spinner from "./Spinner";
-// import DemoCarousel from "./DemoCarousel";
+
 const Hero = () => {
   const [heroImages, setHeroImages] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Ref for autoplay
-  // const autoplay = useRef(
-  //   Autoplay({ delay: 3000, stopOnInteraction: false })
-  // );
-
-  // Fetch hero images
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -34,23 +28,15 @@ const Hero = () => {
     };
 
     fetchData();
-   
-      const storedSettings = JSON.stringify(
-        sessionStorage.getItem("settings")
-      );
-      // console.log();
 
-      setHeroImages(storedSettings.hero);
-  
+    const storedSettings = JSON.stringify(sessionStorage.getItem("settings"));
+
+    setHeroImages(storedSettings.hero);
   }, []);
 
   return (
-    <div className="w-full h-[300px]">
-      {loading ? (
-        <Spinner></Spinner>
-      ) : (
-        <SwiperCarousel images={heroImages} />
-      )}
+    <div className="w-full bg-black h-[300px]">
+      {loading ? <Spinner></Spinner> : <SwiperCarousel images={heroImages} />}
     </div>
   );
 };
