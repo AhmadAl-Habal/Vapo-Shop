@@ -5,17 +5,24 @@ import { FaFacebook, FaInstagram, FaTelegram, FaYoutube } from "react-icons/fa";
 const Footer = () => {
   const [token, setToken] = useState("");
   const [settings, setSettings] = useState({});
+
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    const storedSettings = sessionStorage.getItem("settings");
+    const timeout = setTimeout(() => {
+      const storedToken = localStorage.getItem("token");
+      const storedSettings = sessionStorage.getItem("settings");
+     
 
-    if (storedSettings) {
-      const settingsObject = JSON.parse(storedSettings);
+      if (storedSettings) {
+        const settingsObject = JSON.parse(storedSettings);
+        setSettings(settingsObject);
+      }
 
-      setSettings(settingsObject);
-    }
-    setToken(storedToken || "");
+      setToken(storedToken || "");
+    }, 2000);
+
+    return () => clearTimeout(timeout);
   }, []);
+
   if (!settings) {
     return <p>Loading settings...</p>;
   }
@@ -53,8 +60,7 @@ const Footer = () => {
             </li>
             <li>
               <a
-                //  href={settings.social_media?.telegram || "#"}
-                href={"https://telegram.org" || "#"}
+                href={settings.social_media?.telegram || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-white hover:text-blue-400 transition-colors"

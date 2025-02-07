@@ -18,8 +18,6 @@ const ProductPage = () => {
 
     if (storedSettings) {
       const settingsObject = JSON.parse(storedSettings);
-      console.log(settingsObject.social_media.whatsapp);
-
       setWhatsappAccounts(settingsObject.social_media.whatsapp);
     }
   }, []);

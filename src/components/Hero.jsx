@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "../api/axios";
-import { Carousel } from "@mantine/carousel";
-import Autoplay from "embla-carousel-autoplay";
+
 import SwiperCarousel from "./SwiperCarousel";
+import Spinner from "./Spinner";
 // import DemoCarousel from "./DemoCarousel";
 const Hero = () => {
   const [heroImages, setHeroImages] = useState([]);
@@ -20,7 +20,11 @@ const Hero = () => {
       try {
         const response = await axios.get("/settings");
         if (response.status === 200) {
-          setHeroImages(response.data.data[0]?.hero || []); // Safely access hero images
+          setHeroImages(response.data.data[0]?.hero || []);
+          sessionStorage.setItem(
+            "settings",
+            JSON.stringify(response.data.data[0] || [])
+          );
         }
       } catch (err) {
         console.error("Error fetching settings:", err.message);
@@ -30,46 +34,21 @@ const Hero = () => {
     };
 
     fetchData();
+   
+      const storedSettings = JSON.stringify(
+        sessionStorage.getItem("settings")
+      );
+      // console.log();
 
-    // Cleanup autoplay plugin
-    // return () => {
-    //   if (autoplay.current) {
-    //     autoplay.current.destroy(); // Ensure proper cleanup
-    //   }
-    // };
+      setHeroImages(storedSettings.hero);
+  
   }, []);
-
-  // Map over the heroImages to create slides
-  // const slides = heroImages.map((url, index) => (
-  //   <Carousel.Slide key={index}>
-  //     <img
-  //       src={url}
-  //       alt={`Hero Slide ${index}`}
-  //       className="w-full h-full object-cover"
-  //     />
-  //   </Carousel.Slide>
-  // ));
 
   return (
     <div className="w-full h-[300px]">
       {loading ? (
-        <div className="text-center"></div>
+        <Spinner></Spinner>
       ) : (
-        // <Carousel
-        //   slideSize="100%"
-        //   height={400}
-        //   slideGap="md"
-        //   controlSize={24}
-        //   loop
-        //   withIndicators
-        //   withControls
-        //   plugins={[autoplay.current]}
-        //   onMouseEnter={() => autoplay.current?.stop()}
-        //   onMouseLeave={() => autoplay.current?.reset()}
-        // >
-        //   {slides}
-        // </Carousel>
-        // <DemoCarousel />
         <SwiperCarousel images={heroImages} />
       )}
     </div>

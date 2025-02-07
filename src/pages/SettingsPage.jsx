@@ -38,7 +38,7 @@ const SettingsPage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get("/settings");
-        // console.log(response.data.data[0].social_media.whatsapp);
+    
 
         if (response.status == "200") {
           setDollarValue(response.data.data[0].dollar_price);
@@ -48,7 +48,7 @@ const SettingsPage = () => {
           setInstagramLink(response.data.data[0].social_media.instagram);
           setWhatsappLink(response.data.data[0].social_media.whatsapp);
           setYoutubeLink(response.data.data[0].social_media.youtube);
-          // console.log(response.data.data[0].hero);
+
 
           setSettings(response.data.data[0]);
           sessionStorage.setItem(
@@ -59,9 +59,7 @@ const SettingsPage = () => {
       } catch (err) {
         // setError(err.message);
         console.log("error");
-      } finally {
-        setLoadingCategories(false);
-      }
+      } 
     };
     fetchData();
   }, [refresh]);

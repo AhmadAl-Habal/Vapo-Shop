@@ -10,7 +10,7 @@ const Product = ({ product }) => {
   const [token, setToken] = useState("");
   const productRef = useRef(null);
   const storedDollarValue = sessionStorage.getItem("dollar_value");
-  console.log(storedDollarValue);
+
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");

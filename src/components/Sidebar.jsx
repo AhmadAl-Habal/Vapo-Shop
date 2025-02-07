@@ -62,7 +62,7 @@ const Sidebar = ({ isOpen, toggleSidebar, token }) => {
                 Add New Category
               </Link>
               <Link
-                to="/add-category"
+                to="/add-faq"
                 className="block text-lg font-medium hover:text-gray-300"
                 onClick={toggleSidebar}
               >

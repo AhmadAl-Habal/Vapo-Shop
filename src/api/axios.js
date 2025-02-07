@@ -8,5 +8,6 @@ const axiosInstance = axios.create({
   },
 });
 // dev env https://abomariamvapestorebackend.onrender.com
-// prod env https://abomariambackend.vercel.app/
-export default axiosInstance;
+// p]rod env https://abomariamb
+// 8ackend.vercel.app/
+export default axiosInstance;5

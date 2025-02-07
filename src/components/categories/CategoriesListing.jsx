@@ -8,21 +8,19 @@ const CategoriesListing = ({}) => {
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState(null);
 
-  //   const filteredCategory = sessionStorage.getItem("selectedCategory");
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get("/category");
         if (response.status == "200") {
-          console.log(response.data.data);
-
           setCategories(response.data.data);
         }
       } catch (err) {
         setError(err.message);
       } finally {
         setLoading(false);
-        console.log(categories);
+      
       }
     };
     fetchData();

@@ -15,6 +15,7 @@ const MainLayout = () => {
           const settingsData = response.data.data[0];
 
           sessionStorage.setItem("dollar_value", settingsData.dollar_price);
+          sessionStorage.setItem("settings", JSON.stringify(settingsData));
         }
       } catch (err) {
         console.error("Error fetching settings:", err.message);

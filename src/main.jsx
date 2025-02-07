@@ -5,6 +5,7 @@ import App from "./App.jsx";
 import "@mantine/carousel/styles.css";
 import { MantineProvider } from "@mantine/core";
 createRoot(document.getElementById("root")).render(
+
   <StrictMode>
     <MantineProvider
       withGlobalStyles
@@ -15,5 +16,6 @@ createRoot(document.getElementById("root")).render(
     >
       <App />
     </MantineProvider>
-  </StrictMode>
+   </StrictMode>
+   
 );

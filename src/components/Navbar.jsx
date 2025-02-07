@@ -9,9 +9,14 @@ const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
+
     const storedToken = localStorage.getItem("token");
     setToken(storedToken || "");
   }, []);
+
+  // useEffect(() => {
+
+  // }, []);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -25,9 +30,9 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Navbar */}
+      
       <nav className="bg-red-600 border-b border-red-500 p-1 flex justify-between items-center">
-        {/* Hamburger Menu */}
+        
         <div className="flex">
           <button
             className="text-3xl focus:outline-none mr-5"
@@ -47,7 +52,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* User Links */}
+       
         <div className="flex">
           {token ? (
             <p className="text-xs">
@@ -69,7 +74,7 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Sidebar */}
+   
       <Sidebar
         isOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}

@@ -39,7 +39,7 @@ const ProductsPage = () => {
         const response2 = await axios.get("/item", {
           params: { main_category_id: id },
         });
-        console.log(response2.data.data);
+        
 
         setItems(response2.data.data.items);
         setFilteredItems(response2.data.data.items);
