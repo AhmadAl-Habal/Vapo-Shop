@@ -6,9 +6,9 @@ const Sidebar = ({ isOpen, toggleSidebar, token }) => {
     <>
       <div
         dir="rtl"
-        className={`fixed z-20 top-0 left-0 h-screen w-9/12 max-w-sm bg-[#621f1f] text-white transform transition-transform ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed z-20 top-0 left-0 h-screen w-9/12 max-w-sm bg-[#621f1f] text-white 
+          transition-transform ${isOpen ? "translate-x-0" : "-translate-x-full hidden"}`}
+        
       >
         <button
           className="text-xl absolute top-4 left-4 focus:outline-none"
