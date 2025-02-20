@@ -11,7 +11,6 @@ const Product = ({ product }) => {
   const productRef = useRef(null);
   const storedDollarValue = sessionStorage.getItem("dollar_value");
 
-
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     setToken(storedToken || "");
@@ -111,10 +110,10 @@ const Product = ({ product }) => {
                 className="cursor-pointer ml-1"
                 color="red"
                 onClick={deleteItem}
-                size={20}
+                size={30}
               />
               <Link to={`/edit-product/${product._id}`}>
-                <FaEdit size={20} color="#d0bf4c" className="cursor-pointer" />
+                <FaEdit size={30} color="#d0bf4c" className="cursor-pointer" />
               </Link>
             </div>
           )}

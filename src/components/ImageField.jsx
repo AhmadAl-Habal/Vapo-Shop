@@ -158,7 +158,7 @@ const ImageField = ({ inputDetails, endpoint, name }) => {
                 className="flex bg-red-400 text-black p-1 rounded text-xs items-center m-1"
               >
                 Delete
-                <MdDelete className="ml-1" size={20} />
+                <MdDelete className="ml-1" size={30} />
               </button>
               <button
                 type="button"
@@ -166,7 +166,7 @@ const ImageField = ({ inputDetails, endpoint, name }) => {
                 className="flex bg-green-400 text-black p-1 rounded text-xs items-center m-1"
               >
                 Edit
-                <FaEdit className="ml-1" size={20} />
+                <FaEdit className="ml-1" size={30} />
               </button>
             </div>
           </div>

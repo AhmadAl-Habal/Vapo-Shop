@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import axios from "../../api/axios";
 import Spinner from "../../components/Spinner";
 import hero from "../../assets/bg.webp";
+import BackButton from "../../components/BackButton";
 const ProductPage = () => {
   const { id } = useParams();
   const [productDetails, setProductDetails] = useState(null);
@@ -53,11 +54,13 @@ const ProductPage = () => {
         <div className="absolute inset-0 bg-black bg-opacity-80"></div>
 
         <div className="relative w-[80vw] mx-auto bg-transparent py-10 text-white">
-          <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm mb-5 ">
-            <Link className="mr-5 text-white" to={"/"}>
+          {/* <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm mb-5 ">
+            <Link className="mr-5 text-white w-full" to={"/"}>
               Return to Homepage
             </Link>
-          </p>
+          </p> */}
+
+          <BackButton />
 
           {loading ? (
             <Spinner />

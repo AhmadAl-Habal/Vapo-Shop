@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import axios from "../../api/axios";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import hero from "../../assets/bg.webp";
+import BackButton from "../../components/BackButton";
 const AddNewFAQPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -81,12 +82,7 @@ const AddNewFAQPage = () => {
           <p className="text-white mb-5">
             You must be logged in to access this page.
           </p>
-          <Link
-            to="/"
-            className="text-white font-bold text-sm border border-2 rounded-full py-1 px-2"
-          >
-            Return to Homepage
-          </Link>
+          <BackButton />
         </div>
       </div>
     );

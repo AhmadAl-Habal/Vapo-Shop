@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import axios from "../../api/axios";
 import { Link, useNavigate } from "react-router-dom";
 import hero from "../../assets/bg.webp";
+import BackButton from "../../components/BackButton";
 const LoginPage = () => {
   const navigate = useNavigate();
   const [authToken, setAuthToken] = useState(null);
@@ -57,9 +58,7 @@ const LoginPage = () => {
         className="relative space-y-4 w-[80vw] mx-auto bg-transparent pt-10"
       >
         <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm">
-          <Link className="mr-5 text-white" to={"/"}>
-            Return to Homepage
-          </Link>
+          <BackButton />
         </p>
         <div>
           <label className="mr-5 text-white">Username</label>

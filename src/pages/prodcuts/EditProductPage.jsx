@@ -102,7 +102,7 @@ const EditProductPage = () => {
     };
 
     fetchData();
-  }, [refresh, allSubCategories]); 
+  }, [refresh, allSubCategories]);
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -125,8 +125,8 @@ const EditProductPage = () => {
       //     formData.append("image", file);
       //   });
       // }
-      console.log("data",data);
-      
+      console.log("data", data);
+
       if (data.sub_category_id) {
         formData.append("sub_category_id", data.sub_category_id);
       }
@@ -221,12 +221,7 @@ const EditProductPage = () => {
           <p className="text-white mb-5">
             You must be logged in to access this page.
           </p>
-          <Link
-            to="/"
-            className="text-white font-bold text-sm border border-2 rounded-full py-1 px-2"
-          >
-            Return to Homepage
-          </Link>
+          <BackButton />
         </div>
       </div>
     );
@@ -251,11 +246,7 @@ const EditProductPage = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="relative space-y-4 w-[90vw] mx-auto bg-transparent py-10"
         >
-          <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm">
-            <Link className="mr-5 text-white" to={"/"}>
-              Return to Homepage
-            </Link>
-          </p>
+          <BackButton />
           <p className="text-center text-white font-bold">
             New Product Details
           </p>

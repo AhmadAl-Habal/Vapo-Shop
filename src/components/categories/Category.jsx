@@ -65,13 +65,13 @@ const Category = ({ category }) => {
             className="cursor-pointer"
             color="red"
             onClick={deleteItem}
-            size={20}
+            size={30}
           />
           <Link
             to={`/edit-category/${category._id}`}
             onClick={(e) => e.stopPropagation()}
           >
-            <FaEdit size={20} color="#d0bf4c" className="cursor-pointer" />
+            <FaEdit size={30} color="#d0bf4c" className="cursor-pointer" />
           </Link>
         </div>
       )}

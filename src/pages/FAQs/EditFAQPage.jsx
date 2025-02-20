@@ -5,6 +5,7 @@ import { useNavigate, Link, useParams } from "react-router-dom";
 import ImageField from "../../components/ImageField";
 import BulkImageUploadForm from "../../components/BulkImageUploadForm";
 import hero from "../../assets/bg.webp";
+import BackButton from "../../components/BackButton";
 
 const EditFAQPage = () => {
   const navigate = useNavigate();
@@ -90,12 +91,7 @@ const EditFAQPage = () => {
           <p className="text-white mb-5">
             You must be logged in to access this page.
           </p>
-          <Link
-            to="/"
-            className="text-white font-bold text-sm border border-2 rounded-full py-1 px-2"
-          >
-            Return to Homepage
-          </Link>
+          <BackButton />
         </div>
       </div>
     );

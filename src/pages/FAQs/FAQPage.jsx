@@ -5,6 +5,7 @@ import Spinner from "../../components/Spinner";
 import hero from "../../assets/bg.webp";
 import FAQ from "../../components/FAQ";
 import { CiCirclePlus } from "react-icons/ci";
+import BackButton from "../../components/BackButton";
 const FAQPage = () => {
   const { id } = useParams();
   const [productDetails, setProductDetails] = useState(null);
@@ -51,11 +52,7 @@ const FAQPage = () => {
         <div className="absolute inset-0 bg-black bg-opacity-80"></div>
 
         <div className="relative w-[80vw] mx-auto bg-transparent py-10 text-white">
-          <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm mb-5 ">
-            <Link className="mr-5 text-white" to={"/"}>
-              Return to Homepage
-            </Link>
-          </p>
+          <BackButton />
           <div>
             {loading ? (
               <Spinner loading={loading} />

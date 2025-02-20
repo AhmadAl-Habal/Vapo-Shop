@@ -51,11 +51,11 @@ const FAQ = ({ question, answer, images, id }) => {
                   e.stopPropagation();
                   deleteItem();
                 }}
-                size={15}
+                size={30}
               />
 
               <Link to={`/edit-faq/${id}`}>
-                <FaEdit size={15} color="#d0bf4c" className="cursor-pointer" />
+                <FaEdit size={30} color="#d0bf4c" className="cursor-pointer" />
               </Link>
             </div>
           )}

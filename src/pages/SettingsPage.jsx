@@ -7,6 +7,7 @@ import Spinner from "../components/Spinner";
 import Whatsapp from "../components/social links/Whatsapp";
 import HeroImageField from "../components/HeroImageField";
 import HeroBulkImageUploadForm from "../components/HeroBulkImageUploadForm";
+import BackButton from "../components/BackButton";
 const SettingsPage = () => {
   const navigate = useNavigate();
 
@@ -38,7 +39,6 @@ const SettingsPage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get("/settings");
-    
 
         if (response.status == "200") {
           setDollarValue(response.data.data[0].dollar_price);
@@ -49,7 +49,6 @@ const SettingsPage = () => {
           setWhatsappLink(response.data.data[0].social_media.whatsapp);
           setYoutubeLink(response.data.data[0].social_media.youtube);
 
-
           setSettings(response.data.data[0]);
           sessionStorage.setItem(
             "settings",
@@ -59,7 +58,7 @@ const SettingsPage = () => {
       } catch (err) {
         // setError(err.message);
         console.log("error");
-      } 
+      }
     };
     fetchData();
   }, [refresh]);
@@ -280,12 +279,7 @@ const SettingsPage = () => {
           <p className="text-white mb-5">
             You must be logged in to access this page.
           </p>
-          <Link
-            to="/"
-            className="text-white font-bold text-sm border border-2 rounded-full py-1 px-2"
-          >
-            Return to Homepage
-          </Link>
+          <BackButton />
         </div>
       </div>
     );
@@ -307,11 +301,7 @@ const SettingsPage = () => {
         <div className="absolute inset-0 bg-black bg-opacity-80"></div>
 
         <div className="relative space-y-4 w-[90vw] mx-auto bg-transparent py-10">
-          <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm">
-            <Link className="mr-5 text-white" to={"/"}>
-              Return to Homepage
-            </Link>
-          </p>
+          <BackButton />
           <div>
             <div className="flex items-center  mb-5 ">
               <label className="text-white font-bold  w-1/4">

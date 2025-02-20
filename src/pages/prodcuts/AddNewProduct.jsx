@@ -4,6 +4,7 @@ import axios from "../../api/axios";
 import { useNavigate, Link } from "react-router-dom";
 import hero from "../../assets/bg.webp";
 import Spinner from "../../components/Spinner";
+import BackButton from "../../components/BackButton";
 
 const AddNewProduct = () => {
   const navigate = useNavigate();
@@ -137,12 +138,7 @@ const AddNewProduct = () => {
           <p className="text-white mb-5">
             You must be logged in to access this page.
           </p>
-          <Link
-            to="/"
-            className="text-white font-bold text-sm border border-2 rounded-full py-1 px-2"
-          >
-            Return to Homepage
-          </Link>
+          <BackButton />
         </div>
       </div>
     );
@@ -162,11 +158,7 @@ const AddNewProduct = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="relative space-y-4 w-[90vw] mx-auto bg-transparent py-10"
         >
-          <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm">
-            <Link className="mr-5 text-white" to={"/"}>
-              Return to Homepage
-            </Link>
-          </p>
+          <BackButton />
           <p className="text-center text-white font-bold">
             New Product Details
           </p>
