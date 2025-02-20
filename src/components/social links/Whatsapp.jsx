@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "../../api/axios";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-import { motion } from "framer-motion"; 
+import { motion } from "framer-motion";
 
 const Whatsapp = ({ accounts }) => {
   const [expanded, setExpanded] = useState(false);
@@ -15,7 +15,12 @@ const Whatsapp = ({ accounts }) => {
     }
   }, [accounts]);
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
 
   const toggleExpand = () => setExpanded((prev) => !prev);
 
@@ -51,16 +56,18 @@ const Whatsapp = ({ accounts }) => {
 
   return (
     <div className="p-5 bg-transparent border-2 border text-white rounded-lg">
-      
       <div
         onClick={toggleExpand}
         className="flex justify-between items-center cursor-pointer rounded"
       >
         <h2 className="text-md font-bold">WhatsApp Settings</h2>
-        {expanded ? <FaChevronUp className="text-white" /> : <FaChevronDown className="text-white" />}
+        {expanded ? (
+          <FaChevronUp className="text-white" />
+        ) : (
+          <FaChevronDown className="text-white" />
+        )}
       </div>
 
-    
       <motion.div
         initial={{ height: 0, opacity: 0 }}
         animate={{ height: expanded ? "auto" : 0, opacity: expanded ? 1 : 0 }}
@@ -79,7 +86,11 @@ const Whatsapp = ({ accounts }) => {
                   errors.link ? "border-red-500" : "border-gray-500"
                 }`}
               />
-              {errors.link && <p className="text-red-500 text-sm mt-1">{errors.link.message}</p>}
+              {errors.link && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.link.message}
+                </p>
+              )}
             </div>
 
             <div>
@@ -95,7 +106,9 @@ const Whatsapp = ({ accounts }) => {
                 }`}
               />
               {errors.phone_number && (
-                <p className="text-red-500 text-sm mt-1">{errors.phone_number.message}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.phone_number.message}
+                </p>
               )}
             </div>
 
@@ -108,10 +121,17 @@ const Whatsapp = ({ accounts }) => {
                   errors.name ? "border-red-500" : "border-gray-500"
                 }`}
               />
-              {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
+              {errors.name && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.name.message}
+                </p>
+              )}
             </div>
 
-            <button type="submit" className="w-full bg-red-600 text-white py-2 rounded">
+            <button
+              type="submit"
+              className="w-full bg-red-600 text-white py-2 rounded"
+            >
               {loading ? "Loading..." : "Add Profile"}
             </button>
           </form>
@@ -134,7 +154,10 @@ const Whatsapp = ({ accounts }) => {
                     <div>
                       <p className="font-bold">{account.name}</p>
                       <p className="text-sm">
-                        <a href={account.link} className="text-blue-400 underline">
+                        <a
+                          href={account.link}
+                          className="text-red-400 underline"
+                        >
                           {account.link}
                         </a>
                       </p>

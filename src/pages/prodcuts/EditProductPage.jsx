@@ -5,6 +5,7 @@ import { useNavigate, Link, useParams } from "react-router-dom";
 import hero from "../../assets/bg.webp";
 import ImageField from "../../components/ImageField";
 import BulkImageUploadForm from "../../components/BulkImageUploadForm";
+import BackButton from "../../components/BackButton";
 const EditProductPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();

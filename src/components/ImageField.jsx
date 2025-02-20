@@ -101,30 +101,32 @@ const ImageField = ({ inputDetails, endpoint, name }) => {
   }
 
   return (
-    <div>
+    <div className="p-5 bg-transparent border-2 border text-white rounded-lg">
+      {/* Toggle Button */}
       <div
-        className={`flex items-center justify-between cursor-pointer px-1 py-2 ${
-          visible && "mb-5"
-        } ${!visible && "border border-2 rounded-lg"}`}
         onClick={setExpand}
+        className="flex justify-between items-center cursor-pointer rounded"
       >
-        <p className="w-100 text-md text-white font-bold">Current Images</p>
+        <h2 className="text-md font-bold">Current Images</h2>
         {visible ? (
-          <FaChevronUp className="text-white " />
+          <FaChevronUp className="text-white" />
         ) : (
           <FaChevronDown className="text-white" />
         )}
       </div>
-      <div className={`${visible ? "block" : "hidden"}`}>
+
+      {/* Expanding Section */}
+      <div
+        className={`overflow-hidden transition-all duration-500 ease-in-out ${
+          visible ? "max-h-[100000px] opacity-100 mt-4" : "max-h-0 opacity-0"
+        }`}
+      >
         {imagePreviews.map((image, index) => (
-          <div
-            key={index}
-            className="border border-2 rounded-lg px-1 py-2 mb-5"
-          >
+          <div key={index} className=" px-3 py-2 mb-5">
             <div className="flex items-center mb-3">
               <label className="text-white w-1/4">Image {index + 1}</label>
               <input
-                key={inputKeys[index]} // Unique key to force re-render
+                key={inputKeys[index]}
                 type="file"
                 className="border rounded p-2 w-3/4 text-white text-sm"
                 onChange={(event) => handleFileChange(event, index)}
@@ -132,14 +134,14 @@ const ImageField = ({ inputDetails, endpoint, name }) => {
               <button
                 type="button"
                 onClick={() => clearImage(index)}
-                className="absolute right-3 ml-2 bg-red-400 text-black p-1 rounded-full text-xs"
+                className="ml-2 bg-red-400 text-black p-1 rounded-full text-xs"
               >
                 Clear
               </button>
             </div>
 
             {image && (
-              <div className="flex justify-center items-center mt-3">
+              <div className="flex justify-center items-center my-3">
                 <img
                   src={
                     typeof image === "string"
@@ -155,18 +157,18 @@ const ImageField = ({ inputDetails, endpoint, name }) => {
               <button
                 type="button"
                 onClick={() => deleteImage(index)}
-                className="flex bg-red-400 text-black p-1 rounded text-xs items-center m-1"
+                className="flex bg-red-400 text-black p-1 rounded text-xs items-center"
               >
                 Delete
-                <MdDelete className="ml-1" size={30} />
+                <MdDelete className="ml-1" size={20} />
               </button>
               <button
                 type="button"
                 onClick={() => editImage(index)}
-                className="flex bg-green-400 text-black p-1 rounded text-xs items-center m-1"
+                className="flex bg-green-400 text-black p-1 rounded text-xs items-center"
               >
                 Edit
-                <FaEdit className="ml-1" size={30} />
+                <FaEdit className="ml-1" size={20} />
               </button>
             </div>
           </div>

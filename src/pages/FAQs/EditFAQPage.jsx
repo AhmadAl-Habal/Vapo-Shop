@@ -110,11 +110,7 @@ const EditFAQPage = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="relative space-y-4 w-[80vw] mx-auto bg-transparent py-10"
         >
-          <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm">
-            <Link className="mr-5 text-white" to={"/faq"}>
-              Return to FAQs page
-            </Link>
-          </p>
+          <BackButton />
           <p className="text-center text-white font-bold">FAQ details</p>
 
           <div>

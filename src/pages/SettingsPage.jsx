@@ -30,6 +30,7 @@ const SettingsPage = () => {
 
   const [facebookLink, setFacebookLink] = useState("");
   const [telegramLink, setTelegramLink] = useState("");
+  const [whatsappChannelLink, setWhatsappChannelLink] = useState("");
   const [instagramLink, setInstagramLink] = useState("");
   const [whatsappLink, setWhatsappLink] = useState("");
   const [youtubeLink, setYoutubeLink] = useState("");
@@ -45,6 +46,9 @@ const SettingsPage = () => {
           setAboutUs(response.data.data[0].about_us);
           setFacebookLink(response.data.data[0].social_media.facebook);
           setTelegramLink(response.data.data[0].social_media.telegram);
+          setWhatsappChannelLink(
+            response.data.data[0].social_media.whatsapp_channel
+          );
           setInstagramLink(response.data.data[0].social_media.instagram);
           setWhatsappLink(response.data.data[0].social_media.whatsapp);
           setYoutubeLink(response.data.data[0].social_media.youtube);
@@ -86,6 +90,7 @@ const SettingsPage = () => {
 
       if (response.status == 200) {
         setStatusMessage("Dollar price changed successfully!");
+        //
       } else {
         setStatusMessage("Failed to change Dollar price");
         //
@@ -141,11 +146,43 @@ const SettingsPage = () => {
 
       if (response.status == 200) {
         setStatusMessage("Telegram link changed successfully!");
+        // setRefresh(!refresh)
       } else {
         setStatusMessage("Failed to change Telegram link ");
       }
     } catch (error) {
       console.error("Change Failed", error.response.data);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const ChangeWhatsAppChannelLink = async () => {
+    setStatusMessage("");
+
+    setLoading(true);
+
+    try {
+      const response = await axios.put(
+        "/settings/whatsapp_channel",
+        { whatsapp_channel: whatsappChannelLink },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status == 200) {
+        setStatusMessage("Whatsapp Channel link changed successfully!");
+        // setRefresh(!refresh)
+      } else {
+        setStatusMessage("Failed to change Whatsapp Channel link ");
+      }
+    } catch (error) {
+      console.error(
+        "Failed to change Whatsapp Channel link",
+        error.response.data
+      );
     } finally {
       setLoading(false);
     }
@@ -387,6 +424,27 @@ const SettingsPage = () => {
                   loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
                 }`}
                 onClick={ChangeTelegramLink}
+                disabled={loading}
+              >
+                {loading ? "loading" : "Save"}
+              </button>
+            </div>
+            <div className="flex items-center  mb-5 ">
+              <label className="text-white font-bold  w-1/4">
+                Whatsapp Channel Link
+              </label>
+              <input
+                type="text"
+                value={whatsappChannelLink}
+                className="border rounded p-2 w-3/4 bg-red-100 "
+                onChange={(e) => setWhatsappChannelLink(e.target.value)}
+              />
+
+              <button
+                className={`text-white ml-2 p-1 rounded ${
+                  loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
+                }`}
+                onClick={ChangeWhatsAppChannelLink}
                 disabled={loading}
               >
                 {loading ? "loading" : "Save"}
