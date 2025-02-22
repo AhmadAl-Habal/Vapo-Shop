@@ -132,12 +132,12 @@ const AddNewProduct = () => {
 
         <div className="absolute inset-0 bg-black bg-opacity-80"></div>
         <div className="relative  w-[80vw] mx-auto bg-transparent py-10">
-          <h1 className="text-2xl font-bold text-red-500 mb-5">
-            Access Denied
-          </h1>
-          <p className="text-white mb-5">
-            You must be logged in to access this page.
-          </p>
+          <div dir="rtl">
+            <h1 className="text-2xl font-bold text-red-500 mb-5">وصول مرفوض</h1>
+            <p className="text-white mb-5">
+              يجب تسجيل الدخول للوصول الى هذه الصفحة
+            </p>
+          </div>
           <BackButton />
         </div>
       </div>
@@ -199,7 +199,9 @@ const AddNewProduct = () => {
               className="border rounded p-2 w-3/4 bg-red-100"
             />
             {errors.price && (
-              <p className="ml-1 text-red-500">{errors.price.message}</p>
+              <p className="mt-2 text-red-500 font-bold text-center">
+                {errors.price.message}
+              </p>
             )}
           </div>
           <div className="flex">
@@ -213,9 +215,9 @@ const AddNewProduct = () => {
               {...register("discount")}
               className="border rounded p-2 w-3/4 bg-red-100"
             />
-            {errors.discount && (
-              <p className="ml-1 text-red-500">{errors.discount.message}</p>
-            )}
+            {/* {errors.discount && (
+              <p className="mt-2 text-red-500 font-bold text-center">{errors.discount.message}</p>
+            )} */}
           </div>
           <div className="flex flex-col">
             {loadingCategories ? (
@@ -324,7 +326,9 @@ const AddNewProduct = () => {
                 Clear
               </button>
               {errors.image && (
-                <p className="ml-1 text-red-500">{errors.image.message}</p>
+                <p className="mt-2 text-red-500 font-bold text-center">
+                  {errors.image.message}
+                </p>
               )}
             </div>
             <div className="flex mt-5">

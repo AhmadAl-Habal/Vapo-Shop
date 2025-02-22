@@ -216,12 +216,12 @@ const EditProductPage = () => {
 
         <div className="absolute inset-0 bg-black bg-opacity-80"></div>
         <div className="relative  w-[80vw] mx-auto bg-transparent py-10">
-          <h1 className="text-2xl font-bold text-red-500 mb-5">
-            Access Denied
-          </h1>
-          <p className="text-white mb-5">
-            You must be logged in to access this page.
-          </p>
+          <div dir="rtl">
+            <h1 className="text-2xl font-bold text-red-500 mb-5">وصول مرفوض</h1>
+            <p className="text-white mb-5">
+              يجب تسجيل الدخول للوصول الى هذه الصفحة
+            </p>
+          </div>
           <BackButton />
         </div>
       </div>
@@ -275,7 +275,9 @@ const EditProductPage = () => {
               }}
             ></textarea>
             {errors.name && (
-              <p className="text-red-500 ml-1">{errors.name.description}</p>
+              <p className="mt-2 text-red-500 font-bold text-center">
+                {errors.name.description}
+              </p>
             )}
           </div>
           <div className="flex">
@@ -287,7 +289,9 @@ const EditProductPage = () => {
               className="border rounded p-2 w-3/4 bg-red-100"
             />
             {errors.price && (
-              <p className="ml-1 text-red-500">{errors.price.message}</p>
+              <p className="mt-2 text-red-500 font-bold text-center">
+                {errors.price.message}
+              </p>
             )}
           </div>
           <div className="flex">
@@ -301,9 +305,9 @@ const EditProductPage = () => {
               )}
               className="border rounded p-2 w-3/4 bg-red-100"
             />
-            {errors.discount && (
+            {/* {errors.discount && (
               <p className="ml-1 text-red-500">{errors.discount.message}</p>
-            )}
+            )} */}
           </div>
           <div className="flex flex-col">
             {loadingCategories ? (

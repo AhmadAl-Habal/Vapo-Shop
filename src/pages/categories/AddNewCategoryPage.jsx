@@ -107,12 +107,12 @@ const AddNewCategoryPage = () => {
         ></div>
         <div className="absolute inset-0 bg-black bg-opacity-80"></div>
         <div className="relative w-[80vw] mx-auto bg-transparent py-10">
-          <h1 className="text-2xl font-bold text-red-500 mb-5">
-            Access Denied
-          </h1>
-          <p className="text-white mb-5">
-            You must be logged in to access this page.
-          </p>
+          <div dir="rtl">
+            <h1 className="text-2xl font-bold text-red-500 mb-5">وصول مرفوض</h1>
+            <p className="text-white mb-5">
+              يجب تسجيل الدخول للوصول الى هذه الصفحة
+            </p>
+          </div>
           <BackButton />
         </div>
       </div>
@@ -136,20 +136,29 @@ const AddNewCategoryPage = () => {
           <p className="text-center text-white font-bold">
             New Category Details
           </p>
-          <div className="flex items-center">
-            <label className="text-white font-bold w-1/4">Name</label>
-            <input
-              type="text"
-              {...register("name", { required: "Name is required" })}
-              className="border rounded p-2 w-3/4 bg-red-100"
-            />
+          <div>
+            {" "}
+            <div className="flex items-center">
+              <label className="text-sm text-white font-bold w-1/4">Name</label>
+              <input
+                dir="rtl"
+                type="text"
+                {...register("name", { required: "Name is required" })}
+                className="border rounded p-2 w-3/4 bg-red-100"
+              />
+            </div>
             {errors.name && (
-              <p className="text-red-500 ml-1">{errors.name.message}</p>
+              <p className="mt-2 text-red-500 font-bold text-center">
+                {errors.name.message}
+              </p>
             )}
           </div>
           <div className="flex items-center">
-            <label className="text-white font-bold w-1/4">Description</label>
+            <label className="text-sm text-white font-bold w-1/4">
+              Description
+            </label>
             <textarea
+              dir="rtl"
               {...register("description")}
               className="border rounded p-2 w-3/4 bg-red-100 resize-none overflow-hidden"
               rows={1}
@@ -161,25 +170,29 @@ const AddNewCategoryPage = () => {
           </div>
 
           <div>
-            <div className="flex items-center">
-              <label className="text-white font-bold w-1/4">Image</label>
-              <input
-                type="file"
-                {...register("image", {
-                  required: "Image is required",
-                })}
-                className="border rounded p-2 text-white text-sm inline-block w-3/4"
-                onChange={handleFileChange} // تحديث الصورة المختارة
-              />
-              <button
-                type="button"
-                className="absolute right-1 bg-red-400 text-black p-1 rounded-full text-xs"
-                onClick={clearImage}
-              >
-                Clear
-              </button>
+            <div>
+              <div className="flex items-center">
+                <label className="text-white font-bold w-1/4">Image</label>
+                <input
+                  type="file"
+                  {...register("image", {
+                    required: "Image is required",
+                  })}
+                  className="border rounded p-2 text-white text-sm inline-block w-3/4"
+                  onChange={handleFileChange}
+                />
+                <button
+                  type="button"
+                  className="absolute right-1 bg-red-400 text-black p-1 rounded-full text-xs"
+                  onClick={clearImage}
+                >
+                  Clear
+                </button>
+              </div>{" "}
               {errors.image && (
-                <p className="ml-1 text-red-500">{errors.image.message}</p>
+                <p className="mt-2 text-red-500 font-bold text-center">
+                  {errors.image.message}
+                </p>
               )}
             </div>
 

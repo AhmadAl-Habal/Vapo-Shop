@@ -9,7 +9,6 @@ const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
-
     const storedToken = localStorage.getItem("token");
     setToken(storedToken || "");
   }, []);
@@ -30,12 +29,10 @@ const Navbar = () => {
 
   return (
     <>
-      
       <nav className="bg-red-600 border-b border-red-500 p-1 flex justify-between items-center">
-        
         <div className="flex">
           <button
-            className="text-3xl focus:outline-none mr-5"
+            className="text-3xl focus:outline-none mr-3"
             onClick={toggleSidebar}
           >
             ☰
@@ -52,11 +49,10 @@ const Navbar = () => {
           </div>
         </div>
 
-       
         <div className="flex">
           {token ? (
             <p className="text-xs">
-              <span className="text-yellow-400 mr-5">
+              <span className="text-yellow-400 mr-3">
                 <Link to={"/settings"}> Admin mode!</Link>
               </span>
               <button
@@ -74,7 +70,6 @@ const Navbar = () => {
         </div>
       </nav>
 
-   
       <Sidebar
         isOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}

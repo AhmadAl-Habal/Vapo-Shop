@@ -123,6 +123,7 @@ const SubcategoriesList = ({ refresh, setRefresh, category }) => {
         <div className="flex items-center">
           <label className="text-white font-bold w-1/4">Name</label>
           <input
+            dir="rtl"
             type="text"
             {...register("name", { required: "Name is required" })}
             className="border rounded p-2 w-3/4 bg-red-100"
@@ -134,6 +135,7 @@ const SubcategoriesList = ({ refresh, setRefresh, category }) => {
         <div className="flex items-center">
           <label className="text-white font-bold w-1/4">Description</label>
           <textarea
+            dir="rtl"
             {...register("description")}
             className="border rounded p-2 w-3/4 bg-red-100 resize-none overflow-hidden"
             rows={1}

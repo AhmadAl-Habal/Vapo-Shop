@@ -57,28 +57,27 @@ const LoginPage = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="relative space-y-4 w-[80vw] mx-auto bg-transparent pt-10"
       >
-        <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm">
-          <BackButton />
-        </p>
+        <BackButton />
+
         <div>
-          <label className="mr-5 text-white">Username</label>
+          <label className="mr-5 text-white w-1/4">Username</label>
           <input
             type="text"
-            placeholder="ahmad"
+            placeholder="UserName "
             {...register("username", { required: "Username is required" })}
-            className="border rounded p-1 bg-red-100 outline-none"
+            className="border rounded p-1 bg-red-100 outline-none w-3/4"
           />
           {errors.username && (
             <p className="font-bold text-red-500">{errors.username.message}</p>
           )}
         </div>
         <div>
-          <label className="mr-6 text-white">Password</label>
+          <label className="mr-6 text-white w-1/4">Password</label>
           <input
             type="password"
-            placeholder="1234"
+            placeholder="Password"
             {...register("password", { required: "Password is required" })}
-            className="border rounded p-1 bg-red-100 outline-none"
+            className="border rounded p-1 bg-red-100 outline-none w-3/4"
           />
           {errors.password && (
             <p className="font-bold text-red-500">{errors.password.message}</p>
