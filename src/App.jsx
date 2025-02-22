@@ -23,6 +23,7 @@ import AddNewCategoryPage from "./pages/categories/AddNewCategoryPage.jsx";
 import EditCategoryPage from "./pages/categories/EditCategoryPage.jsx";
 import PageWrapper from "./PageWrapper.jsx";
 import motionBg from "./assets/motion.jpg";
+import motionBg2 from "./assets/motion2.jpg";
 // Welcome Spinner Component
 const WelcomeSpinner = ({ motionBg }) => {
   return (
@@ -33,17 +34,17 @@ const WelcomeSpinner = ({ motionBg }) => {
       className="fixed inset-0 flex justify-center z-50"
       style={{
         backgroundImage: `url(${motionBg})`,
-        backgroundSize: "cover",
+        backgroundSize: "contain",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         backgroundColor: "#121212",
       }}
     >
       <motion.div
-        animate={{ scale: [1, 1.2, 1], opacity: [0.8, 1, 0.8] }}
+        animate={{ scale: [1, 1.1, 1], opacity: [0.8, 0.9, 0.8] }}
         transition={{ duration: 1, repeat: Infinity }}
       >
-        <p className="text-red-700 text-2xl font-bold mt-[200px]">
+        <p className="text-white text-4xl font-bold mt-[200px]">
           Welcome To VAPO...
         </p>
       </motion.div>

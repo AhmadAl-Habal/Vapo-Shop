@@ -162,20 +162,24 @@ const AddNewProduct = () => {
           <p className="text-center text-white font-bold">
             New Product Details
           </p>
+
           <div className="flex items-center">
             <label className="text-white font-bold w-1/4">Name</label>
-            <input
-              type="text"
+            <textarea
+              dir="rtl"
               {...register("name", { required: "Name is required" })}
-              className="border rounded p-2 w-3/4 bg-red-100"
-            />
-            {errors.name && (
-              <p className="text-red-500 ml-1">{errors.name.message}</p>
-            )}
+              className="border rounded p-2 w-3/4 bg-red-100 resize-none overflow-hidden"
+              rows={1}
+              onInput={(e) => {
+                e.target.style.height = "auto";
+                e.target.style.height = `${e.target.scrollHeight}px`;
+              }}
+            ></textarea>
           </div>
           <div className="flex items-center">
             <label className="text-white font-bold w-1/4">Description</label>
             <textarea
+              dir="rtl"
               {...register("description")}
               className="border rounded p-2 w-3/4 bg-red-100 resize-none overflow-hidden"
               rows={1}
@@ -188,6 +192,7 @@ const AddNewProduct = () => {
           <div className="flex">
             <label className="text-white font-bold w-1/4">Price</label>
             <input
+              dir="rtl"
               type="number"
               step="0.01"
               {...register("price", { required: "Price is required" })}
@@ -202,6 +207,7 @@ const AddNewProduct = () => {
               Discount
             </label>
             <input
+              dir="rtl"
               type="number"
               step="0.01"
               {...register("discount")}
@@ -220,7 +226,10 @@ const AddNewProduct = () => {
                   <label className="text-white font-bold w-1/4">Category</label>
                   <div className="flex items-center">
                     <select
-                      {...register("main_category_id")}
+                      dir="rtl"
+                      {...register("main_category_id", {
+                        required: "Price is required",
+                      })}
                       className="border rounded p-2 w-full bg-red-100 text-right w-3/4"
                       onChange={handleCategoryChange}
                     >
@@ -264,6 +273,7 @@ const AddNewProduct = () => {
                     {selectedCategoryId ? (
                       filteredSubCategories.length > 0 ? (
                         <select
+                          dir="rtl"
                           {...register("sub_category_id")}
                           className="border rounded p-2 bg-red-100 text-right w-full"
                         >

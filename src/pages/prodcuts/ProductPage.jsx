@@ -97,7 +97,7 @@ const ProductPage = () => {
                 dir="rtl"
                 className="bg-transparent text-white p-5 rounded-lg shadow-lg max-w-lg mx-auto"
               >
-                <h2 className="text-xl font-bold mb-4">
+                <h2 className="text-xl font-bold mb-4 whitespace-pre-wrap leading-relaxed">
                   {productDetails.name}
                 </h2>
 

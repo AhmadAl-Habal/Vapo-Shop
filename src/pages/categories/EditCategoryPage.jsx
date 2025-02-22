@@ -224,7 +224,7 @@ const EditCategoryPage = () => {
                 className="bg-red-600 text-white px-4 py-1 rounded mr-5"
                 disabled={loading}
               >
-                {loading ? "Loading..." : "Create"}
+                {loading ? "Loading..." : "Edit"}
               </button>
               {statusMessage && (
                 <p className="text-red-500 font-bold">{statusMessage}</p>

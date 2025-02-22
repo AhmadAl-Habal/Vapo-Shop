@@ -13,13 +13,16 @@ const ProductsPage = () => {
   const [filteredSubCategory, setFilteredSubCategory] = useState("");
   const [allSubCategories, setAllSubCategories] = useState([]);
   const [items, setItems] = useState([]); // Original items from API
+  const [discountedItems, setDiscountedItems] = useState([]); // Original items from API
   const [filteredItems, setFilteredItems] = useState([]); // Items after filtering
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const location = useLocation();
   const { categoryDetails } = location.state || {};
-
+  const [offersCategory, setOffersCategory] = useState(
+    categoryDetails.name.includes("عروض") ? true : false
+  );
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     setToken(storedToken || "");
@@ -49,7 +52,36 @@ const ProductsPage = () => {
         setLoading(false);
       }
     };
+
     fetchData();
+  }, [categoryDetails]);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    setToken(storedToken || "");
+
+    if (offersCategory) {
+      setLoading(true);
+
+      const fetchData = async () => {
+        try {
+          // Fetch Items
+          const response = await axios.get("/item", {
+            params: { discount: 1 },
+          });
+
+          setDiscountedItems(response.data.data.items);
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setLoading(false);
+          console.log(discountedItems);
+        }
+      };
+
+      fetchData();
+      console.log("test");
+    }
   }, [categoryDetails]);
 
   // Function to handle filtering
@@ -90,18 +122,20 @@ const ProductsPage = () => {
               <p className="text-gray-500">{categoryDetails?.description}</p>
             </div>
             <div className="flex flex-row-reverse justify-between items-center mb-5 px-2 text-xs">
-              <select
-                onChange={handleFilterChange}
-                className="border rounded p-2 bg-red-100 text-right"
-                dir="rtl"
-              >
-                <option value="">الكل</option>
-                {allSubCategories.map((subCategory) => (
-                  <option key={subCategory._id} value={subCategory._id}>
-                    {subCategory.name}
-                  </option>
-                ))}
-              </select>
+              {!offersCategory && (
+                <select
+                  onChange={handleFilterChange}
+                  className="border rounded p-2 bg-red-100 text-right"
+                  dir="rtl"
+                >
+                  <option value="">الكل</option>
+                  {allSubCategories.map((subCategory) => (
+                    <option key={subCategory._id} value={subCategory._id}>
+                      {subCategory.name}
+                    </option>
+                  ))}
+                </select>
+              )}
               {token && (
                 <Link to={"/add-product"}>
                   <CiCirclePlus
@@ -120,14 +154,22 @@ const ProductsPage = () => {
                   dir="rtl"
                   className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2"
                 >
-                  {filteredItems.length === 0 ? (
+                  {filteredItems.length > 0 || discountedItems.length > 0 ? (
+                    <>
+                      {filteredItems.map((product, index) => (
+                        <Product key={`filtered-${index}`} product={product} />
+                      ))}
+                      {discountedItems.map((product, index) => (
+                        <Product
+                          key={`discounted-${index}`}
+                          product={product}
+                        />
+                      ))}
+                    </>
+                  ) : (
                     <p className="text-lg text-white">
                       There are no items to show
                     </p>
-                  ) : (
-                    filteredItems.map((product, index) => (
-                      <Product key={index} product={product} />
-                    ))
                   )}
                 </div>
               )}
