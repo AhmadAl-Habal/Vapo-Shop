@@ -97,6 +97,17 @@ const ProductPage = () => {
                 dir="rtl"
                 className="bg-transparent text-white p-5 rounded-lg shadow-lg max-w-lg mx-auto"
               >
+                <p className="text-center text-red-600 font-semibold p-3 rounded-lg border border-red-400 text-sm">
+                  🚨 <span className="font-bold">تنبيه هام:</span> منتجات الفيب
+                  تحتوي على <span className="underline">النيكوتين</span>، وهو
+                  مادة تسبب <span className="font-bold">الإدمان</span>. يُنصح
+                  باستخدامها من قبل{" "}
+                  <span className="text-white">البالغين فقط</span>، ويُمنع بيعها
+                  للقاصرين. احرص على{" "}
+                  <span className="italic">الاستخدام المسؤول</span> واحتفظ بها
+                  بعيدًا عن متناول الأطفال. ✅🔥
+                </p>
+
                 <h2 className="text-xl font-bold mb-4 whitespace-pre-wrap leading-relaxed">
                   {productDetails.name}
                 </h2>

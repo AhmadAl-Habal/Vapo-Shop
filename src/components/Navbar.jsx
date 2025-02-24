@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Sidebar from "./Sidebar.jsx"; // Import the Sidebar component
+import Sidebar from "./Sidebar.jsx";
 import logo from "../assets/logo.png";
 
 const Navbar = () => {
@@ -44,7 +44,7 @@ const Navbar = () => {
               alt="React Jobs"
             />
             <p className="font-bold text-xs">
-              <Link to={"/"}>🔥VAPO ABO MARIAM</Link>
+              <Link to={"/"}>VAPO ABO MARIAM</Link>
             </p>
           </div>
         </div>

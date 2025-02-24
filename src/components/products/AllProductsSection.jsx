@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import CategoriesListing from "./CategoriesListing";
+import ProductsListing from "./ProductsListing";
 import { CiCirclePlus } from "react-icons/ci";
 import hero from "../../assets/bg.webp";
 import axios from "../../api/axios";
 
-const CategoriesSection = () => {
+const AllProductsSection = () => {
   const filteredCategory = sessionStorage.getItem("selectedCategory");
   const [token, setToken] = useState("");
   const [filterCategory, setFilteredCategory] = useState("");
@@ -75,9 +75,9 @@ const CategoriesSection = () => {
         )}
       </div>
 
-      <CategoriesListing filteredCategory={filterCategory} />
+      <ProductsListing filteredCategory={filterCategory} />
     </section>
   );
 };
 
-export default CategoriesSection;
+export default AllProductsSection;

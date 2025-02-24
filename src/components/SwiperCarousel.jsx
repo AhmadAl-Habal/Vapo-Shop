@@ -1,9 +1,13 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination, Navigation } from "swiper/modules";
+import { EffectFade, Autoplay, Pagination, Navigation } from "swiper/modules";
+import { EffectCoverflow } from "swiper/modules";
+import { EffectCube } from "swiper/modules";
+import { EffectFlip } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import "swiper/css/effect-fade";
 
 const SwiperCarousel = ({ images }) => {
   return (
@@ -13,14 +17,14 @@ const SwiperCarousel = ({ images }) => {
           .swiper-button-prev,
           .swiper-button-next {
             color: red !important;
-            font-size: 40px !important; /* Reduce icon size */
-            width: 50px !important; /* Reduce button width */
-            height: 50px !important; /* Reduce button height */
+            font-size: 40px !important;
+            width: 50px !important;
+            height: 50px !important;
           }
 
           .swiper-button-prev::after,
           .swiper-button-next::after {
-            font-size: 30px !important; /* Reduce arrow size */
+            font-size: 30px !important;
           }
 
           .swiper-pagination-bullet {
@@ -34,6 +38,22 @@ const SwiperCarousel = ({ images }) => {
       </style>
 
       <Swiper
+        modules={[Autoplay, Pagination, Navigation, EffectFade]}
+        effect="fade"
+        // effect="cube"
+        // modules={[Autoplay, Pagination, Navigation, EffectCube]}
+        // effect="flip"
+        // modules={[Autoplay, Pagination, Navigation, EffectFlip]}
+        // effect="coverflow"
+        // modules={[Autoplay, Pagination, Navigation, EffectCoverflow]}
+        // coverflowEffect={{
+        //   rotate: 50,
+        //   stretch: 0,
+        //   depth: 100,
+        //   modifier: 1,
+        //   slideShadows: true,
+        // }}
+        speed={2000}
         spaceBetween={30}
         centeredSlides={true}
         autoplay={{
@@ -45,7 +65,6 @@ const SwiperCarousel = ({ images }) => {
           clickable: true,
         }}
         navigation={true}
-        modules={[Autoplay, Pagination, Navigation]}
         className="mySwiper"
       >
         {images?.map((image, index) => (
