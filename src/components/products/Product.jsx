@@ -35,7 +35,7 @@ const Product = ({ product }) => {
           setHasAppeared(true); // Lock it, so it never animates again
         }
       },
-      { threshold: 0.3 } // Adjust threshold as needed
+      { threshold: 0.05 } // Adjust threshold as needed
     );
 
     const currentElement = productRef.current;
