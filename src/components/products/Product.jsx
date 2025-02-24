@@ -70,7 +70,7 @@ const Product = ({ product }) => {
             </div>
           </Link>
 
-          <div className="w-full flex px-1 text-sm justify-around items-center">
+          <div className="w-full  px-1 text-sm justify-around items-center">
             <div className="font-bold text-green-700">
               <p className="">
                 {product.discount ? (

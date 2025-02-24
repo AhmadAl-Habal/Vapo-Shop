@@ -34,7 +34,7 @@ const WelcomeSpinner = ({ motionBg }) => {
       className="fixed inset-0 flex justify-center z-50"
       style={{
         backgroundImage: `url(${motionBg})`,
-        backgroundSize: "contain",
+        backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         backgroundColor: "#121212",

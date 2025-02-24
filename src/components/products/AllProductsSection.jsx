@@ -45,7 +45,7 @@ const AllProductsSection = () => {
       //   style={{ backgroundImage: `url(${hero})`, opacity: 0.9 }}
     >
       <h2 className="text-xl font-bold bg-red-600 mb-2 text-center py-3 rounded-full">
-        الأقسام الرئيسية
+        جميع المنتجات
       </h2>
       <div className="flex flex-row-reverse justify-end items-center mb-5 px-2 text-xs">
         {/* <select
@@ -67,7 +67,7 @@ const AllProductsSection = () => {
           ))}
         </select> */}
         {token ? (
-          <Link className="" to={"/add-category"}>
+          <Link className="" to={"/add-product"}>
             <CiCirclePlus size={30} color="white" className="g-gray-200" />
           </Link>
         ) : (
