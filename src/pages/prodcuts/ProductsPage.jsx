@@ -105,7 +105,7 @@ const ProductsPage = () => {
       ></div>
 
       <div className="absolute inset-0 bg-black bg-opacity-80"></div>
-      <div className="relative w-[80vw] mx-auto bg-transparent py-10">
+      <div className="relative w-[90vw] mx-auto bg-transparent py-10">
         <BackButton />
 
         {loading ? (

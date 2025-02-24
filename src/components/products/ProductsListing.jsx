@@ -55,7 +55,7 @@ const ProductsListing = () => {
             <input
               dir="rtl"
               type="text"
-              placeholder="بحث عن منتج..."
+              placeholder="ابحث عن منتج..."
               className="w-full p-2 border border-gray-300 rounded-full outline-none"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -82,7 +82,7 @@ const ProductsListing = () => {
                 className="bg-red-500 text-white px-4 py-2 rounded hover:bg-black"
                 onClick={handleLoadMore}
               >
-                Load More
+                عرض المزيد
               </button>
             </div>
           )}

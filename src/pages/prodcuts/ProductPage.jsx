@@ -165,10 +165,16 @@ const ProductPage = () => {
 
                 <div className="mb-4">
                   <p className="font-bold text-lg mb-2">الصنف:</p>
-                  <span className="inline-block bg-red-600 text-gray-200 text-sm px-3 py-1 rounded-full">
-                    {productDetails.main_category_id &&
-                      productDetails.main_category_id.name}
-                  </span>
+                  {productDetails.main_category_id && (
+                    <span className="inline-block bg-red-600 text-gray-200 text-sm px-3 py-1 rounded-full">
+                      {productDetails.main_category_id.name}
+                    </span>
+                  )}{" "}
+                  {productDetails.sub_category_id && (
+                    <span className="inline-block bg-red-600 text-gray-200 text-sm px-3 py-1 rounded-full">
+                      {productDetails.sub_category_id.name}
+                    </span>
+                  )}
                 </div>
 
                 <a
