@@ -6,6 +6,8 @@ import { FaEdit } from "react-icons/fa";
 
 const Product = ({ product }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [hasAppeared, setHasAppeared] = useState(false);
+
   const [showAllDesc, setShowAllDesc] = useState(false);
   const [token, setToken] = useState("");
   const productRef = useRef(null);
@@ -25,18 +27,15 @@ const Product = ({ product }) => {
       console.error("Failed to delete item:", error);
     }
   };
-
   useEffect(() => {
-    let timeout;
-
     const observer = new IntersectionObserver(
       ([entry]) => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-          setIsVisible(entry.isIntersecting);
-        }, 100); // Add a small delay (100ms) to prevent flickering
+        if (entry.isIntersecting && !hasAppeared) {
+          setIsVisible(true); // Trigger animation
+          setHasAppeared(true); // Lock it, so it never animates again
+        }
       },
-      { threshold: 0.5 } // Increase threshold slightly to reduce flickering
+      { threshold: 0.3 } // Adjust threshold as needed
     );
 
     const currentElement = productRef.current;
@@ -44,9 +43,8 @@ const Product = ({ product }) => {
 
     return () => {
       if (currentElement) observer.unobserve(currentElement);
-      clearTimeout(timeout);
     };
-  }, []);
+  }, [hasAppeared]); // Depend only on `hasAppeared` to avoid re-triggers
 
   return (
     <>
@@ -54,7 +52,7 @@ const Product = ({ product }) => {
       <div
         ref={productRef}
         className={`transform transition-all duration-500 ease-in-out ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+          hasAppeared ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
         } flex flex-col justify-center items-center border border-1 border-white rounded-lg bg-white p-2 shadow-lg flex-wrap`}
       >
         <Link to={`/product/${product._id}`}>

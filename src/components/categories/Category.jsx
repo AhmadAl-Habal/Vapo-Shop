@@ -6,6 +6,7 @@ import { FaEdit } from "react-icons/fa";
 
 const Category = ({ category }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [hasAppeared, setHasAppeared] = useState(false);
   const [token, setToken] = useState("");
   const [popupView, setPopupView] = useState(false);
   const productRef = useRef(null);
@@ -28,9 +29,12 @@ const Category = ({ category }) => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsVisible(entry.isIntersecting);
+        if (entry.isIntersecting && !hasAppeared) {
+          setIsVisible(true);
+          setHasAppeared(true); // Prevents re-triggering
+        }
       },
-      { threshold: 0.1 }
+      { threshold: 0.3 } // Adjust this if needed
     );
 
     const currentElement = productRef.current;
@@ -39,14 +43,14 @@ const Category = ({ category }) => {
     return () => {
       if (currentElement) observer.unobserve(currentElement);
     };
-  }, []);
+  }, [hasAppeared]);
 
   return (
     <>
       <div
         ref={productRef}
-        className={`w-full  transform transition-all duration-500 ease-in-out ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+        className={`w-full transform transition-all duration-500 ease-in-out ${
+          hasAppeared ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
         } flex flex-col justify-center items-center border border-1 border-white rounded-lg bg-white p-3 shadow-lg`}
       >
         <Link

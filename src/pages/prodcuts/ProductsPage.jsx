@@ -13,26 +13,30 @@ const ProductsPage = () => {
   const [filteredSubCategory, setFilteredSubCategory] = useState("");
   const [allSubCategories, setAllSubCategories] = useState([]);
   const [items, setItems] = useState([]); // Original items from API
-  const [discountedItems, setDiscountedItems] = useState([]); // Original items from API
+  const [discountedItems, setDiscountedItems] = useState([]); // Discounted items
   const [filteredItems, setFilteredItems] = useState([]); // Items after filtering
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [categoryDetails, setCategoryDetails] = useState({});
+  const [offersCategory, setOffersCategory] = useState(false);
 
-  const location = useLocation();
-  const { categoryDetails } = location.state || {};
-  const [offersCategory, setOffersCategory] = useState(
-    categoryDetails.name.includes("عروض") ? true : false
-  );
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     setToken(storedToken || "");
-    setLoading(true);
+  }, []);
 
+  useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
+        // Fetch Category
+        const response = await axios.get(`/category/${id}`);
+        setCategoryDetails(response.data.data);
+        setOffersCategory(response.data.data.name.includes("عروض"));
+
         // Fetch Subcategories
-        const response = await axios.get("/sub_category");
-        const filteredSubCategories = response.data.data.filter(
+        const response1 = await axios.get("/sub_category");
+        const filteredSubCategories = response1.data.data.filter(
           (subCategory) =>
             subCategory.main_category_id &&
             subCategory.main_category_id._id === id
@@ -54,35 +58,26 @@ const ProductsPage = () => {
     };
 
     fetchData();
-  }, [categoryDetails]);
+  }, [id]); // 🔹 Only re-run when `id` changes
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    setToken(storedToken || "");
-
     if (offersCategory) {
       setLoading(true);
-
-      const fetchData = async () => {
+      const fetchDiscountedItems = async () => {
         try {
-          // Fetch Items
           const response = await axios.get("/item", {
             params: { discount: 1 },
           });
-
           setDiscountedItems(response.data.data.items);
         } catch (err) {
           setError(err.message);
         } finally {
           setLoading(false);
-          console.log(discountedItems);
         }
       };
-
-      fetchData();
-      console.log("test");
+      fetchDiscountedItems();
     }
-  }, [categoryDetails]);
+  }, [offersCategory]); // 🔹 Only fetch when `offersCategory` is true
 
   // Function to handle filtering
   const handleFilterChange = (e) => {
@@ -146,7 +141,7 @@ const ProductsPage = () => {
                 </Link>
               )}
             </div>
-            <section className=" py-5 font-bold">
+            <section className="py-5 font-bold">
               {loading ? (
                 <Spinner />
               ) : (

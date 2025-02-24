@@ -44,7 +44,7 @@ const AllProductsSection = () => {
       className=" "
       //   style={{ backgroundImage: `url(${hero})`, opacity: 0.9 }}
     >
-      <h2 className="text-xl font-bold bg-red-600 mb-2 text-center py-3 rounded-full">
+      <h2 className="text-xl font-bold bg-red-600 mb-2 text-center py-2 rounded-full">
         جميع المنتجات
       </h2>
       <div className="flex flex-row-reverse justify-end items-center mb-5 px-2 text-xs">
