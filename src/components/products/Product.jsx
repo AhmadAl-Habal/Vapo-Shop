@@ -27,11 +27,16 @@ const Product = ({ product }) => {
   };
 
   useEffect(() => {
+    let timeout;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsVisible(entry.isIntersecting);
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          setIsVisible(entry.isIntersecting);
+        }, 100); // Add a small delay (100ms) to prevent flickering
       },
-      { threshold: 0.1 }
+      { threshold: 0.5 } // Increase threshold slightly to reduce flickering
     );
 
     const currentElement = productRef.current;
@@ -39,6 +44,7 @@ const Product = ({ product }) => {
 
     return () => {
       if (currentElement) observer.unobserve(currentElement);
+      clearTimeout(timeout);
     };
   }, []);
 
