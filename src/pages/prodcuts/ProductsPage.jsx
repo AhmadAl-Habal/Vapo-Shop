@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../api/axios";
 import { Link, useLocation, useParams } from "react-router-dom";
-import hero from "../../assets/bg.webp";
+import hero from "../../assets/motion11.jpg";
 import { CiCirclePlus } from "react-icons/ci";
 import Product from "../../components/products/Product";
 import Spinner from "../../components/Spinner";

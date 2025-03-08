@@ -6,7 +6,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import axios from "../api/axios";
 import WarnningMessage from "../components/WarnningMessage";
-import hero from "../assets/bg.webp";
+import hero from "../assets/motion11.jpg";
 const MainLayout = () => {
   const location = useLocation();
   useEffect(() => {

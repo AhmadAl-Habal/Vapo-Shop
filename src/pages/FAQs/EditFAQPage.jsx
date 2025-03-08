@@ -4,7 +4,7 @@ import axios from "../../api/axios";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import ImageField from "../../components/ImageField";
 import BulkImageUploadForm from "../../components/BulkImageUploadForm";
-import hero from "../../assets/bg.webp";
+import hero from "../../assets/motion11.jpg";
 import BackButton from "../../components/BackButton";
 
 const EditFAQPage = () => {

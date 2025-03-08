@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "../../api/axios";
 import { useNavigate, Link, useParams } from "react-router-dom";
-import hero from "../../assets/bg.webp";
+import hero from "../../assets/motion11.jpg";
 import ImageField from "../../components/ImageField";
 import BulkImageUploadForm from "../../components/BulkImageUploadForm";
 import BackButton from "../../components/BackButton";

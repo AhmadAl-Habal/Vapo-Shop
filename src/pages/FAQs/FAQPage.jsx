@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "../../api/axios";
 import Spinner from "../../components/Spinner";
-import hero from "../../assets/bg.webp";
+import hero from "../../assets/motion11.jpg";
 import FAQ from "../../components/FAQ";
 import { CiCirclePlus } from "react-icons/ci";
 import BackButton from "../../components/BackButton";

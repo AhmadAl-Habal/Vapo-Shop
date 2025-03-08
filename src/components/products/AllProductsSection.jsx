@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ProductsListing from "./ProductsListing";
 import { CiCirclePlus } from "react-icons/ci";
-import hero from "../../assets/bg.webp";
+import hero from "../../assets/motion11.jpg";
 import axios from "../../api/axios";
 
 const AllProductsSection = () => {
