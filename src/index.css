@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 body {
-  margin: 45px 0 41px 0; /* Adjust based on navbar and footer height */
+  margin: 44px 0 40px 0; /* Adjust based on navbar and footer height */
 }
