@@ -4,6 +4,8 @@ import { FaChevronDown, FaChevronUp, FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
 const ImageField = ({ inputDetails, endpoint, name }) => {
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [popupView, setPopupView] = useState(false);
   const [imagePreviews, setImagePreviews] = useState(
     inputDetails?.images || []
   );
@@ -101,80 +103,127 @@ const ImageField = ({ inputDetails, endpoint, name }) => {
   }
 
   return (
-    <div className="p-5 bg-transparent border-2 border text-white rounded-lg">
-      {/* Toggle Button */}
-      <div
-        onClick={setExpand}
-        className="flex justify-between items-center cursor-pointer rounded"
-      >
-        <h2 className="text-md font-bold">Current Images</h2>
-        {visible ? (
-          <FaChevronUp className="text-white" />
-        ) : (
-          <FaChevronDown className="text-white" />
-        )}
-      </div>
+    <>
+      {" "}
+      <div className="p-5 bg-transparent border-2 border text-white rounded-lg">
+        {/* Toggle Button */}
+        <div
+          onClick={setExpand}
+          className="flex justify-between items-center cursor-pointer rounded"
+        >
+          <h2 className="text-md font-bold">Current Images</h2>
+          {visible ? (
+            <FaChevronUp className="text-white" />
+          ) : (
+            <FaChevronDown className="text-white" />
+          )}
+        </div>
 
-      {/* Expanding Section */}
-      <div
-        className={`overflow-hidden transition-all duration-500 ease-in-out ${
-          visible ? "max-h-[100000px] opacity-100 mt-4" : "max-h-0 opacity-0"
-        }`}
-      >
-        {imagePreviews.map((image, index) => (
-          <div key={index} className=" px-3 py-2 mb-5">
-            <div className="flex items-center mb-3">
-              <label className="text-white w-1/4">Image {index + 1}</label>
-              <input
-                key={inputKeys[index]}
-                type="file"
-                className="border rounded p-2 w-3/4 text-white text-sm"
-                onChange={(event) => handleFileChange(event, index)}
-              />
-              <button
-                type="button"
-                onClick={() => clearImage(index)}
-                className="ml-2 bg-red-400 text-black p-1 rounded-full text-xs"
-              >
-                Clear
-              </button>
-            </div>
-
-            {image && (
-              <div className="flex justify-center items-center my-3">
-                <img
-                  src={
-                    typeof image === "string"
-                      ? image
-                      : URL.createObjectURL(image)
-                  }
-                  alt={`Preview ${index}`}
-                  className="rounded w-[350px] h-[250px] object-contain"
+        {/* Expanding Section */}
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            visible ? "max-h-[100000px] opacity-100 mt-4" : "max-h-0 opacity-0"
+          }`}
+        >
+          {imagePreviews.map((image, index) => (
+            <div key={index} className=" px-3 py-2 mb-5">
+              <div className="flex items-center mb-3">
+                <label className="text-white w-1/4">Image {index + 1}</label>
+                <input
+                  key={inputKeys[index]}
+                  type="file"
+                  className="border rounded p-2 w-3/4 text-white text-sm"
+                  onChange={(event) => handleFileChange(event, index)}
                 />
+                <button
+                  type="button"
+                  onClick={() => clearImage(index)}
+                  className="ml-2 bg-red-400 text-black p-1 rounded-full text-xs"
+                >
+                  Clear
+                </button>
               </div>
-            )}
-            <div className="flex items-center space-x-2">
+
+              {image && (
+                <div className="flex justify-center items-center my-3">
+                  <img
+                    src={
+                      typeof image === "string"
+                        ? image
+                        : URL.createObjectURL(image)
+                    }
+                    alt={`Preview ${index}`}
+                    className="rounded w-[350px] h-[250px] object-contain"
+                  />
+                </div>
+              )}
+              <div className="flex items-center space-x-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedIndex(index);
+                    setPopupView(true);
+                  }}
+                  className="flex bg-red-400 text-black p-1 rounded text-xs items-center"
+                >
+                  Delete
+                  <MdDelete className="ml-1" size={20} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => editImage(index)}
+                  className="flex bg-green-400 text-black p-1 rounded text-xs items-center"
+                >
+                  Edit
+                  <FaEdit className="ml-1" size={20} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      {popupView && (
+        <div
+          className="min-h-screen w-full bg-black z-10 fixed top-0 left-0 bg-opacity-70 flex justify-center items-center"
+          onClick={() => setPopupView(false)}
+        >
+          <div
+            dir="rtl"
+            className="bg-white text-black p-6 rounded-lg shadow-lg w-[80vw] max-w-[400px] text-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className="text-xl font-bold mb-4">تأكيد الحذف</h2>
+            <p className="mb-6">
+              هل أنت متأكد من حذف الصورة{" "}
+              <span className="font-bold">
+                "{selectedIndex !== null ? selectedIndex + 1 : ""}"
+              </span>
+              ؟
+            </p>
+
+            <div className="flex justify-center gap-4">
               <button
-                type="button"
-                onClick={() => deleteImage(index)}
-                className="flex bg-red-400 text-black p-1 rounded text-xs items-center"
+                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+                onClick={() => {
+                  if (selectedIndex !== null) {
+                    deleteImage(selectedIndex);
+                    setPopupView(false);
+                  }
+                }}
               >
-                Delete
-                <MdDelete className="ml-1" size={20} />
+                نعم، احذف
               </button>
               <button
-                type="button"
-                onClick={() => editImage(index)}
-                className="flex bg-green-400 text-black p-1 rounded text-xs items-center"
+                className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
+                onClick={() => setPopupView(false)}
               >
-                Edit
-                <FaEdit className="ml-1" size={20} />
+                إلغاء
               </button>
             </div>
           </div>
-        ))}
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 };
 

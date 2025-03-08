@@ -304,12 +304,12 @@ const SettingsPage = () => {
     return (
       <div className={"relative min-h-[100vh] h-auto"}>
         <div
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-0 bg-fixed bg-cover bg-center z-0"
           style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
         ></div>
 
         <div className="absolute inset-0 bg-black bg-opacity-80"></div>
-        <div className="relative  w-[80vw] mx-auto bg-transparent py-10">
+        <div className="relative  w-[80vw] mx-auto bg-transparent py-7">
           <div dir="rtl">
             <h1 className="text-2xl font-bold text-red-500 mb-5">وصول مرفوض</h1>
             <p className="text-white mb-5">
@@ -331,13 +331,13 @@ const SettingsPage = () => {
         }
       >
         <div
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-0 bg-fixed bg-cover bg-center z-0"
           style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
         ></div>
 
         <div className="absolute inset-0 bg-black bg-opacity-80"></div>
 
-        <div className="relative space-y-4 w-[90vw] mx-auto bg-transparent py-10">
+        <div className="relative space-y-4 w-[90vw] mx-auto bg-transparent py-7">
           <BackButton />
           <div>
             <div className="flex items-center  mb-5 ">

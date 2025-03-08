@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import axios from "../api/axios";
+import WarnningMessage from "../components/WarnningMessage";
 const MainLayout = () => {
+  const location = useLocation();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -26,8 +28,14 @@ const MainLayout = () => {
   }, []);
   return (
     <>
+      {location.pathname === "/" && <WarnningMessage />}
       <Navbar />
-      <Outlet />
+      <div
+        className="min-h-screen bg-fixed bg-cover bg-center"
+        // style={{ backgroundImage: "url('/your-background-image.jpg')" }}
+      >
+        <Outlet />
+      </div>
       <Footer />
       <ToastContainer />
     </>

@@ -48,12 +48,12 @@ const ProductPage = () => {
     <>
       <div className="relative min-h-[100vh]">
         <div
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-0 bg-fixed bg-cover bg-center z-0"
           style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
         ></div>
         <div className="absolute inset-0 bg-black bg-opacity-80"></div>
 
-        <div className="relative w-[80vw] mx-auto bg-transparent py-10 text-white">
+        <div className="relative w-[80vw] mx-auto bg-transparent py-7 text-white">
           {/* <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm mb-5 ">
             <Link className="mr-5 text-white w-full" to={"/"}>
               Return to Homepage
@@ -97,17 +97,6 @@ const ProductPage = () => {
                 dir="rtl"
                 className="bg-transparent text-white p-5 rounded-lg shadow-lg max-w-lg mx-auto"
               >
-                <p className="text-center text-red-600 font-semibold p-3 rounded-lg border border-red-400 text-sm">
-                  🚨 <span className="font-bold">تنبيه هام:</span> منتجات الفيب
-                  تحتوي على <span className="underline">النيكوتين</span>، وهو
-                  مادة تسبب <span className="font-bold">الإدمان</span>. يُنصح
-                  باستخدامها من قبل{" "}
-                  <span className="text-white">البالغين فقط</span>، ويُمنع بيعها
-                  للقاصرين. احرص على{" "}
-                  <span className="italic">الاستخدام المسؤول</span> واحتفظ بها
-                  بعيدًا عن متناول الأطفال. ✅🔥
-                </p>
-
                 <h2 className="text-xl font-bold mb-4 whitespace-pre-wrap leading-relaxed">
                   {productDetails.name}
                 </h2>

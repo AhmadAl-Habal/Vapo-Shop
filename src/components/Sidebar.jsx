@@ -8,7 +8,6 @@ const Sidebar = ({ isOpen, toggleSidebar, token }) => {
         dir="rtl"
         className={`fixed z-20 top-0 left-0 h-screen w-9/12 max-w-sm bg-[#621f1f] text-white 
           transition-transform ${isOpen ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0 pointer-events-none"}`}
-        
       >
         <button
           className="text-xl absolute top-4 left-4 focus:outline-none"
@@ -29,7 +28,7 @@ const Sidebar = ({ isOpen, toggleSidebar, token }) => {
             className="block text-lg font-medium hover:text-gray-300"
             onClick={toggleSidebar}
           >
-            عن Vapo
+            عن Vapo Abo Mariam
           </Link>
           <Link
             to="/faq"

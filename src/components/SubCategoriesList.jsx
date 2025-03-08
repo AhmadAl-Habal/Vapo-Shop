@@ -112,10 +112,10 @@ const SubcategoriesList = ({ refresh, setRefresh, category }) => {
   };
 
   return (
-    <div className="relative space-y-4 w-[90vw] mx-auto bg-transparent py-10">
+    <div className="relative space-y-4 w-[90vw] mx-auto bg-transparent py-7">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="relative space-y-2 w-[80vw] mx-auto bg-transparent py-10 text-sm"
+        className="relative space-y-2 w-[80vw] mx-auto bg-transparent py-7 text-sm"
       >
         <p className="text-center text-white font-bold text-lg mb-5">
           New SubCategory Details

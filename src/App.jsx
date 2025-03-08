@@ -37,11 +37,12 @@ const WelcomeSpinner = ({ motionBg }) => {
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-        backgroundColor: "#121212",
+        backgroundColor: "#000",
       }}
     >
+      <motion.div className="absolute inset-0 bg-black bg-opacity-80"></motion.div>
       <motion.div
-        animate={{ scale: [1, 1.1, 1], opacity: [0.8, 0.9, 0.8] }}
+        // animate={{ scale: [1, 1.1, 1], opacity: [0.8, 0.9, 0.8] }}
         transition={{ duration: 1, repeat: Infinity }}
       >
         <p className="text-white text-4xl font-bold mt-[200px]">
@@ -74,13 +75,13 @@ const AnimatedRoutes = () => {
     <div
       id="app-container"
       className="w-full min-h-screen bg-[#000]"
-      style={{
-        backgroundImage: `url(${motionBg})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundColor: "#000",
-      }}
+      // style={{
+      //   backgroundImage: `url(${motionBg})`,
+      //   backgroundSize: "cover",
+      //   backgroundPosition: "center",
+      //   backgroundRepeat: "no-repeat",
+      //   backgroundColor: "#000",
+      // }}
     >
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
@@ -216,7 +217,7 @@ function App() {
     <Router>
       <AnimatePresence mode="wait">
         {isLoading ? (
-          <WelcomeSpinner motionBg={motionBg} />
+          <WelcomeSpinner motionBg={motionBg2} />
         ) : (
           <AnimatedRoutes />
         )}

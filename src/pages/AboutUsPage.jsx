@@ -38,12 +38,12 @@ const AboutUsPage = () => {
     <>
       <div className="relative min-h-[100vh]">
         <div
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-0 bg-fixed bg-cover bg-center z-0"
           style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
         ></div>
         <div className="absolute inset-0 bg-black bg-opacity-80"></div>
 
-        <div className="relative w-[80vw] mx-auto bg-transparent py-10 text-white">
+        <div className="relative w-[80vw] mx-auto bg-transparent py-7 text-white">
           <BackButton />
           <div dir="rtl">
             {loading ? (
@@ -52,9 +52,7 @@ const AboutUsPage = () => {
               <p>Error: {error}</p>
             ) : (
               <div>
-                <h1 className="text-2xl font-bold mb-5">
-                  لمحة عن Vapo كسم بشار
-                </h1>
+                <h1 className="text-2xl font-bold mb-5">عن Vapo Abo Mariam</h1>
                 <p className="w-full whitespace-pre-wrap text-white text-md font-bold">
                   {aboutUs}
                 </p>

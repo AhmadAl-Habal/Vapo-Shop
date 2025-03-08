@@ -6,12 +6,12 @@ const NotFoundPage = () => {
   return (
     <div className={"relative min-h-[100vh]"}>
       <div
-        className="absolute inset-0 bg-cover bg-center"
+        className="absolute inset-0 bg-fixed bg-cover bg-center z-0"
         style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
       ></div>
 
       <div className="absolute inset-0 bg-black bg-opacity-80"></div>
-      <div className="relative  w-[80vw] mx-auto bg-transparent py-10">
+      <div className="relative  w-[80vw] mx-auto bg-transparent py-7">
         <section className="text-center flex flex-col justify-center items-center h-96 text-white">
           <FaExclamationTriangle className="text-yellow-400 text-6xl mb-4" />
           <i className="fas fa-exclamation-triangle text-yellow-400 fa-4x mb-4"></i>
