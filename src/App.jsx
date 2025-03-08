@@ -25,6 +25,7 @@ import PageWrapper from "./PageWrapper.jsx";
 import motionBg from "./assets/motion.jpg";
 import motionBg2 from "./assets/motion2.jpg";
 // Welcome Spinner Component
+
 const WelcomeSpinner = ({ motionBg }) => {
   return (
     <motion.div
@@ -40,14 +41,29 @@ const WelcomeSpinner = ({ motionBg }) => {
         backgroundColor: "#000",
       }}
     >
+      {/* Dark Overlay */}
       <motion.div className="absolute inset-0 bg-black bg-opacity-80"></motion.div>
+
+      {/* Animated Content */}
       <motion.div
-        // animate={{ scale: [1, 1.1, 1], opacity: [0.8, 0.9, 0.8] }}
-        transition={{ duration: 1, repeat: Infinity }}
+        animate={{ scale: [1, 1.05, 1], opacity: [0.8, 0.9, 0.8] }}
+        transition={{ duration: 1.5, repeat: Infinity }}
+        className="relative h-screen flex items-center justify-center text-center px-4"
       >
-        <p className="text-white text-4xl font-bold mt-[200px]">
-          Welcome To VAPO...
-        </p>
+        <div className="text-white">
+          {/* Main Title */}
+          <h1
+            className="text-5xl md:text-7xl font-extrabold italic"
+            style={{ fontFamily: "Great Vibes, cursive" }}
+          >
+            Vapo Abo Mariam
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-lg md:text-2xl mt-4 uppercase tracking-widest">
+            Smoking is a habit, vaping is a lifestyle
+          </p>
+        </div>
       </motion.div>
     </motion.div>
   );
