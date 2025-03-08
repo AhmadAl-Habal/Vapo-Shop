@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import axios from "../api/axios";
 import WarnningMessage from "../components/WarnningMessage";
+import hero from "../assets/bg.webp";
 const MainLayout = () => {
   const location = useLocation();
   useEffect(() => {
@@ -30,10 +31,14 @@ const MainLayout = () => {
     <>
       {location.pathname === "/" && <WarnningMessage />}
       <Navbar />
-      <div
-        className="min-h-screen bg-fixed bg-cover bg-center"
-        // style={{ backgroundImage: "url('/your-background-image.jpg')" }}
-      >
+      <div>
+        <div
+          className="absolute inset-0 bg-fixed bg-cover bg-center z-0"
+          style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
+        ></div>
+
+        <div className="absolute inset-0 bg-black bg-opacity-80 z-0"></div>
+
         <Outlet />
       </div>
       <Footer />

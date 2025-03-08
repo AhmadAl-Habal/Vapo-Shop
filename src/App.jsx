@@ -87,10 +87,13 @@ const pageVariants = {
 const AnimatedRoutes = () => {
   const location = useLocation();
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
   return (
     <div
       id="app-container"
-      className="w-full min-h-screen bg-[#000]"
+      className="w-full min-h-screen bg-[#000] overflow-x-hidden"
       // style={{
       //   backgroundImage: `url(${motionBg})`,
       //   backgroundSize: "cover",
