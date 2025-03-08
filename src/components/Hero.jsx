@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "../api/axios";
 
 import SwiperCarousel from "./SwiperCarousel";
@@ -17,7 +17,7 @@ const Hero = () => {
           setHeroImages(response.data.data[0]?.hero || []);
           sessionStorage.setItem(
             "settings",
-            JSON.stringify(response.data.data[0] || [])
+            JSON.stringify(response.data.data[0] || {})
           );
         }
       } catch (err) {
@@ -29,14 +29,19 @@ const Hero = () => {
 
     fetchData();
 
-    const storedSettings = JSON.stringify(sessionStorage.getItem("settings"));
+    const storedSettings = sessionStorage.getItem("settings");
 
-    setHeroImages(storedSettings.hero);
+    if (storedSettings) {
+      const parsedSettings = JSON.parse(storedSettings);
+      setHeroImages(parsedSettings.hero || []);
+    }
   }, []);
 
-  return (
+  return loading ? (
+    <Spinner />
+  ) : (
     <div className="w-full bg-black min-h-[400px] mb-5">
-      {loading ? <Spinner></Spinner> : <SwiperCarousel images={heroImages} />}
+      <SwiperCarousel images={heroImages} />
     </div>
   );
 };

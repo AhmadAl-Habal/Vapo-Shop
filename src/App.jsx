@@ -68,181 +68,232 @@ const WelcomeSpinner = ({ motionBg }) => {
     </motion.div>
   );
 };
-
-const pageVariants = {
-  initial: { x: "100vw", opacity: 0 }, // Start off-screen to the right
-  animate: {
-    x: 0,
-    opacity: 1,
-    transition: { duration: 0.6, ease: "easeInOut" },
-  },
-  exit: {
-    x: "-100vw",
-    opacity: 0,
-    transition: { duration: 0.6, ease: "easeInOut" },
-  }, // Slide out to the left
-};
-
-// Animated Routes Component
+// Animated Routes Component (Without Animation)
 const AnimatedRoutes = () => {
   const location = useLocation();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
+
   return (
     <div
       id="app-container"
       className="w-full min-h-screen bg-[#000] overflow-x-hidden"
-      // style={{
-      //   backgroundImage: `url(${motionBg})`,
-      //   backgroundSize: "cover",
-      //   backgroundPosition: "center",
-      //   backgroundRepeat: "no-repeat",
-      //   backgroundColor: "#000",
-      // }}
     >
-      <AnimatePresence mode="wait">
-        <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<MainLayout />}>
-            <Route
-              index
-              element={
-                <PageWrapper>
-                  <HomePage />
-                </PageWrapper>
-              }
-            />
-            <Route
-              path="/login"
-              element={
-                <PageWrapper>
-                  <LoginPage />
-                </PageWrapper>
-              }
-            />
-            <Route
-              path="/add-product"
-              element={
-                <PageWrapper>
-                  <AddNewProduct />
-                </PageWrapper>
-              }
-            />
-            <Route
-              path="/edit-product/:id"
-              element={
-                <PageWrapper>
-                  <EditProductPage />
-                </PageWrapper>
-              }
-            />
-            <Route
-              path="/product/:id"
-              element={
-                <PageWrapper>
-                  <ProductPage />
-                </PageWrapper>
-              }
-            />
-            <Route
-              path="/products/:id"
-              element={
-                <PageWrapper>
-                  <ProductsPage />
-                </PageWrapper>
-              }
-            />
-            <Route
-              path="/settings"
-              element={
-                <PageWrapper>
-                  <SettingsPage />
-                </PageWrapper>
-              }
-            />
-            <Route
-              path="/about-us"
-              element={
-                <PageWrapper>
-                  <AboutUsPage />
-                </PageWrapper>
-              }
-            />
-            <Route
-              path="/faq"
-              element={
-                <PageWrapper>
-                  <FAQPage />
-                </PageWrapper>
-              }
-            />
-            <Route
-              path="/edit-faq/:id"
-              element={
-                <PageWrapper>
-                  <EditFAQPage />
-                </PageWrapper>
-              }
-            />
-            <Route
-              path="/add-faq"
-              element={
-                <PageWrapper>
-                  <AddNewFAQPage />
-                </PageWrapper>
-              }
-            />
-            <Route
-              path="/add-category"
-              element={
-                <PageWrapper>
-                  <AddNewCategoryPage />
-                </PageWrapper>
-              }
-            />
-            <Route
-              path="/edit-category/:id"
-              element={
-                <PageWrapper>
-                  <EditCategoryPage />
-                </PageWrapper>
-              }
-            />
-            <Route
-              path="*"
-              element={
-                <PageWrapper>
-                  <NotFoundPage />
-                </PageWrapper>
-              }
-            />
-          </Route>
-        </Routes>
-      </AnimatePresence>
+      <Routes location={location}>
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/add-product" element={<AddNewProduct />} />
+          <Route path="/edit-product/:id" element={<EditProductPage />} />
+          <Route path="/product/:id" element={<ProductPage />} />
+          <Route path="/products/:id" element={<ProductsPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/about-us" element={<AboutUsPage />} />
+          <Route path="/faq" element={<FAQPage />} />
+          <Route path="/edit-faq/:id" element={<EditFAQPage />} />
+          <Route path="/add-faq" element={<AddNewFAQPage />} />
+          <Route path="/add-category" element={<AddNewCategoryPage />} />
+          <Route path="/edit-category/:id" element={<EditCategoryPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+      </Routes>
     </div>
   );
 };
 
-// Main App Component
+// Main App Component (Without Animation)
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => setIsLoading(false), 2000); // Show spinner for 2 seconds
+    setTimeout(() => setIsLoading(false), 2000);
   }, []);
 
   return (
     <Router>
-      <AnimatePresence mode="wait">
-        {isLoading ? (
-          <WelcomeSpinner motionBg={motionBg2} />
-        ) : (
-          <AnimatedRoutes />
-        )}
-      </AnimatePresence>
+      {isLoading ? <WelcomeSpinner motionBg={motionBg2} /> : <AnimatedRoutes />}
     </Router>
   );
 }
 
 export default App;
+
+// const pageVariants = {
+//   initial: { x: "100vw", opacity: 0 }, // Start off-screen to the right
+//   animate: {
+//     x: 0,
+//     opacity: 1,
+//     transition: { duration: 0.6, ease: "easeInOut" },
+//   },
+//   exit: {
+//     x: "-100vw",
+//     opacity: 0,
+//     transition: { duration: 0.6, ease: "easeInOut" },
+//   }, // Slide out to the left
+// };
+
+// // Animated Routes Component
+// const AnimatedRoutes = () => {
+//   const location = useLocation();
+
+//   useEffect(() => {
+//     window.scrollTo(0, 0);
+//   }, [location]);
+//   return (
+//     <div
+//       id="app-container"
+//       className="w-full min-h-screen bg-[#000] overflow-x-hidden"
+//       // style={{
+//       //   backgroundImage: `url(${motionBg})`,
+//       //   backgroundSize: "cover",
+//       //   backgroundPosition: "center",
+//       //   backgroundRepeat: "no-repeat",
+//       //   backgroundColor: "#000",
+//       // }}
+//     >
+//       <AnimatePresence mode="wait">
+//         <Routes location={location} key={location.pathname}>
+//           <Route path="/" element={<MainLayout />}>
+//             <Route
+//               index
+//               element={
+//                 <PageWrapper>
+//                   <HomePage />
+//                 </PageWrapper>
+//               }
+//             />
+//             <Route
+//               path="/login"
+//               element={
+//                 <PageWrapper>
+//                   <LoginPage />
+//                 </PageWrapper>
+//               }
+//             />
+//             <Route
+//               path="/add-product"
+//               element={
+//                 <PageWrapper>
+//                   <AddNewProduct />
+//                 </PageWrapper>
+//               }
+//             />
+//             <Route
+//               path="/edit-product/:id"
+//               element={
+//                 <PageWrapper>
+//                   <EditProductPage />
+//                 </PageWrapper>
+//               }
+//             />
+//             <Route
+//               path="/product/:id"
+//               element={
+//                 <PageWrapper>
+//                   <ProductPage />
+//                 </PageWrapper>
+//               }
+//             />
+//             <Route
+//               path="/products/:id"
+//               element={
+//                 <PageWrapper>
+//                   <ProductsPage />
+//                 </PageWrapper>
+//               }
+//             />
+//             <Route
+//               path="/settings"
+//               element={
+//                 <PageWrapper>
+//                   <SettingsPage />
+//                 </PageWrapper>
+//               }
+//             />
+//             <Route
+//               path="/about-us"
+//               element={
+//                 <PageWrapper>
+//                   <AboutUsPage />
+//                 </PageWrapper>
+//               }
+//             />
+//             <Route
+//               path="/faq"
+//               element={
+//                 <PageWrapper>
+//                   <FAQPage />
+//                 </PageWrapper>
+//               }
+//             />
+//             <Route
+//               path="/edit-faq/:id"
+//               element={
+//                 <PageWrapper>
+//                   <EditFAQPage />
+//                 </PageWrapper>
+//               }
+//             />
+//             <Route
+//               path="/add-faq"
+//               element={
+//                 <PageWrapper>
+//                   <AddNewFAQPage />
+//                 </PageWrapper>
+//               }
+//             />
+//             <Route
+//               path="/add-category"
+//               element={
+//                 <PageWrapper>
+//                   <AddNewCategoryPage />
+//                 </PageWrapper>
+//               }
+//             />
+//             <Route
+//               path="/edit-category/:id"
+//               element={
+//                 <PageWrapper>
+//                   <EditCategoryPage />
+//                 </PageWrapper>
+//               }
+//             />
+//             <Route
+//               path="*"
+//               element={
+//                 <PageWrapper>
+//                   <NotFoundPage />
+//                 </PageWrapper>
+//               }
+//             />
+//           </Route>
+//         </Routes>
+//       </AnimatePresence>
+//     </div>
+//   );
+// };
+
+// // Main App Component
+// function App() {
+//   const [isLoading, setIsLoading] = useState(true);
+
+//   useEffect(() => {
+//     setTimeout(() => setIsLoading(false), 2000); // Show spinner for 2 seconds
+//   }, []);
+
+//   return (
+//     <Router>
+//       <AnimatePresence mode="wait">
+//         {isLoading ? (
+//           <WelcomeSpinner motionBg={motionBg2} />
+//         ) : (
+//           <AnimatedRoutes />
+//         )}
+//       </AnimatePresence>
+//     </Router>
+//   );
+// }
+
+// export default App;
