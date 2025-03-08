@@ -31,16 +31,16 @@ const MainLayout = () => {
     <>
       {location.pathname === "/" && <WarnningMessage />}
       <Navbar />
-      <div>
+      {/* <div>
         <div
           className="absolute inset-0 bg-fixed bg-cover bg-center z-0"
           style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
         ></div>
 
-        <div className="absolute inset-0 bg-black bg-opacity-80 z-0"></div>
+        <div className="absolute inset-0 bg-black bg-opacity-80 z-0"></div> */}
 
-        <Outlet />
-      </div>
+      <Outlet />
+      {/* </div> */}
       <Footer />
       <ToastContainer />
     </>
