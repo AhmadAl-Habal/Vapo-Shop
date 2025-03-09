@@ -46,12 +46,11 @@ const WelcomeSpinner = ({ motionBg }) => {
 
       {/* Animated Content */}
       <motion.div
-        animate={{ scale: [1, 1.05, 1], opacity: [0.8, 0.9, 0.8] }}
+        animate={{ scale: [0, 1.05, 1], opacity: [0.8, 0.9, 0.8] }}
         transition={{ duration: 1.5, repeat: Infinity }}
-        className="relative h-screen flex items-center justify-center text-center px-4"
+        className="relative h-screen flex items-center justify-center text-center px-4 mt-10"
       >
         <div className="text-white">
-          {/* Main Title */}
           <h1
             className="text-5xl md:text-7xl font-extrabold italic"
             style={{ fontFamily: "Great Vibes, cursive" }}
@@ -59,7 +58,6 @@ const WelcomeSpinner = ({ motionBg }) => {
             Vapo Abo Mariam
           </h1>
 
-          {/* Subtitle */}
           <p className="text-lg md:text-2xl mt-4 uppercase tracking-widest">
             Smoking is a habit, vaping is a lifestyle
           </p>
@@ -108,7 +106,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => setIsLoading(false), 2000);
+    setTimeout(() => setIsLoading(false), 3000);
   }, []);
 
   return (
