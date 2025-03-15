@@ -10,6 +10,10 @@ export default {
         "70/30": "70% 28%",
       },
     },
+    screens: {
+      xs: "370px",
+      ...require("tailwindcss/defaultTheme").screens,
+    },
   },
   plugins: [],
 };

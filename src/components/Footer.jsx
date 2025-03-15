@@ -34,15 +34,14 @@ const Footer = () => {
   return (
     <div className="fixed bottom-0 left-0 w-full z-50">
       {" "}
-      <footer className="bg-red-500 border-b border-red-500 p-1 flex justify-between items-center">
+      <footer className="bg-red-800 p-1 flex justify-between items-center">
         <div className="w-full flex justify-between items-center space-x-2">
           <div className="flex justify-between items-center space-x-2">
             <img
-              className="h-[30px] w-[30px]  w-auto rounded-full cursor-pointer mr-5"
+              className="h-[30px] w-[30px]  w-auto rounded-full cursor-pointer mr-1"
               src={logo}
-              alt="React Jobs"
             />
-            <ul className="flex gap-4">
+            <ul className="flex gap-1 xs:gap-4 flex-wrap">
               {settings.social_media?.facebook && (
                 <li>
                   <a
@@ -52,7 +51,7 @@ const Footer = () => {
                     className="flex items-center gap-2 text-white hover:text-blue-500 transition-colors"
                   >
                     <FaFacebook />
-                    <span className="hidden sm:block">Facebook</span>
+                    <span className="hidden md:block">Facebook</span>
                   </a>
                 </li>
               )}
@@ -66,7 +65,7 @@ const Footer = () => {
                     className="flex items-center gap-2 text-white hover:text-pink-500 transition-colors"
                   >
                     <FaInstagram />
-                    <span className="hidden sm:block">Instagram</span>
+                    <span className="hidden md:block">Instagram</span>
                   </a>
                 </li>
               )}
@@ -80,7 +79,7 @@ const Footer = () => {
                     className="flex items-center gap-2 text-white hover:text-blue-400 transition-colors"
                   >
                     <FaTelegram />
-                    <span className="hidden sm:block">Telegram</span>
+                    <span className="hidden md:block">Telegram</span>
                   </a>
                 </li>
               )}
@@ -94,7 +93,7 @@ const Footer = () => {
                     className="flex items-center gap-2 text-white hover:text-green-500 transition-colors"
                   >
                     <FaWhatsapp />
-                    <span className="hidden sm:block">WhatsApp</span>
+                    <span className="hidden md:block">WhatsApp</span>
                   </a>
                 </li>
               )}
@@ -108,7 +107,7 @@ const Footer = () => {
                     className="flex items-center gap-2 text-white hover:text-red-500 transition-colors"
                   >
                     <FaYoutube />
-                    <span className="hidden sm:block">YouTube</span>
+                    <span className="hidden md:block">YouTube</span>
                   </a>
                 </li>
               )}

@@ -31,11 +31,11 @@ const Product = ({ product }) => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasAppeared) {
-          setIsVisible(true); // Trigger animation
-          setHasAppeared(true); // Lock it, so it never animates again
+          setIsVisible(true);
+          setHasAppeared(true);
         }
       },
-      { threshold: 0.05 } // Adjust threshold as needed
+      { threshold: 0.05 }
     );
 
     const currentElement = productRef.current;
@@ -44,7 +44,7 @@ const Product = ({ product }) => {
     return () => {
       if (currentElement) observer.unobserve(currentElement);
     };
-  }, [hasAppeared]); // Depend only on `hasAppeared` to avoid re-triggers
+  }, [hasAppeared]);
 
   return (
     <>
@@ -115,9 +115,9 @@ const Product = ({ product }) => {
             </div>
 
             {token && (
-              <div className="flex justify-around items-center">
+              <div className="flex justify-center items-center gap-x-5 mt-5 ">
                 <MdDelete
-                  className="cursor-pointer ml-1"
+                  className="cursor-pointer"
                   color="red"
                   onClick={() => setPopupView(true)}
                   size={30}

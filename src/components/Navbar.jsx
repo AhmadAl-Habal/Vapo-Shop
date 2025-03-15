@@ -29,8 +29,8 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="   fixed top-0 left-0 w-full z-50">
-        <nav className="bg-red-500 border-b border-red-500 p-1 flex justify-between items-center">
+      <div className="fixed top-0 left-0 w-full z-50">
+        <nav className="bg-red-800 p-1 flex justify-between items-center">
           <div className="flex">
             <button
               className="text-3xl focus:outline-none mr-3"
@@ -44,7 +44,7 @@ const Navbar = () => {
                 src={logo}
                 alt="React Jobs"
               />
-              <p className="font-bold text-xs">
+              <p className="font-bold text-xs ">
                 <Link to={"/"}>VAPO ABO MARIAM</Link>
               </p>
             </div>
@@ -52,9 +52,12 @@ const Navbar = () => {
 
           <div className="flex">
             {token ? (
-              <p className="text-xs">
+              <p className="text-xs ">
                 <span className="text-yellow-400 mr-3">
-                  <Link to={"/settings"}> Admin mode!</Link>
+                  <Link to={"/settings"} className="hidden xs:inline-block">
+                    {" "}
+                    Admin mode!
+                  </Link>
                 </span>
                 <button
                   className="font-bold text-black border border-2 border-black p-1 rounded-full"

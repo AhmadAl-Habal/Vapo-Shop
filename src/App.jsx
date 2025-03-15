@@ -24,7 +24,6 @@ import EditCategoryPage from "./pages/categories/EditCategoryPage.jsx";
 import PageWrapper from "./PageWrapper.jsx";
 import motionBg from "./assets/motion.jpg";
 import motionBg2 from "./assets/motion2.jpg";
-// Welcome Spinner Component
 
 const WelcomeSpinner = ({ motionBg }) => {
   return (
@@ -41,14 +40,12 @@ const WelcomeSpinner = ({ motionBg }) => {
         backgroundColor: "#000",
       }}
     >
-      {/* Dark Overlay */}
       <motion.div className="absolute inset-0 bg-black bg-opacity-80"></motion.div>
 
-      {/* Animated Content */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.5 }}
+        transition={{ duration: 3 }}
         whileHover={{ scale: 1.05 }}
         className="relative h-screen flex items-center justify-center text-center px-4 mt-10"
       >

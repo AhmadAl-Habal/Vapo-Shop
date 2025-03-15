@@ -65,7 +65,7 @@ const LoginPage = () => {
             type="text"
             placeholder="UserName "
             {...register("username", { required: "Username is required" })}
-            className="border rounded p-1 bg-red-100 outline-none w-3/4"
+            className="border rounded p-1 bg-red-100 outline-none w-full mt-3"
           />
           {errors.username && (
             <p className="font-bold text-red-500">{errors.username.message}</p>
@@ -77,7 +77,7 @@ const LoginPage = () => {
             type="password"
             placeholder="Password"
             {...register("password", { required: "Password is required" })}
-            className="border rounded p-1 bg-red-100 outline-none w-3/4"
+            className="border rounded p-1 bg-red-100 outline-none w-full mt-3"
           />
           {errors.password && (
             <p className="font-bold text-red-500">{errors.password.message}</p>

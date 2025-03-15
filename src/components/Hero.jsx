@@ -40,7 +40,7 @@ const Hero = () => {
   return loading ? (
     <Spinner />
   ) : (
-    <div className="w-full bg-black min-h-[400px] mb-5">
+    <div className="w-full bg-black h-[85vh] min-h-[400px] mb-5">
       <SwiperCarousel images={heroImages} />
     </div>
   );

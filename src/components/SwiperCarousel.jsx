@@ -16,7 +16,7 @@ const SwiperCarousel = ({ images }) => {
         {`
           .swiper-button-prev,
           .swiper-button-next {
-            color: red !important;
+            color: rgb(153 27 27 / var(--tw-bg-opacity, 1)) !important;
             font-size: 40px !important;
             width: 50px !important;
             height: 50px !important;
@@ -32,7 +32,7 @@ const SwiperCarousel = ({ images }) => {
           }
 
           .swiper-pagination-bullet-active {
-            background: red !important;
+            background: rgb(153 27 27 / var(--tw-bg-opacity, 1)) !important;
           }
         `}
       </style>
@@ -72,7 +72,7 @@ const SwiperCarousel = ({ images }) => {
             <img
               src={image}
               alt={`Slide ${index + 1}`}
-              className="w-full min-h-[400px] h-[50vw] object-cover"
+              className="w-full min-h-[400px] h-[85vh] object-cover"
             />
           </SwiperSlide>
         ))}

@@ -8,6 +8,40 @@ const axiosInstance = axios.create({
   },
 });
 // dev env https://abomariamvapestorebackend.onrender.com
-// p]rod env https://abomariamb
-// 8ackend.vercel.app/
-export default axiosInstance;5
+// prod env https://abomariambackend.vercel.app/
+
+export default axiosInstance;
+
+// Category Requests
+
+export const getCategories = async () => {
+  try {
+    const response = await axiosInstance.get("/category");
+    if (response.status === 200) {
+      return response.data.data;
+    } else {
+      throw new Error("Failed to fetch categories");
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+// General Requests
+
+export const deleteItem = async (endpoint, id) => {
+  try {
+    const response = await axios.delete(`/${endpoint}/${id}`, {
+      headers: {
+        auth: storedToken,
+      },
+    });
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error("Failed to delete item");
+    }
+  } catch (error) {
+    throw error;
+  }
+};

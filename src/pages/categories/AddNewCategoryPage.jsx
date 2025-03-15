@@ -46,6 +46,7 @@ const AddNewCategoryPage = () => {
       const response = await axios.post("/category", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          auth: storedToken,
         },
       });
 

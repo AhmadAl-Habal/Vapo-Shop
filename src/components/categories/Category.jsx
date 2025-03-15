@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
-import axios from "../../api/axios";
+import { deleteItem } from "../../api/axios";
 import { FaEdit } from "react-icons/fa";
 
-const Category = ({ category }) => {
-  const [isVisible, setIsVisible] = useState(false);
+const Category = ({ category, removeCategory }) => {
   const [hasAppeared, setHasAppeared] = useState(false);
   const [token, setToken] = useState("");
   const [popupView, setPopupView] = useState(false);
@@ -16,25 +15,23 @@ const Category = ({ category }) => {
     setToken(storedToken || "");
   }, []);
 
-  const deleteItem = async () => {
+  const deleteCategory = async () => {
     try {
-      await axios.delete(`/category/${category._id}`);
+      await deleteItem("category", category._id);
       setPopupView(false);
-      setIsVisible(false);
+      removeCategory(category._id);
     } catch (error) {
-      console.error("Failed to delete item:", error);
+      console.error("Failed to delete category:", error);
     }
   };
-
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasAppeared) {
-          setIsVisible(true);
-          setHasAppeared(true); // Prevents re-triggering
+          setHasAppeared(true);
         }
       },
-      { threshold: 0.3 } // Adjust this if needed
+      { threshold: 0.3 }
     );
 
     const currentElement = productRef.current;
@@ -67,7 +64,7 @@ const Category = ({ category }) => {
         </Link>
 
         {token && (
-          <div className="w-full flex space-x-5 justify-center items-center">
+          <div className="w-full flex justify-center items-center gap-x-5 mt-5 ">
             <MdDelete
               className="cursor-pointer"
               color="red"
@@ -102,7 +99,7 @@ const Category = ({ category }) => {
             <div className="flex justify-center gap-4">
               <button
                 className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-                onClick={() => deleteItem(category.id)}
+                onClick={deleteCategory}
               >
                 نعم، احذف
               </button>
