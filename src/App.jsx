@@ -22,7 +22,7 @@ import ProductsPage from "./pages/prodcuts/ProductsPage.jsx";
 import AddNewCategoryPage from "./pages/categories/AddNewCategoryPage.jsx";
 import EditCategoryPage from "./pages/categories/EditCategoryPage.jsx";
 import PageWrapper from "./PageWrapper.jsx";
-import motionBg from "./assets/motion.jpg";
+
 import motionBg2 from "./assets/motion2.jpg";
 
 const WelcomeSpinner = ({ motionBg }) => {

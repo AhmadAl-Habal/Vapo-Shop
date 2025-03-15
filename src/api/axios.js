@@ -31,7 +31,7 @@ export const getCategories = async () => {
 
 export const deleteItem = async (endpoint, id) => {
   try {
-    const response = await axios.delete(`/${endpoint}/${id}`, {
+    const response = await axiosInstance.delete(`/${endpoint}/${id}`, {
       headers: {
         auth: storedToken,
       },
@@ -40,6 +40,22 @@ export const deleteItem = async (endpoint, id) => {
       return response.data;
     } else {
       throw new Error("Failed to delete item");
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Products Requests
+
+export const getProducts = async () => {
+  try {
+    const response = await axiosInstance.get(`/item`);
+
+    if (response.status === 200) {
+      return response.data.data.items;
+    } else {
+      throw new Error("Failed to get item");
     }
   } catch (error) {
     throw error;

@@ -6,14 +6,10 @@ import { FaEdit } from "react-icons/fa";
 
 const Category = ({ category, removeCategory }) => {
   const [hasAppeared, setHasAppeared] = useState(false);
-  const [token, setToken] = useState("");
+
   const [popupView, setPopupView] = useState(false);
   const productRef = useRef(null);
-
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    setToken(storedToken || "");
-  }, []);
+  const token = localStorage.getItem("token");
 
   const deleteCategory = async () => {
     try {
