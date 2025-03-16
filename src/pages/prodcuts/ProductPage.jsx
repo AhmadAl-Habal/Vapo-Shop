@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "../../api/axios";
 import Spinner from "../../components/Spinner";
-import hero from "../../assets/motion11.jpg";
+
 import BackButton from "../../components/BackButton";
+import { AiOutlineClose } from "react-icons/ai";
 const ProductPage = () => {
   const { id } = useParams();
   const [productDetails, setProductDetails] = useState(null);
@@ -179,7 +180,7 @@ const ProductPage = () => {
               setPopupView(false);
             }}
           >
-            X
+            <AiOutlineClose />
           </button>
 
           <div className="flex items-center justify-center min-h-screen overflow-y-auto">

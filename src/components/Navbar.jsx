@@ -49,7 +49,7 @@ const Navbar = () => {
           )}
           {token ? (
             <button
-              className="font-bold text-black border-2 border-black p-1 rounded-full"
+              className="font-bold text-xs text-black border-2 border-black p-1 rounded-full"
               onClick={logout}
             >
               Logout
