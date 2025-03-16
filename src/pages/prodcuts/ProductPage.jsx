@@ -174,7 +174,7 @@ const ProductPage = () => {
           onClick={() => setPopupView(false)}
         >
           <button
-            className="right-4 top-4 cursor-pointer p-3 text-white fixed rounded-full w-[40px] text-2xl"
+            className="right-4 top-10 cursor-pointer p-3 text-white fixed rounded-full w-[40px] text-2xl"
             onClick={(e) => {
               setPopupView(false);
             }}
