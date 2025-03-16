@@ -98,14 +98,7 @@ const EditFAQPage = () => {
   }
   return (
     <>
-      <div className={"relative min-h-[100vh]"}>
-        <div
-          className="absolute inset-0 bg-fixed bg-cover bg-center z-0"
-          style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
-        ></div>
-
-        <div className="absolute inset-0 bg-black bg-opacity-80"></div>
-
+      <div className="relative min-h-[100vh]">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="relative space-y-4 w-[80vw] mx-auto bg-transparent py-7"
@@ -169,6 +162,7 @@ const EditFAQPage = () => {
             </div>
           </div>
         </form>
+
         <div className="relative w-[80vw] mx-auto py-5">
           {!loading && faqDetails?.images && (
             <BulkImageUploadForm
@@ -179,6 +173,7 @@ const EditFAQPage = () => {
             />
           )}
         </div>
+
         <div className="relative w-[80vw] mx-auto py-5">
           {!loading && faqDetails?.images && (
             <ImageField

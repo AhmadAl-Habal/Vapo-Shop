@@ -236,13 +236,6 @@ const EditProductPage = () => {
             : "relative min-h-[100vh]"
         }
       >
-        <div
-          className="absolute inset-0 bg-fixed bg-cover bg-center z-0"
-          style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
-        ></div>
-
-        <div className="absolute inset-0 bg-black bg-opacity-80"></div>
-
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="relative space-y-4 w-[90vw] mx-auto bg-transparent py-7"
@@ -252,7 +245,7 @@ const EditProductPage = () => {
             New Product Details
           </p>
           <div className="flex items-center">
-            <label className="text-white font-bold w-1/4">Name</label>
+            <label className="text-white font-bold w-1/4 text-sm">Name</label>
             <textarea
               {...register("name", { required: "Name is required" })}
               className="border rounded p-2 w-3/4 bg-red-100 resize-none overflow-hidden"
@@ -264,7 +257,9 @@ const EditProductPage = () => {
             ></textarea>
           </div>
           <div className="flex items-center">
-            <label className="text-white font-bold w-1/4">Description</label>
+            <label className="text-white font-bold w-1/4 text-sm">
+              Description
+            </label>
             <textarea
               {...register("description")}
               className="border rounded p-2 w-3/4 bg-red-100 resize-none overflow-hidden"
@@ -281,7 +276,7 @@ const EditProductPage = () => {
             )}
           </div>
           <div className="flex">
-            <label className="text-white font-bold w-1/4">Price</label>
+            <label className="text-white font-bold w-1/4 text-sm">Price</label>
             <input
               type="number"
               step="0.01"
@@ -295,7 +290,9 @@ const EditProductPage = () => {
             )}
           </div>
           <div className="flex">
-            <label className="text-white font-bold w-1/4">Discount</label>
+            <label className="text-white font-bold w-1/4 text-sm">
+              Discount
+            </label>
             <input
               type="number"
               step="0.01"
@@ -305,9 +302,6 @@ const EditProductPage = () => {
               )}
               className="border rounded p-2 w-3/4 bg-red-100"
             />
-            {/* {errors.discount && (
-              <p className="ml-1 text-red-500">{errors.discount.message}</p>
-            )} */}
           </div>
           <div className="flex flex-col">
             {loadingCategories ? (
@@ -315,7 +309,9 @@ const EditProductPage = () => {
             ) : (
               <>
                 <div className="flex mb-4">
-                  <label className="text-white font-bold w-1/4">Category</label>
+                  <label className="text-white font-bold w-1/4 text-sm">
+                    Category
+                  </label>
                   <div className="flex items-center">
                     <select
                       {...register("main_category_id")}
@@ -338,14 +334,14 @@ const EditProductPage = () => {
                     </select>
                     <div className="flex items-center justify-end w-1/4 ml-5 space-x-2">
                       <Link
-                        className=" bg-green-500 text-white p-1 rounded-full text-xs"
+                        className="bg-green-500 text-white p-1 rounded-full text-xs"
                         to={"/add-category"}
                       >
                         Add
                       </Link>
                       <button
                         type="button"
-                        className=" bg-red-500 text-white p-1 rounded-full text-xs"
+                        className="bg-red-500 text-white p-1 rounded-full text-xs"
                         onClick={() => {
                           navigate(`/edit-category/${selectedCategoryId}`);
                         }}
@@ -356,7 +352,7 @@ const EditProductPage = () => {
                   </div>
                 </div>
                 <div className="flex items-center">
-                  <label className="text-white font-bold w-1/4">
+                  <label className="text-white font-bold w-1/4 text-sm">
                     SubCategory
                   </label>
                   <div className="flex items-center w-3/4">
@@ -386,50 +382,7 @@ const EditProductPage = () => {
               </>
             )}
           </div>
-          {/* <div className="flex">
-            {loadingCategories ? (
-              <p>Loading...</p>
-            ) : (
-              <>
-                <label className="text-white font-bold w-1/4">Cagtegory</label>
-                <div className="flex items-center">
-                  <select
-                    {...register("main_category_id")}
-                    className="border rounded p-2 w-full bg-red-100 text-right w-3/4"
-                  >
-                    <option className="text-left" value="">
-                      Select a category
-                    </option>
-                    {allCategories.map((category) => (
-                      <option
-                        className="inline-block flex justify-between"
-                        key={category._id}
-                        value={category._id}
-                      >
-                        {category.name}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="flex items-center justify-end w-1/4 ml-5 space-x-2">
-                    <button
-                      type="button"
-                      className=" bg-green-500 text-white p-1 rounded-full text-xs"
-                      onClick={() => setPopupView("add")}
-                    >
-                      Add
-                    </button>
-                    <button
-                      type="button"
-                      className=" bg-red-500 text-white p-1 rounded-full text-xs"
-                      onClick={() => setPopupView("delete")}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
-          </div> */}
+
           <div>
             <div className="flex mt-5">
               <button
@@ -437,7 +390,7 @@ const EditProductPage = () => {
                 className="bg-red-600 text-white px-4 py-1 rounded mr-5"
                 disabled={loading}
               >
-                {loading ? "Loading..." : "ُEdit"}
+                {loading ? "Loading..." : "Edit"}
               </button>
               {statusMessage && (
                 <p className="text-red-500 font-bold">{statusMessage}</p>

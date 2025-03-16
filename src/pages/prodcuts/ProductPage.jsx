@@ -47,19 +47,7 @@ const ProductPage = () => {
   return (
     <>
       <div className="relative min-h-[100vh]">
-        <div
-          className="absolute inset-0 bg-fixed bg-cover bg-center z-0"
-          style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
-        ></div>
-        <div className="absolute inset-0 bg-black bg-opacity-80"></div>
-
         <div className="relative w-[80vw] mx-auto bg-transparent py-7 text-white">
-          {/* <p className="border border-2 py-1 px-2 rounded-full inline-block text-sm mb-5 ">
-            <Link className="mr-5 text-white w-full" to={"/"}>
-              Return to Homepage
-            </Link>
-          </p> */}
-
           <BackButton />
 
           {loading ? (
@@ -78,7 +66,7 @@ const ProductPage = () => {
                 {productDetails.images?.length > 1 && (
                   <div
                     dir="rtl"
-                    className="flex w-full justify-center items-center mb-5  flex-wrap"
+                    className="flex w-full justify-center items-center mb-5 flex-wrap"
                   >
                     {productDetails.images.map((image, index) => (
                       <img
@@ -179,6 +167,7 @@ const ProductPage = () => {
           )}
         </div>
       </div>
+
       {popupView && (
         <div
           className="min-h-screen w-full bg-black z-10 fixed top-0 left-0 bg-opacity-70"

@@ -29,14 +29,14 @@ export const getCategories = async () => {
 
 // General Requests
 
-export const deleteItem = async (endpoint, id) => {
+export const deleteItem = async (endpoint, id, storedToken) => {
   try {
     const response = await axiosInstance.delete(`/${endpoint}/${id}`, {
       headers: {
         auth: storedToken,
       },
     });
-    if (response.status === 200) {
+    if (response.status === 204) {
       return response.data;
     } else {
       throw new Error("Failed to delete item");
@@ -59,5 +59,31 @@ export const getProducts = async () => {
     }
   } catch (error) {
     throw error;
+  }
+};
+
+// Social Media Requests
+
+export const addWhatsappProfile = async (data) => {
+  try {
+    const formData = new FormData();
+    formData.append("link", data.link);
+    formData.append("phone_number", data.phone_number);
+    formData.append("name", data.name);
+
+    const response = await axiosInstance.post(
+      "/settings/whatsapp",
+      formData
+      //    {
+      //   headers: {
+      //     "Content-Type": "multipart/form-data",
+      //   },
+      // }
+    );
+
+    return response.data.data.social_media.whatsapp; // Return only necessary data
+  } catch (error) {
+    console.error("Error adding profile:", error);
+    throw error; // Throw error to handle it in the component
   }
 };

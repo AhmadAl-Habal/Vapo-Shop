@@ -71,14 +71,10 @@ const SubcategoriesList = ({ refresh, setRefresh, category }) => {
       }
       formData.append("main_category_id", category._id);
       const response = await axios.post("/sub_category", formData);
-      //   setCategory(response.data.data);
-      console.log(response);
 
       if (response.status === 201) {
         setStatusMessage("Catgegory created successfully!");
-        // setTimeout(() => {
-        //   navigate("/");
-        // }, 2000);
+
         setRefresh((prev) => !prev);
       } else {
         setStatusMessage("Failed to create the Catgegory.");
@@ -101,7 +97,6 @@ const SubcategoriesList = ({ refresh, setRefresh, category }) => {
   const deleteProfile = async (subId) => {
     try {
       const response = await axios.delete(`/sub_category/${subId}`);
-      console.log(response);
 
       setAllSubCategories((prev) =>
         prev.filter((subCategory) => subCategory._id !== subId)

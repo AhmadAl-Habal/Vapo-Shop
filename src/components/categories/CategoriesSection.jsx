@@ -4,10 +4,7 @@ import CategoriesListing from "./CategoriesListing";
 import { CiCirclePlus } from "react-icons/ci";
 
 const CategoriesSection = () => {
-  const [token, setToken] = useState("");
-  const [categories, setCategories] = useState([]);
-
-  const [error, setError] = useState(null);
+  const token = localStorage.getItem("token");
 
   return (
     <section>

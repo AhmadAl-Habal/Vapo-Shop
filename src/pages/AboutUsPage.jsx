@@ -37,12 +37,6 @@ const AboutUsPage = () => {
   return (
     <>
       <div className="relative min-h-[100vh]">
-        <div
-          className="absolute inset-0 bg-fixed bg-cover bg-center z-0"
-          style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
-        ></div>
-        <div className="absolute inset-0 bg-black bg-opacity-80"></div>
-
         <div className="relative w-[80vw] mx-auto bg-transparent py-7 text-white">
           <BackButton />
           <div dir="rtl">

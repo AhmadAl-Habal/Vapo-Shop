@@ -7,7 +7,7 @@ const Sidebar = ({ isOpen, toggleSidebar, token }) => {
     <>
       <div
         dir="rtl"
-        className={`fixed z-20 top-0 left-0 h-screen w-9/12 max-w-sm text-white 
+        className={`fixed z-50 top-0 left-0 h-screen w-9/12 max-w-sm text-white 
           transition-transform ${isOpen ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0 pointer-events-none"}`}
       >
         {/* Background Image with Opacity */}
@@ -15,11 +15,11 @@ const Sidebar = ({ isOpen, toggleSidebar, token }) => {
           className="absolute inset-0 bg-cover bg-center z-0"
           style={{
             backgroundImage: `url(${motionBg2})`,
-            opacity: 0.8, // Opacity for the background
+            opacity: 0.8,
           }}
         ></div>
 
-        {/* Dark Overlay to Enhance Readability */}
+        {/* Dark Overlay */}
         <div className="absolute inset-0 bg-black bg-opacity-90 z-0"></div>
 
         {/* Sidebar Content */}
@@ -90,7 +90,7 @@ const Sidebar = ({ isOpen, toggleSidebar, token }) => {
 
       {isOpen && (
         <div
-          className="fixed z-10 inset-0 bg-black bg-opacity-70 transition-opacity"
+          className="fixed z-40 inset-0 bg-black bg-opacity-70 transition-opacity"
           onClick={toggleSidebar}
         />
       )}

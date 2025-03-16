@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "../../api/axios";
+import { deleteItem } from "../../api/axios";
+import { addWhatsappProfile } from "../../api/axios";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { motion } from "framer-motion";
 
@@ -8,7 +9,7 @@ const Whatsapp = ({ accounts }) => {
   const [expanded, setExpanded] = useState(false);
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const token = localStorage.getItem("token");
   useEffect(() => {
     if (accounts.length > 0) {
       setProfiles(accounts);
@@ -27,17 +28,9 @@ const Whatsapp = ({ accounts }) => {
   const addProfile = async (data) => {
     setLoading(true);
     try {
-      const formData = new FormData();
-      formData.append("link", data.link);
-      formData.append("phone_number", data.phone_number);
-      formData.append("name", data.name);
-
-      const response = await axios.post("/settings/whatsapp", formData, {});
-
-      if (response.status === 201) {
-        setProfiles(response.data.data.social_media.whatsapp);
-        reset();
-      }
+      const newProfiles = await addWhatsappProfile(data);
+      setProfiles(newProfiles);
+      reset();
     } catch (error) {
       console.error("Error adding profile:", error);
     } finally {
@@ -47,7 +40,7 @@ const Whatsapp = ({ accounts }) => {
 
   const deleteProfile = async (index) => {
     try {
-      await axios.delete(`/settings/whatsapp/${index}`);
+      await deleteItem("settings/whatsapp", index, token);
       setProfiles((prev) => prev.filter((_, i) => i !== index));
     } catch (error) {
       console.error("Error deleting profile:", error);

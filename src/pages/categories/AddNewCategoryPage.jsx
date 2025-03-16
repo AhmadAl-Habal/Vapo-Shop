@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "../../api/axios";
 import { useNavigate, Link } from "react-router-dom";
-import hero from "../../assets/motion11.jpg";
-import Spinner from "../../components/Spinner";
+
+import Unauthorized from "../../components/Unauthorized";
 import SubCategoriesList from "../../components/SubCategoriesList";
 import BackButton from "../../components/BackButton";
 
@@ -100,132 +100,106 @@ const AddNewCategoryPage = () => {
   };
 
   if (!storedToken) {
-    return (
-      <div className={"relative min-h-[100vh]"}>
-        <div
-          className="absolute inset-0 bg-fixed bg-cover bg-center z-0"
-          style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
-        ></div>
-        <div className="absolute inset-0 bg-black bg-opacity-80"></div>
-        <div className="relative w-[80vw] mx-auto bg-transparent py-7">
-          <div dir="rtl">
-            <h1 className="text-2xl font-bold text-red-500 mb-5">وصول مرفوض</h1>
-            <p className="text-white mb-5">
-              يجب تسجيل الدخول للوصول الى هذه الصفحة
-            </p>
-          </div>
-          <BackButton />
-        </div>
-      </div>
-    );
+    return <Unauthorized />;
   }
 
   return (
     <>
-      <div className={"relative min-h-[100vh]"}>
-        <div
-          className="absolute inset-0 bg-fixed bg-cover bg-center z-0"
-          style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
-        ></div>
-        <div className="absolute inset-0 bg-black bg-opacity-80"></div>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="relative space-y-4 w-[90vw] mx-auto bg-transparent py-7"
+      >
+        <BackButton />
+        <p className="text-center text-white font-bold">New Category Details</p>
 
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="relative space-y-4 w-[90vw] mx-auto bg-transparent py-7"
-        >
-          <BackButton />
-          <p className="text-center text-white font-bold">
-            New Category Details
-          </p>
-          <div>
-            {" "}
-            <div className="flex items-center">
-              <label className="text-sm text-white font-bold w-1/4">Name</label>
-              <input
-                dir="rtl"
-                type="text"
-                {...register("name", { required: "Name is required" })}
-                className="border rounded p-2 w-3/4 bg-red-100"
-              />
-            </div>
-            {errors.name && (
-              <p className="mt-2 text-red-500 font-bold text-center">
-                {errors.name.message}
-              </p>
-            )}
-          </div>
+        <div>
           <div className="flex items-center">
-            <label className="text-sm text-white font-bold w-1/4">
-              Description
-            </label>
-            <textarea
+            <label className="text-sm text-white font-bold w-1/4">Name</label>
+            <input
               dir="rtl"
-              {...register("description")}
-              className="border rounded p-2 w-3/4 bg-red-100 resize-none overflow-hidden"
-              rows={1}
-              onInput={(e) => {
-                e.target.style.height = "auto";
-                e.target.style.height = `${e.target.scrollHeight}px`;
-              }}
-            ></textarea>
+              type="text"
+              {...register("name", { required: "Name is required" })}
+              className="border rounded p-2 w-3/4 bg-red-100"
+            />
           </div>
+          {errors.name && (
+            <p className="mt-2 text-red-500 font-bold text-center">
+              {errors.name.message}
+            </p>
+          )}
+        </div>
 
-          <div>
-            <div>
-              <div className="flex items-center">
-                <label className="text-white font-bold w-1/4">Image</label>
-                <input
-                  type="file"
-                  {...register("image", {
-                    required: "Image is required",
-                  })}
-                  className="border rounded p-2 text-white text-sm inline-block w-3/4"
-                  onChange={handleFileChange}
-                />
-                <button
-                  type="button"
-                  className="absolute right-1 bg-red-400 text-black p-1 rounded-full text-xs"
-                  onClick={clearImage}
-                >
-                  Clear
-                </button>
-              </div>{" "}
-              {errors.image && (
-                <p className="mt-2 text-red-500 font-bold text-center">
-                  {errors.image.message}
-                </p>
-              )}
-            </div>
+        <div className="flex items-center">
+          <label className="text-sm text-white font-bold w-1/4">
+            Description
+          </label>
+          <textarea
+            dir="rtl"
+            {...register("description")}
+            className="border rounded p-2 w-3/4 bg-red-100 resize-none overflow-hidden"
+            rows={1}
+            onInput={(e) => {
+              e.target.style.height = "auto";
+              e.target.style.height = `${e.target.scrollHeight}px`;
+            }}
+          ></textarea>
+        </div>
 
-            {imagePreview && (
-              <div className="mt-4 w-full flex justify-center">
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="max-w-full h-full object-cover"
-                />
-              </div>
-            )}
-            <div className="flex mt-5">
-              <button
-                type="submit"
-                className="bg-red-600 text-white px-4 py-1 rounded mr-5"
-                disabled={loading}
-              >
-                {loading ? "Loading..." : "Create"}
-              </button>
-              {statusMessage && (
-                <p className="text-red-500 font-bold">{statusMessage}</p>
-              )}
-            </div>
+        <div>
+          <div className="flex items-center">
+            <label className="text-white font-bold w-1/4">Image</label>
+            <input
+              type="file"
+              {...register("image", {
+                required: "Image is required",
+              })}
+              className="border rounded p-2 text-white text-sm inline-block w-3/4"
+              onChange={handleFileChange}
+            />
+            <button
+              type="button"
+              className="absolute right-1 bg-red-400 text-black p-1 rounded-full text-xs"
+              onClick={clearImage}
+            >
+              Clear
+            </button>
           </div>
-        </form>
-        <SubCategoriesList
-          category={category}
-          refresh={refresh}
-          setRefresh={setRefresh}
-        />
-      </div>
+          {errors.image && (
+            <p className="mt-2 text-red-500 font-bold text-center">
+              {errors.image.message}
+            </p>
+          )}
+        </div>
+
+        {imagePreview && (
+          <div className="mt-4 w-full flex justify-center">
+            <img
+              src={imagePreview}
+              alt="Preview"
+              className="max-w-full h-full object-cover"
+            />
+          </div>
+        )}
+
+        <div className="flex mt-5">
+          <button
+            type="submit"
+            className="bg-red-600 text-white px-4 py-1 rounded mr-5"
+            disabled={loading}
+          >
+            {loading ? "Loading..." : "Create"}
+          </button>
+          {statusMessage && (
+            <p className="text-red-500 font-bold">{statusMessage}</p>
+          )}
+        </div>
+      </form>
+
+      <SubCategoriesList
+        category={category}
+        refresh={refresh}
+        setRefresh={setRefresh}
+      />
     </>
   );
 };

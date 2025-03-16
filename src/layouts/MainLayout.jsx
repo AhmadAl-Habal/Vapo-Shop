@@ -7,8 +7,10 @@ import Footer from "../components/Footer";
 import axios from "../api/axios";
 import WarnningMessage from "../components/WarnningMessage";
 import hero from "../assets/motion11.jpg";
+
 const MainLayout = () => {
   const location = useLocation();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -27,21 +29,31 @@ const MainLayout = () => {
 
     fetchData();
   }, []);
+
   return (
     <>
       {location.pathname === "/" && <WarnningMessage />}
-      <Navbar />
-      {/* <div>
+
+      <div className="relative min-h-[100vh]">
+        {/* Background Image */}
         <div
           className="absolute inset-0 bg-fixed bg-cover bg-center z-0"
           style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
         ></div>
 
-        <div className="absolute inset-0 bg-black bg-opacity-80 z-0"></div> */}
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black bg-opacity-80 z-10"></div>
 
-      <Outlet />
-      {/* </div> */}
-      <Footer />
+        <Navbar />
+
+        {/* Main Content Area */}
+        <div className="flex-grow relative z-20">
+          <Outlet /> {/* This is where your pages will be rendered */}
+        </div>
+
+        <Footer />
+      </div>
+
       <ToastContainer />
     </>
   );

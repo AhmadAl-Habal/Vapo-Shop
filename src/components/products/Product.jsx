@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
-import axios from "../../api/axios";
+import { deleteItem } from "../../api/axios";
 import { FaEdit } from "react-icons/fa";
 
 const Product = ({ product }) => {
@@ -27,13 +27,13 @@ const Product = ({ product }) => {
     return () => observer.disconnect();
   }, []);
 
-  const deleteItem = async () => {
+  const deleteProduct = async () => {
     try {
-      await axios.delete(`/item/${product._id}`);
+      await deleteItem("item", product._id, token);
       setPopupView(false);
       setIsVisible(false);
     } catch (error) {
-      console.error("Failed to delete item:", error);
+      console.error("Failed to delete Product:", error);
     }
   };
 
@@ -139,7 +139,7 @@ const Product = ({ product }) => {
             <div className="flex justify-center gap-4">
               <button
                 className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-                onClick={() => deleteItem()}
+                onClick={() => deleteProduct()}
               >
                 نعم، احذف
               </button>

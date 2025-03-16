@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "../api/axios";
-const ImageUploadForm = ({ inputDetails, endpoint,refresh,setRefresh }) => {
+const ImageUploadForm = ({ inputDetails, endpoint, refresh, setRefresh }) => {
   const [images, setImages] = useState([]);
   const [key, setKey] = useState(Date.now()); // Unique key for file input
   const [statusMessage, setStatusMessage] = useState("");
@@ -36,29 +36,26 @@ const ImageUploadForm = ({ inputDetails, endpoint,refresh,setRefresh }) => {
     });
 
     try {
-      //   const response = await fetch(`/${endpoint}/${inputDetails._id}`, {
-      //     method: "POST",
-      //     body: formData,
-      //   });
       const response = await axios.post(
         `/${endpoint}/${inputDetails._id}`,
         formData,
-        {headers: {
+        {
+          headers: {
             "Content-Type": "multipart/form-data",
-        }}
+          },
+        }
       );
 
       if (response.status === 201) {
         setStatusMessage("Images uploaded successfully!");
         setImages([]);
         setKey(Date.now()); // Reset the input field
-        setTimeout(() => setRefresh((prev) => !prev), 100); 
+        setTimeout(() => setRefresh((prev) => !prev), 100);
       } else {
         setStatusMessage("Failed to upload images. Please try again.");
       }
     } catch (error) {
       setStatusMessage("An error occurred during upload.");
-    
     } finally {
       setLoading(false);
     }

@@ -146,14 +146,7 @@ const AddNewProduct = () => {
 
   return (
     <>
-      <div className={"relative min-h-[100vh]"}>
-        <div
-          className="absolute inset-0 bg-fixed bg-cover bg-center z-0"
-          style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
-        ></div>
-
-        <div className="absolute inset-0 bg-black bg-opacity-80"></div>
-
+      <div className="relative min-h-[100vh]">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="relative space-y-4 w-[90vw] mx-auto bg-transparent py-7"
@@ -164,7 +157,7 @@ const AddNewProduct = () => {
           </p>
 
           <div className="flex items-center">
-            <label className="text-white font-bold w-1/4">Name</label>
+            <label className="text-white font-bold w-1/4 text-sm">Name</label>
             <textarea
               dir="rtl"
               {...register("name", { required: "Name is required" })}
@@ -177,7 +170,9 @@ const AddNewProduct = () => {
             ></textarea>
           </div>
           <div className="flex items-center">
-            <label className="text-white font-bold w-1/4">Description</label>
+            <label className="text-white font-bold w-1/4 text-sm">
+              Description
+            </label>
             <textarea
               dir="rtl"
               {...register("description")}
@@ -190,7 +185,7 @@ const AddNewProduct = () => {
             ></textarea>
           </div>
           <div className="flex">
-            <label className="text-white font-bold w-1/4">Price</label>
+            <label className="text-white font-bold w-1/4 text-sm">Price</label>
             <input
               dir="rtl"
               type="number"
@@ -215,9 +210,6 @@ const AddNewProduct = () => {
               {...register("discount")}
               className="border rounded p-2 w-3/4 bg-red-100"
             />
-            {/* {errors.discount && (
-              <p className="mt-2 text-red-500 font-bold text-center">{errors.discount.message}</p>
-            )} */}
           </div>
           <div className="flex flex-col">
             {loadingCategories ? (
@@ -225,7 +217,9 @@ const AddNewProduct = () => {
             ) : (
               <>
                 <div className="flex mb-4">
-                  <label className="text-white font-bold w-1/4">Category</label>
+                  <label className="text-white font-bold w-1/4 text-sm">
+                    Category
+                  </label>
                   <div className="flex items-center">
                     <select
                       dir="rtl"
@@ -250,14 +244,14 @@ const AddNewProduct = () => {
                     </select>
                     <div className="flex items-center justify-end w-1/4 ml-5 space-x-2">
                       <Link
-                        className=" bg-green-500 text-white p-1 rounded-full text-xs"
+                        className="bg-green-500 text-white p-1 rounded-full text-xs"
                         to={"/add-category"}
                       >
                         Add
                       </Link>
                       <button
                         type="button"
-                        className=" bg-red-500 text-white p-1 rounded-full text-xs"
+                        className="bg-red-500 text-white p-1 rounded-full text-xs"
                         onClick={() => {
                           navigate(`/edit-category/${selectedCategoryId}`);
                         }}
@@ -268,7 +262,7 @@ const AddNewProduct = () => {
                   </div>
                 </div>
                 <div className="flex items-center">
-                  <label className="text-white font-bold w-1/4 break-all">
+                  <label className="text-white font-bold w-1/4 text-sm break-all">
                     SubCategory
                   </label>
                   <div className="flex items-center w-3/4">
@@ -309,7 +303,9 @@ const AddNewProduct = () => {
           </div>
           <div>
             <div className="flex items-center">
-              <label className="text-white font-bold w-1/4">Images</label>
+              <label className="text-white font-bold w-1/4 text-sm">
+                Images
+              </label>
               <input
                 type="file"
                 {...register("image", {
@@ -351,81 +347,3 @@ const AddNewProduct = () => {
 };
 
 export default AddNewProduct;
-
-{
-  /* {popupView === "add" && (
-        <div className="bg-black z-10 inset-0 absolute bg-opacity-30">
-          <button
-            className="right-0 bg-red-600 p-2 absolute top-20 rounded-full w-[40px]"
-            onClick={() => {
-              setPopupView(false);
-            }}
-          >
-            X
-          </button>
-          <div className="flex items-center justify-center h-100vh">
-            <div className="flex items-center absolute inset-50 bg-black p-2  top-[40vh] w-[80vw] rounded-lg ">
-              <label className="text-white font-bold w-1/4">
-                Category Name
-              </label>
-              <input
-                type="text"
-                required
-                className="border rounded p-2 w-3/4 bg-red-100 "
-                onChange={(e) => setCategoryName(e.target.value)}
-              />
-
-              <button
-                className="text-white ml-2 p-1 bg-red-600 rounded"
-                onClick={addCategory}
-              >
-                {loading ? "loading" : "Add"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-      {popupView === "delete" && (
-        <div className="bg-black z-10 inset-0 absolute bg-opacity-30">
-          <button
-            className="right-0 bg-red-600 p-2 absolute top-20 rounded-full w-[40px]"
-            onClick={() => {
-              setPopupView(false);
-            }}
-          >
-            X
-          </button>
-          <div className="flex items-center justify-center h-100vh">
-            <div className="flex items-center absolute inset-50 bg-black p-2  top-[40vh] w-[80vw] rounded-lg ">
-              <select
-                onChange={(e) => setDeletedCategoryId(e.target.value)}
-                className="border rounded p-2 w-full bg-red-100 text-right w-3/4"
-              >
-                <option className="text-left" value="">
-                  Select a category
-                </option>
-                {allCategories.map((category) => (
-                  <option
-                    className="inline-block flex justify-between"
-                    key={category._id}
-                    value={category._id}
-                  >
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-
-              <button
-                className="text-white ml-2 p-1 bg-red-600 rounded"
-                onClick={() => {
-                  console.log(deletedCategoryId);
-                  deleteCategory();
-                }}
-              >
-                {loading ? "loading" : "Delete"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )} */
-}

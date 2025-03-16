@@ -41,10 +41,6 @@ const HeroBulkImageUploadForm = ({
     });
 
     try {
-      //   const response = await fetch(`/${endpoint}/${inputDetails._id}`, {
-      //     method: "POST",
-      //     body: formData,
-      //   });
       const response = await axios.post(`/settings/${endpoint}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",

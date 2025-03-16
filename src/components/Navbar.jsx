@@ -1,25 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar.jsx";
 import logo from "../assets/logo.png";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const [token, setToken] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    setToken(storedToken || "");
-  }, []);
-
-  // useEffect(() => {
-
-  // }, []);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
+  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
   const logout = () => {
     localStorage.clear();
@@ -28,59 +17,60 @@ const Navbar = () => {
   };
 
   return (
-    <>
-      <div className="fixed top-0 left-0 w-full z-50">
-        <nav className="bg-red-800 p-1 flex justify-between items-center">
-          <div className="flex">
-            <button
-              className="text-3xl focus:outline-none mr-3"
-              onClick={toggleSidebar}
+    <div className="fixed top-0 left-0 w-full z-50">
+      <nav className="bg-red-800 p-1 flex justify-between items-center">
+        {/* Left Side: Sidebar Toggle & Logo */}
+        <div className="flex items-center">
+          <button
+            className="text-3xl focus:outline-none mr-3"
+            onClick={toggleSidebar}
+          >
+            ☰
+          </button>
+          <Link to={"/"} className="flex items-center space-x-2">
+            <img
+              className="h-[30px] w-[30px] rounded-full cursor-pointer"
+              src={logo}
+              alt="React Jobs"
+            />
+            <p className="font-bold text-xs">VAPO ABO MARIAM</p>
+          </Link>
+        </div>
+
+        {/* Right Side: Auth Buttons */}
+        <div className="flex items-center space-x-3">
+          {token && (
+            <Link
+              to={"/settings"}
+              className="text-xs text-yellow-400 hidden xs:inline-block"
             >
-              ☰
+              Admin mode!
+            </Link>
+          )}
+          {token ? (
+            <button
+              className="font-bold text-black border-2 border-black p-1 rounded-full"
+              onClick={logout}
+            >
+              Logout
             </button>
-            <div className="flex items-center space-x-2">
-              <img
-                className="h-[30px] w-[30px] rounded-full cursor-pointer"
-                src={logo}
-                alt="React Jobs"
-              />
-              <p className="font-bold text-xs ">
-                <Link to={"/"}>VAPO ABO MARIAM</Link>
-              </p>
-            </div>
-          </div>
+          ) : (
+            <Link
+              to={"/login"}
+              className="font-bold text-xs text-black border-2 border-black p-1 rounded-full"
+            >
+              Login
+            </Link>
+          )}
+        </div>
+      </nav>
 
-          <div className="flex">
-            {token ? (
-              <p className="text-xs ">
-                <span className="text-yellow-400 mr-3">
-                  <Link to={"/settings"} className="hidden xs:inline-block">
-                    {" "}
-                    Admin mode!
-                  </Link>
-                </span>
-                <button
-                  className="font-bold text-black border border-2 border-black p-1 rounded-full"
-                  onClick={logout}
-                >
-                  Logout
-                </button>
-              </p>
-            ) : (
-              <p className="font-bold text-xs text-black border border-2 border-black p-1 rounded-full">
-                <Link to={"/login"}>Login</Link>
-              </p>
-            )}
-          </div>
-        </nav>
-
-        <Sidebar
-          isOpen={isSidebarOpen}
-          toggleSidebar={toggleSidebar}
-          token={token}
-        />
-      </div>
-    </>
+      <Sidebar
+        isOpen={isSidebarOpen}
+        toggleSidebar={toggleSidebar}
+        token={token}
+      />
+    </div>
   );
 };
 

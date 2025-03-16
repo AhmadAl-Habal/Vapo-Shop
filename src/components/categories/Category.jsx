@@ -13,7 +13,7 @@ const Category = ({ category, removeCategory }) => {
 
   const deleteCategory = async () => {
     try {
-      await deleteItem("category", category._id);
+      await deleteItem("category", category._id, token);
       setPopupView(false);
       removeCategory(category._id);
     } catch (error) {
