@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "../../api/axios";
-import { useNavigate, Link, useParams } from "react-router-dom";
-import hero from "../../assets/motion11.jpg";
-import Spinner from "../../components/Spinner";
+import { getCategoryById, updateCategory } from "../../api/axios";
+import { useParams } from "react-router-dom";
 import SubCategoriesList from "../../components/SubCategoriesList";
 import BackButton from "../../components/BackButton";
+import Unauthorized from "../../components/Unauthorized";
+
 const EditCategoryPage = () => {
-  const navigate = useNavigate();
+  const { id } = useParams();
 
   const {
     register,
@@ -18,39 +18,29 @@ const EditCategoryPage = () => {
     formState: { errors },
   } = useForm();
 
-  const storedToken = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [popupView, setPopupView] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
-  const [loadingSubCategories, setLoadingSubCategories] = useState(false);
-  const [allSubCategories, setAllSubCategories] = useState([]);
   const [category, setCategory] = useState({});
   const [imagePreview, setImagePreview] = useState(null);
 
-  const { id } = useParams();
-
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchCategory = async () => {
       try {
-        const response = await axios.get(`/category/${id}`);
-        if (response.status === 200) {
-          reset({
-            name: response.data.data.name || "",
-            description: response.data.data.description || "",
-          });
-          setImagePreview(response.data.data.image);
-          setCategory(response.data.data);
-        }
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+        const data = await getCategoryById(id);
+        reset({
+          name: data.name || "",
+          description: data.description || "",
+        });
+        setImagePreview(data.image);
+        setCategory(data);
+      } catch {
+        setStatusMessage("Error fetching category.");
       }
     };
 
-    fetchData();
+    fetchCategory();
   }, [refresh]);
 
   const onSubmit = async (data) => {
@@ -58,89 +48,24 @@ const EditCategoryPage = () => {
     setStatusMessage("");
 
     try {
-      const formData = new FormData();
-      formData.append("name", data.name);
-      if (data.description) {
-        formData.append("description", data.description);
-      }
-
-      if (data.image && data.image[0]) {
-        formData.append("image", data.image[0]);
-      }
-      const response = await axios.put(`/category/${id}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      if (response.status === 200) {
-        setStatusMessage("Catgegory Edited successfully!");
-        setCategory(response.data.data);
-        console.log(category);
-
-        // setTimeout(() => {
-        //   navigate("/");
-        // }, 2000);
-        setRefresh((prev) => !prev);
-        console.log(refresh);
-      } else {
-        setStatusMessage("Failed to edit the Catgegory.");
-      }
-    } catch (error) {
-      console.error(
-        "Error editing Category:",
-        error.response?.data || error.message
-      );
-      console.log("Error response:", error.response);
-      setStatusMessage("Error editing Category. Please try again.");
+      const updatedCategory = await updateCategory(id, data, token);
+      setStatusMessage("Category updated successfully!");
+      setCategory(updatedCategory);
+      setRefresh((prev) => !prev);
+    } catch {
+      setStatusMessage("Error updating category. Please try again.");
     } finally {
       setLoading(false);
     }
   };
-  useEffect(() => {
-    setLoadingSubCategories(true);
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("/sub_category");
-        if (response.status == "200") {
-          setAllSubCategories(response.data.data);
-        } else setAllSubCategories(response.status);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoadingSubCategories(false);
-      }
-    };
-    fetchData();
-  }, [, popupView]);
-
   const clearImage = () => {
     setValue("image", null);
     clearErrors("image");
     setImagePreview(null);
   };
 
-  if (!storedToken) {
-    return (
-      <div className={"relative min-h-[100vh]"}>
-        <div
-          className="absolute inset-0 bg-fixed bg-cover bg-center z-0"
-          style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
-        ></div>
+  if (!token) return <Unauthorized />;
 
-        <div className="absolute inset-0 bg-black bg-opacity-80"></div>
-        <div className="relative  w-[80vw] mx-auto bg-transparent py-7">
-          <div dir="rtl">
-            <h1 className="text-2xl font-bold text-red-500 mb-5">وصول مرفوض</h1>
-            <p className="text-white mb-5">
-              يجب تسجيل الدخول للوصول الى هذه الصفحة
-            </p>
-          </div>
-          <BackButton />
-        </div>
-      </div>
-    );
-  }
   return (
     <>
       <form
@@ -149,7 +74,10 @@ const EditCategoryPage = () => {
       >
         <BackButton />
 
-        <p className="text-center text-white font-bold">New Category Details</p>
+        <p className="text-center text-white font-bold">Edit Category</p>
+
+        {/* Name Field */}
+
         <div>
           <div className="flex items-center">
             <label className="text-white font-bold w-1/4">Name</label>
@@ -159,13 +87,16 @@ const EditCategoryPage = () => {
               {...register("name", { required: "Name is required" })}
               className="border rounded p-2 w-3/4 bg-red-100"
             />
-          </div>{" "}
+          </div>
           {errors.name && (
             <p className="mt-2 text-red-500 font-bold text-center">
               {errors.name.message}
             </p>
           )}
         </div>
+
+        {/* Description Field */}
+
         <div className="flex items-center">
           <label className="text-white font-bold w-1/4">Description</label>
           <textarea
@@ -179,6 +110,8 @@ const EditCategoryPage = () => {
             }}
           ></textarea>
         </div>
+
+        {/* Image Upload */}
 
         <div>
           <div className="flex items-center">
@@ -205,22 +138,26 @@ const EditCategoryPage = () => {
               />
             </div>
           )}
-          <div className="flex mt-5">
-            <button
-              type="submit"
-              className="bg-red-600 text-white px-4 py-1 rounded mr-5"
-              disabled={loading}
-            >
-              {loading ? "Loading..." : "Edit"}
-            </button>
-            {statusMessage && (
-              <p className="text-red-500 font-bold text-center">
-                {statusMessage}
-              </p>
-            )}
-          </div>
+        </div>
+
+        <div className="flex mt-5">
+          <button
+            type="submit"
+            className="bg-red-600 text-white px-4 py-1 rounded mr-5"
+            disabled={loading}
+          >
+            {loading ? "Loading..." : "Edit"}
+          </button>
+          {statusMessage && (
+            <p className="text-red-500 font-bold text-center">
+              {statusMessage}
+            </p>
+          )}
         </div>
       </form>
+
+      {/* Image Preview */}
+
       <SubCategoriesList
         category={category}
         refresh={refresh}

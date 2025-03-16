@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Hero from "../components/Hero";
-import hero from "../assets/motion11.jpg";
 import CategoriesSection from "../components/categories/CategoriesSection";
 import AllProductsSection from "../components/products/AllProductsSection";
 

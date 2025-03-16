@@ -48,7 +48,7 @@ const MainLayout = () => {
 
         {/* Main Content Area */}
         <div className="flex-grow relative z-20">
-          <Outlet /> {/* This is where your pages will be rendered */}
+          <Outlet /> {/* This is where pages will be rendered */}
         </div>
 
         <Footer />

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "../../api/axios";
 import { useNavigate, Link, useParams } from "react-router-dom";
-import hero from "../../assets/motion11.jpg";
+import Unauthorized from "../../components/Unauthorized";
 import ImageField from "../../components/ImageField";
 import BulkImageUploadForm from "../../components/BulkImageUploadForm";
 import BackButton from "../../components/BackButton";
@@ -16,7 +16,7 @@ const EditProductPage = () => {
     reset,
   } = useForm();
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
-  const storedToken = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
@@ -126,7 +126,6 @@ const EditProductPage = () => {
       //     formData.append("image", file);
       //   });
       // }
-      console.log("data", data);
 
       if (data.sub_category_id) {
         formData.append("sub_category_id", data.sub_category_id);
@@ -149,18 +148,6 @@ const EditProductPage = () => {
     }
   };
 
-  const clearImage = () => {
-    setValue("image", null);
-    clearErrors("image");
-    setImagePreview(null);
-  };
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setImagePreview(URL.createObjectURL(file));
-    }
-  };
-
   const handleCategoryChange = (e) => {
     const selectedCategoryId = e.target.value;
     setSelectedCategoryId(selectedCategoryId);
@@ -176,25 +163,6 @@ const EditProductPage = () => {
     reset({ ...productDetails, sub_category_id: "" }); // Reset subcategory selection
   };
 
-  const deleteCategory = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.delete(
-        `/category/${deletedCategoryId}`,
-
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-    } catch (error) {
-      console.error("Login failed:", error.response.data);
-    } finally {
-      setLoading(false);
-    }
-    setPopupView(false);
-  };
   useEffect(() => {
     if (selectedCategoryId) {
       const filtered = allSubCategories.filter(
@@ -206,27 +174,7 @@ const EditProductPage = () => {
     }
   }, [selectedCategoryId, allSubCategories]);
 
-  if (!storedToken) {
-    return (
-      <div className={"relative min-h-[100vh]"}>
-        <div
-          className="absolute inset-0 bg-fixed bg-cover bg-center z-0"
-          style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
-        ></div>
-
-        <div className="absolute inset-0 bg-black bg-opacity-80"></div>
-        <div className="relative  w-[80vw] mx-auto bg-transparent py-7">
-          <div dir="rtl">
-            <h1 className="text-2xl font-bold text-red-500 mb-5">وصول مرفوض</h1>
-            <p className="text-white mb-5">
-              يجب تسجيل الدخول للوصول الى هذه الصفحة
-            </p>
-          </div>
-          <BackButton />
-        </div>
-      </div>
-    );
-  }
+  if (!token) return <Unauthorized />;
   return (
     <>
       <div
@@ -275,7 +223,7 @@ const EditProductPage = () => {
               </p>
             )}
           </div>
-          <div className="flex">
+          <div className="flex items-center">
             <label className="text-white font-bold w-1/4 text-sm">Price</label>
             <input
               type="number"
@@ -289,7 +237,7 @@ const EditProductPage = () => {
               </p>
             )}
           </div>
-          <div className="flex">
+          <div className="flex items-center">
             <label className="text-white font-bold w-1/4 text-sm">
               Discount
             </label>
@@ -352,29 +300,38 @@ const EditProductPage = () => {
                   </div>
                 </div>
                 <div className="flex items-center">
-                  <label className="text-white font-bold w-1/4 text-sm">
+                  <label className="text-white font-bold w-1/4 text-sm break-all">
                     SubCategory
                   </label>
                   <div className="flex items-center w-3/4">
-                    {filteredSubCategories.length > 0 ? (
-                      <select
-                        {...register("sub_category_id")}
-                        className="border rounded p-2 bg-red-100 text-right w-full"
-                      >
-                        <option className="text-left" value="">
-                          Select a Subcategory
-                        </option>
-                        {filteredSubCategories.map((subCategory) => (
-                          <option key={subCategory._id} value={subCategory._id}>
-                            {subCategory.name}
+                    {selectedCategoryId ? (
+                      filteredSubCategories.length > 0 ? (
+                        <select
+                          dir="rtl"
+                          {...register("sub_category_id")}
+                          className="border rounded p-2 bg-red-100 text-right w-full"
+                        >
+                          <option className="text-left" value="">
+                            Select a Subcategory
                           </option>
-                        ))}
-                      </select>
+                          {filteredSubCategories.map((subCategory) => (
+                            <option
+                              className="inline-block flex justify-between"
+                              key={subCategory._id}
+                              value={subCategory._id}
+                            >
+                              {subCategory.name}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <p className="ml-2 text-red-600 font-bold">
+                          There are no subcategories for this category yet.
+                        </p>
+                      )
                     ) : (
                       <p className="ml-2 text-red-600 font-bold">
-                        {selectedCategoryId
-                          ? "No subcategories available for this category."
-                          : "Please select a category first."}
+                        Please select a main category first.
                       </p>
                     )}
                   </div>

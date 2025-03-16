@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "../../api/axios";
-import { Link, useNavigate } from "react-router-dom";
-import hero from "../../assets/motion11.jpg";
+import { useNavigate } from "react-router-dom";
+
 import BackButton from "../../components/BackButton";
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ const LoginPage = () => {
       localStorage.setItem("token", authToken);
       const timeout = setTimeout(() => {
         navigate("/");
-        window.location.reload();
+        // window.location.reload();
       }, 2000);
     }
   }, [authToken, navigate]);

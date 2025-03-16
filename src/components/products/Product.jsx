@@ -65,39 +65,41 @@ const Product = ({ product }) => {
           </Link>
 
           <div className="px-1 text-sm">
-            <div className="font-bold text-green-700">
-              <p>
-                {product.discount ? (
-                  <>
-                    <span className="text-gray-400 line-through mr-2">
-                      ${product.price}
-                    </span>
-                    <span>
-                      $
-                      {(product.price * (1 - product.discount / 100)).toFixed(
-                        2
-                      )}
-                    </span>
-                  </>
-                ) : (
-                  `$${product.price}`
-                )}
-              </p>
-              <p>
-                {product.discount
-                  ? (
-                      product.price *
-                      storedDollarValue *
-                      (1 - product.discount / 100)
-                    ).toLocaleString("en-US", {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 2,
-                    }) + " ل.س"
-                  : (product.price * storedDollarValue).toLocaleString(
-                      "en-US"
-                    ) + " ل.س"}
-              </p>
-            </div>
+            {product.price && (
+              <div className="font-bold text-green-700">
+                <p>
+                  {product.discount ? (
+                    <>
+                      <span className="text-gray-400 line-through mr-2">
+                        ${product.price}
+                      </span>
+                      <span>
+                        $
+                        {(product.price * (1 - product.discount / 100)).toFixed(
+                          2
+                        )}
+                      </span>
+                    </>
+                  ) : (
+                    `$${product.price}`
+                  )}
+                </p>
+                <p>
+                  {product.discount
+                    ? (
+                        product.price *
+                        storedDollarValue *
+                        (1 - product.discount / 100)
+                      ).toLocaleString("en-US", {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                      }) + " ل.س"
+                    : (product.price * storedDollarValue).toLocaleString(
+                        "en-US"
+                      ) + " ل.س"}
+                </p>
+              </div>
+            )}
 
             {token && (
               <div className="flex justify-center items-center gap-5 mt-5">

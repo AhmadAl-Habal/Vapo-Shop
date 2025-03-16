@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "../../api/axios";
-import { useNavigate, Link } from "react-router-dom";
+
+import { addCategory, getSubCategories } from "../../api/axios";
+import { useNavigate } from "react-router-dom";
 
 import Unauthorized from "../../components/Unauthorized";
 import SubCategoriesList from "../../components/SubCategoriesList";
@@ -9,7 +10,6 @@ import BackButton from "../../components/BackButton";
 
 const AddNewCategoryPage = () => {
   const navigate = useNavigate();
-
   const {
     register,
     handleSubmit,
@@ -18,14 +18,11 @@ const AddNewCategoryPage = () => {
     formState: { errors },
   } = useForm();
 
-  const storedToken = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [popupView, setPopupView] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
-  const [loadingSubCategories, setLoadingSubCategories] = useState(false);
-  const [allSubCategories, setAllSubCategories] = useState([]);
+
   const [category, setCategory] = useState({});
   const [imagePreview, setImagePreview] = useState(null);
 
@@ -34,57 +31,16 @@ const AddNewCategoryPage = () => {
     setStatusMessage("");
 
     try {
-      const formData = new FormData();
-      formData.append("name", data.name);
-      if (data.description) {
-        formData.append("description", data.description);
-      }
-
-      if (data.image && data.image[0]) {
-        formData.append("image", data.image[0]);
-      }
-      const response = await axios.post("/category", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          auth: storedToken,
-        },
-      });
-
-      if (response.status === 201) {
-        setStatusMessage("Category created successfully!");
-        setCategory(response.data.data);
-        setRefresh((prev) => !prev);
-      } else {
-        setStatusMessage("Failed to create the Category.");
-      }
+      const newCategory = await addCategory(data, token);
+      setStatusMessage("Category created successfully!");
+      setCategory(newCategory);
+      setRefresh((prev) => !prev);
     } catch (error) {
-      console.error(
-        "Error creating Category:",
-        error.response?.data || error.message
-      );
       setStatusMessage("Error creating Category. Please try again.");
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    setLoadingSubCategories(true);
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("/sub_category");
-        if (response.status === 200) {
-          setAllSubCategories(response.data.data);
-        }
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoadingSubCategories(false);
-      }
-    };
-    fetchData();
-  }, [popupView]);
-
   const clearImage = () => {
     setValue("image", null);
     clearErrors("image");
@@ -93,15 +49,10 @@ const AddNewCategoryPage = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const imageURL = URL.createObjectURL(file);
-      setImagePreview(imageURL);
-    }
+    if (file) setImagePreview(URL.createObjectURL(file));
   };
 
-  if (!storedToken) {
-    return <Unauthorized />;
-  }
+  if (!token) return <Unauthorized />;
 
   return (
     <>
@@ -112,6 +63,7 @@ const AddNewCategoryPage = () => {
         <BackButton />
         <p className="text-center text-white font-bold">New Category Details</p>
 
+        {/* Name Field */}
         <div>
           <div className="flex items-center">
             <label className="text-sm text-white font-bold w-1/4">Name</label>
@@ -129,6 +81,7 @@ const AddNewCategoryPage = () => {
           )}
         </div>
 
+        {/* Description Field */}
         <div className="flex items-center">
           <label className="text-sm text-white font-bold w-1/4">
             Description
@@ -138,22 +91,21 @@ const AddNewCategoryPage = () => {
             {...register("description")}
             className="border rounded p-2 w-3/4 bg-red-100 resize-none overflow-hidden"
             rows={1}
-            onInput={(e) => {
+            onChange={(e) => {
               e.target.style.height = "auto";
               e.target.style.height = `${e.target.scrollHeight}px`;
             }}
           ></textarea>
         </div>
 
+        {/* Image Upload */}
         <div>
           <div className="flex items-center">
             <label className="text-white font-bold w-1/4">Image</label>
             <input
               type="file"
-              {...register("image", {
-                required: "Image is required",
-              })}
-              className="border rounded p-2 text-white text-sm inline-block w-3/4"
+              {...register("image", { required: "Image is required" })}
+              className="border rounded p-2 text-white text-sm w-3/4"
               onChange={handleFileChange}
             />
             <button
@@ -171,6 +123,7 @@ const AddNewCategoryPage = () => {
           )}
         </div>
 
+        {/* Image Preview */}
         {imagePreview && (
           <div className="mt-4 w-full flex justify-center">
             <img
@@ -181,6 +134,7 @@ const AddNewCategoryPage = () => {
           </div>
         )}
 
+        {/* Submit Button & Status Message */}
         <div className="flex mt-5">
           <button
             type="submit"

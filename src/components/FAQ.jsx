@@ -39,13 +39,16 @@ const FAQ = ({ question, answer, images, id }) => {
           className={`flex items-center justify-between cursor-pointer ${visible && "mb-10"}`}
           onClick={setExpand}
         >
-          <p className="w-100 text-2xl text-red-400 font-bold">{question}</p>
-          <div className="flex flex-row-reverse">
-            {visible ? (
-              <FaChevronUp className="text-gray-500 " />
-            ) : (
-              <FaChevronDown className="text-gray-500" />
-            )}
+          <p className="w-100 text-xl text-red-400 font-bold">{question}</p>
+          <div className="flex items-center flex-row-reverse">
+            <div>
+              {" "}
+              {visible ? (
+                <FaChevronUp className="text-gray-500 " />
+              ) : (
+                <FaChevronDown className="text-gray-500" />
+              )}
+            </div>
             {token && (
               <div className="flex justify-around items-center mx-2">
                 <MdDelete

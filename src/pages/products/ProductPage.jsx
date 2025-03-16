@@ -9,9 +9,9 @@ const ProductPage = () => {
   const { id } = useParams();
   const [productDetails, setProductDetails] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+
   const [mainImage, setMainImage] = useState("");
-  const storedDollarValue = sessionStorage.getItem("dollar_value");
+  const storedDollarValue = sessionStorage.getItem("dollar_value") || 1;
   const [popupView, setPopupView] = useState(false);
 
   const [whatsappAccounts, setWhatsappAccounts] = useState([]);
@@ -30,15 +30,15 @@ const ProductPage = () => {
       try {
         const response = await axios.get(`/item/${id}`);
 
-        if (response.status == "200") {
+        if (response.status === 200) {
           const data = response.data.data;
           setProductDetails(data);
           if (data.images?.length) {
             setMainImage(data.images[0]);
           }
-        } else setProductDetails(response.status);
+        }
       } catch (err) {
-        setError(err.message);
+        console.log(err.message);
       } finally {
         setLoading(false);
       }
@@ -96,50 +96,52 @@ const ProductPage = () => {
                     {productDetails.description}
                   </p>
                 )}
-                <div className="mb-6">
-                  <p className="font-bold text-lg mb-2">السعر:</p>
-                  {productDetails.discount ? (
-                    <div className="flex flex-col items-start gap-2">
-                      <span className="flex items-center text-gray-400 text-sm line-through">
-                        السعر الأصلي: ${productDetails.price}
-                      </span>
+                {productDetails.price && (
+                  <div className="mb-6">
+                    <p className="font-bold text-lg mb-2">السعر:</p>
+                    {productDetails.discount ? (
+                      <div className="flex flex-col items-start gap-2">
+                        <span className="flex items-center text-gray-400 text-sm line-through">
+                          السعر الأصلي: ${productDetails.price}
+                        </span>
 
-                      <span className="flex items-center text-green-400 text-xl font-bold">
-                        السعر بعد الخصم: $
-                        {(
-                          productDetails.price *
-                          (1 - productDetails.discount / 100)
-                        ).toFixed(2)}
-                      </span>
+                        <span className="flex items-center text-green-400 text-xl font-bold">
+                          السعر بعد الخصم: $
+                          {(
+                            productDetails.price *
+                            (1 - productDetails.discount / 100)
+                          ).toFixed(2)}
+                        </span>
 
-                      <span className="text-sm text-gray-300">
-                        ما يعادل:{" "}
-                        {(
-                          productDetails.price *
-                          storedDollarValue *
-                          (1 - productDetails.discount / 100)
-                        ).toLocaleString("en-US", {
-                          minimumFractionDigits: 0,
-                          maximumFractionDigits: 2,
-                        })}{" "}
-                        ل.س
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-start gap-2">
-                      <span className="text-gray-300 text-xl font-bold">
-                        ${productDetails.price}
-                      </span>
-                      <span className="text-sm text-gray-300">
-                        ما يعادل:{" "}
-                        {(
-                          productDetails.price * storedDollarValue
-                        ).toLocaleString("en-US")}{" "}
-                        ل.س
-                      </span>
-                    </div>
-                  )}
-                </div>
+                        <span className="text-sm text-gray-300">
+                          ما يعادل:
+                          {(
+                            productDetails.price *
+                            storedDollarValue *
+                            (1 - productDetails.discount / 100)
+                          ).toLocaleString("en-US", {
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 2,
+                          })}
+                          ل.س
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-start gap-2">
+                        <span className="text-gray-300 text-xl font-bold">
+                          ${productDetails.price}
+                        </span>
+                        <span className="text-sm text-gray-300">
+                          ما يعادل:
+                          {(
+                            productDetails.price * storedDollarValue
+                          ).toLocaleString("en-US")}
+                          ل.س
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 <div className="mb-4">
                   <p className="font-bold text-lg mb-2">الصنف:</p>
@@ -147,7 +149,7 @@ const ProductPage = () => {
                     <span className="inline-block bg-red-600 text-gray-200 text-sm px-3 py-1 rounded-full">
                       {productDetails.main_category_id.name}
                     </span>
-                  )}{" "}
+                  )}
                   {productDetails.sub_category_id && (
                     <span className="inline-block bg-red-600 text-gray-200 text-sm px-3 py-1 rounded-full">
                       {productDetails.sub_category_id.name}

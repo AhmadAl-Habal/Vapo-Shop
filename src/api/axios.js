@@ -27,13 +27,96 @@ export const getCategories = async () => {
   }
 };
 
+export const getCategoryById = async (id) => {
+  try {
+    const response = await axiosInstance.get(`/category/${id}`);
+    if (response.status === 200) {
+      return response.data.data;
+    } else {
+      throw new Error("Failed to fetch category");
+    }
+  } catch (error) {
+    console.error("Error fetching category:", error);
+    throw error;
+  }
+};
+
+export const updateCategory = async (id, data, token) => {
+  try {
+    const formData = new FormData();
+    formData.append("name", data.name);
+    if (data.description) formData.append("description", data.description);
+    if (data.image?.[0]) formData.append("image", data.image[0]);
+
+    const response = await axiosInstance.put(`/category/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        auth: token,
+      },
+    });
+
+    if (response.status === 200) {
+      return response.data.data;
+    } else {
+      throw new Error("Failed to update category.");
+    }
+  } catch (error) {
+    console.error("Error updating category:", error);
+    throw error;
+  }
+};
+
+// SubCategory Requests
+
+export const getSubCategories = async () => {
+  try {
+    const response = await axiosInstance.get("/sub_category");
+    if (response.status === 200) {
+      return response.data.data;
+    } else {
+      throw new Error("Failed to fetch subcategories.");
+    }
+  } catch (error) {
+    console.error("Error fetching subcategories:", error);
+    throw error;
+  }
+};
+
+export const addCategory = async (data, token) => {
+  try {
+    const formData = new FormData();
+    formData.append("name", data.name);
+    if (data.description) formData.append("description", data.description);
+    if (data.image?.[0]) formData.append("image", data.image[0]);
+
+    const response = await axiosInstance.post("/category", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        auth: token,
+      },
+    });
+
+    if (response.status === 201) {
+      return response.data.data;
+    } else {
+      throw new Error("Failed to create the Category.");
+    }
+  } catch (error) {
+    console.error(
+      "Error creating Category:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
 // General Requests
 
-export const deleteItem = async (endpoint, id, storedToken) => {
+export const deleteItem = async (endpoint, id, token) => {
   try {
     const response = await axiosInstance.delete(`/${endpoint}/${id}`, {
       headers: {
-        auth: storedToken,
+        auth: token,
       },
     });
     if (response.status === 204) {
@@ -81,9 +164,92 @@ export const addWhatsappProfile = async (data) => {
       // }
     );
 
-    return response.data.data.social_media.whatsapp; // Return only necessary data
+    return response.data.data.social_media.whatsapp;
   } catch (error) {
     console.error("Error adding profile:", error);
-    throw error; // Throw error to handle it in the component
+    throw error;
+  }
+};
+
+// FAQ Requests
+
+export const getFAQs = async () => {
+  try {
+    const response = await axiosInstance.get("/faq");
+
+    if (response.status === 200) {
+      return response.data.data; // Return the FAQ list
+    } else {
+      throw new Error("Failed to fetch FAQs.");
+    }
+  } catch (error) {
+    console.error("Error fetching FAQs:", error.message);
+    throw error;
+  }
+};
+
+export const getFAQById = async (id) => {
+  try {
+    const response = await axiosInstance.get(`/faq/${id}`);
+
+    if (response.status === 200) {
+      return response.data.data;
+    } else {
+      throw new Error("Failed to fetch FAQ.");
+    }
+  } catch (error) {
+    console.error("Error fetching FAQ:", error.message);
+    throw error;
+  }
+};
+
+export const addFAQ = async (data, token) => {
+  try {
+    const formData = new FormData();
+    formData.append("question", data.question);
+    formData.append("answer", data.answer);
+
+    if (data.image?.length > 0) {
+      Array.from(data.image).forEach((file) => formData.append("image", file));
+    }
+
+    const response = await axiosInstance.post("/faq", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        auth: token,
+      },
+    });
+
+    if (response.status === 201) {
+      return response.data;
+    } else {
+      throw new Error("Failed to create the FAQ.");
+    }
+  } catch (error) {
+    console.error("Error creating FAQ:", error.message);
+    throw error;
+  }
+};
+
+export const updateFAQ = async (id, data, token) => {
+  try {
+    const formData = new FormData();
+    formData.append("question", data.question);
+    formData.append("answer", data.answer);
+
+    const response = await axiosInstance.put(`/faq/${id}`, formData, {
+      headers: {
+        auth: token,
+      },
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error("Failed to update FAQ.");
+    }
+  } catch (error) {
+    console.error("Error updating FAQ:", error.response?.data || error.message);
+    throw error;
   }
 };

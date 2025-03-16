@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "../../api/axios";
 import { useNavigate, Link } from "react-router-dom";
-import hero from "../../assets/motion11.jpg";
-import Spinner from "../../components/Spinner";
-import BackButton from "../../components/BackButton";
 
+import BackButton from "../../components/BackButton";
+import Unauthorized from "../../components/Unauthorized";
 const AddNewProduct = () => {
   const navigate = useNavigate();
 
@@ -16,7 +15,7 @@ const AddNewProduct = () => {
     clearErrors,
     formState: { errors },
   } = useForm();
-  const storedToken = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -25,8 +24,6 @@ const AddNewProduct = () => {
   const [allCategories, setAllCategories] = useState([]);
   const [allSubCategories, setAllSubCategories] = useState([]);
   const [filteredSubCategories, setFilteredSubCategories] = useState([]);
-  const [popupView, setPopupView] = useState(false);
-  const [categoryName, setCategoryName] = useState("");
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -90,7 +87,6 @@ const AddNewProduct = () => {
         } else setAllCategories(response.status);
 
         const response2 = await axios.get("/sub_category");
-        console.log(response2.data.data);
 
         if (response2.status == "200") {
           setAllSubCategories(response2.data.data);
@@ -103,7 +99,7 @@ const AddNewProduct = () => {
       }
     };
     fetchData();
-  }, [popupView]);
+  }, []);
 
   const clearImage = () => {
     setValue("image", null);
@@ -122,27 +118,7 @@ const AddNewProduct = () => {
     setFilteredSubCategories(filtered);
   };
 
-  if (!storedToken) {
-    return (
-      <div className={"relative min-h-[100vh]"}>
-        <div
-          className="absolute inset-0 bg-fixed bg-cover bg-center z-0"
-          style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
-        ></div>
-
-        <div className="absolute inset-0 bg-black bg-opacity-80"></div>
-        <div className="relative  w-[80vw] mx-auto bg-transparent py-7">
-          <div dir="rtl">
-            <h1 className="text-2xl font-bold text-red-500 mb-5">وصول مرفوض</h1>
-            <p className="text-white mb-5">
-              يجب تسجيل الدخول للوصول الى هذه الصفحة
-            </p>
-          </div>
-          <BackButton />
-        </div>
-      </div>
-    );
-  }
+  if (!token) return <Unauthorized />;
 
   return (
     <>
@@ -184,22 +160,25 @@ const AddNewProduct = () => {
               }}
             ></textarea>
           </div>
-          <div className="flex">
+          <div className="flex items-center">
             <label className="text-white font-bold w-1/4 text-sm">Price</label>
             <input
               dir="rtl"
               type="number"
               step="0.01"
-              {...register("price", { required: "Price is required" })}
+              {...register(
+                "price"
+                // , { required: "Price is required" }
+              )}
               className="border rounded p-2 w-3/4 bg-red-100"
             />
-            {errors.price && (
+            {/* {errors.price && (
               <p className="mt-2 text-red-500 font-bold text-center">
                 {errors.price.message}
               </p>
-            )}
+            )} */}
           </div>
-          <div className="flex">
+          <div className="flex items-center">
             <label className="text-white font-bold w-1/4 text-sm">
               Discount
             </label>
@@ -207,7 +186,15 @@ const AddNewProduct = () => {
               dir="rtl"
               type="number"
               step="0.01"
-              {...register("discount")}
+              min="0"
+              max="100"
+              {...register("discount", {
+                min: { value: 0, message: "Discount cannot be less than 0" },
+                max: {
+                  value: 100,
+                  message: "Discount cannot be more than 100",
+                },
+              })}
               className="border rounded p-2 w-3/4 bg-red-100"
             />
           </div>
@@ -216,7 +203,7 @@ const AddNewProduct = () => {
               <p className="text-gray-600">Loading...</p>
             ) : (
               <>
-                <div className="flex mb-4">
+                <div className="flex items-center mb-4">
                   <label className="text-white font-bold w-1/4 text-sm">
                     Category
                   </label>
@@ -302,25 +289,27 @@ const AddNewProduct = () => {
             )}
           </div>
           <div>
-            <div className="flex items-center">
-              <label className="text-white font-bold w-1/4 text-sm">
-                Images
-              </label>
-              <input
-                type="file"
-                {...register("image", {
-                  required: "At least one image is required",
-                })}
-                multiple
-                className="border rounded p-2 text-white text-sm inline-block w-3/4"
-              />
-              <button
-                type="button"
-                className="absolute right-1 bg-red-400 text-black p-1 rounded-full text-xs"
-                onClick={clearImage}
-              >
-                Clear
-              </button>
+            <div>
+              <div className="flex items-center">
+                <label className="text-white font-bold w-1/4 text-sm">
+                  Images
+                </label>
+                <input
+                  type="file"
+                  {...register("image", {
+                    required: "At least one image is required",
+                  })}
+                  multiple
+                  className="border rounded p-2 text-white text-sm inline-block w-3/4"
+                />
+                <button
+                  type="button"
+                  className="absolute right-1 bg-red-400 text-black p-1 rounded-full text-xs"
+                  onClick={clearImage}
+                >
+                  Clear
+                </button>
+              </div>
               {errors.image && (
                 <p className="mt-2 text-red-500 font-bold text-center">
                   {errors.image.message}

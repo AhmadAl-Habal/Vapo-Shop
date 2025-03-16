@@ -1,7 +1,7 @@
 import React from "react";
 import { FaExclamationTriangle } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import hero from "../assets/motion11.jpg";
+
 const NotFoundPage = () => {
   return (
     <div className={"relative min-h-[100vh]"}>
