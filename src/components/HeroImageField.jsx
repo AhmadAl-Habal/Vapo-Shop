@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "../api/axios";
+
+import { deleteHeroImage, editHeroImages } from "../api/axios";
 import { FaChevronDown, FaChevronUp, FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
@@ -12,7 +13,7 @@ const HeroImageField = ({ inputDetails, endpoint, name }) => {
     (inputDetails?.hero || []).map(() => Date.now())
   );
   const [visible, setVisible] = useState(false);
-
+  const token = localStorage.getItem("token");
   useEffect(() => {
     if (inputDetails?.hero) {
       setImagePreviews([...inputDetails.hero]);
@@ -47,7 +48,7 @@ const HeroImageField = ({ inputDetails, endpoint, name }) => {
 
   const deleteImage = async (index) => {
     try {
-      await axios.delete(`/settings/${endpoint}/${index}`);
+      await deleteHeroImage(index, token);
       setImagePreviews((prev) => prev.filter((_, i) => i !== index));
       setPopupView(false);
     } catch (error) {
@@ -57,25 +58,13 @@ const HeroImageField = ({ inputDetails, endpoint, name }) => {
   };
 
   const editImage = async (index) => {
-    const updatedFile = imagePreviews[index];
-    if (!(updatedFile instanceof File)) {
-      alert("Please select a new file to update.");
-      return;
-    }
-
     try {
-      const formData = new FormData();
-      formData.append("image", updatedFile);
+      const updatedFile = imagePreviews[index];
 
-      await axios.put(`/settings/${endpoint}/${index}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await editHeroImages(endpoint, index, updatedFile, token);
 
       alert(`Image ${index + 1} updated successfully.`);
     } catch (error) {
-      console.error("Error updating image:", error);
       alert("Failed to update image.");
     }
   };
@@ -99,7 +88,7 @@ const HeroImageField = ({ inputDetails, endpoint, name }) => {
         {/* Expand/Collapse Animation */}
         <div
           className={`transition-[max-height] duration-500 ease-in-out overflow-hidden ${
-            visible ? "max-h-[5000px] opacity-100" : "max-h-0 opacity-0"
+            visible ? "max-h-[20000px] opacity-100" : "max-h-0 opacity-0"
           }`}
         >
           {imagePreviews.length === 0 ? (

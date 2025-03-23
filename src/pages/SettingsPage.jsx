@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "../api/axios";
-import { useNavigate, Link } from "react-router-dom";
-import hero from "../assets/motion11.jpg";
-import Spinner from "../components/Spinner";
+import { updateSocialMediaLink } from "../api/axios";
+
 import Whatsapp from "../components/social links/Whatsapp";
 import HeroImageField from "../components/HeroImageField";
 import HeroBulkImageUploadForm from "../components/HeroBulkImageUploadForm";
 import BackButton from "../components/BackButton";
 const SettingsPage = () => {
-  const navigate = useNavigate();
-
   const {
     register,
     handleSubmit,
@@ -18,6 +15,7 @@ const SettingsPage = () => {
     clearErrors,
     formState: { errors },
   } = useForm();
+  const token = localStorage.getItem("token");
   const [dollarValue, setDollarValue] = useState("");
   const [settings, setSettings] = useState({});
 
@@ -60,17 +58,11 @@ const SettingsPage = () => {
           );
         } else setSettings(response.status);
       } catch (err) {
-        // setError(err.message);
         console.log("error");
       }
     };
     fetchData();
   }, [refresh]);
-  const clearImage = () => {
-    setValue("image", null);
-    clearErrors("image");
-    setImagePreview(null);
-  };
 
   const ChangeDollarValue = async () => {
     setStatusMessage("");
@@ -101,146 +93,8 @@ const SettingsPage = () => {
       setLoading(false);
     }
   };
-  const ChangeFacebookLink = async () => {
-    setStatusMessage("");
-
-    setLoading(true);
-
-    try {
-      const response = await axios.put(
-        "/settings/facebook",
-        { facebook: facebookLink },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.status == 200) {
-        setStatusMessage("Facebook link changed successfully!");
-      } else {
-        setStatusMessage("Failed to change Facebook link ");
-      }
-    } catch (error) {
-      console.error("Change Failed", error.response.data);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const ChangeTelegramLink = async () => {
-    setStatusMessage("");
-
-    setLoading(true);
-
-    try {
-      const response = await axios.put(
-        "/settings/telegram",
-        { telegram: telegramLink },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.status == 200) {
-        setStatusMessage("Telegram link changed successfully!");
-        // setRefresh(!refresh)
-      } else {
-        setStatusMessage("Failed to change Telegram link ");
-      }
-    } catch (error) {
-      console.error("Change Failed", error.response.data);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const ChangeWhatsAppChannelLink = async () => {
-    setStatusMessage("");
-
-    setLoading(true);
-
-    try {
-      const response = await axios.put(
-        "/settings/whatsapp_channel",
-        { whatsapp_channel: whatsappChannelLink },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.status == 200) {
-        setStatusMessage("Whatsapp Channel link changed successfully!");
-        // setRefresh(!refresh)
-      } else {
-        setStatusMessage("Failed to change Whatsapp Channel link ");
-      }
-    } catch (error) {
-      console.error(
-        "Failed to change Whatsapp Channel link",
-        error.response.data
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const ChangeInstagramLink = async () => {
-    setStatusMessage("");
-
-    setLoading(true);
-
-    try {
-      const response = await axios.put(
-        "/settings/instagram",
-        { instagram: instagramLink },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.status == 200) {
-        setStatusMessage("Instagram link changed successfully!");
-      } else {
-        setStatusMessage("Failed to change Instagram link ");
-      }
-    } catch (error) {
-      console.error("Change Failed", error.response.data);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const ChangeYoutubeLink = async () => {
-    setStatusMessage("");
-
-    setLoading(true);
-
-    try {
-      const response = await axios.put(
-        "/settings/youtube",
-        { youtube: youtubeLink },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.status == 200) {
-        setStatusMessage("Youtube link changed successfully!");
-      } else {
-        setStatusMessage("Failed to change Youtube link ");
-      }
-    } catch (error) {
-      console.error("Change Failed", error.response.data);
-    } finally {
-      setLoading(false);
-    }
+  const handleChangeLink = (platform, link) => {
+    updateSocialMediaLink(platform, link, setLoading, setStatusMessage);
   };
 
   const changeAboutUs = async () => {
@@ -272,49 +126,7 @@ const SettingsPage = () => {
     }
   };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setImagePreview(URL.createObjectURL(file));
-    }
-    console.log("changed");
-  };
-  const deleteCategory = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.delete(
-        `/category/${deletedCategoryId}`,
-
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-    } catch (error) {
-      console.error("Change Failed", error.response.data);
-    } finally {
-      setLoading(false);
-    }
-
-    setPopupView(false);
-  };
-
-  if (!storedToken) {
-    return (
-      <div className={"relative min-h-[100vh] h-auto"}>
-        <div className="relative  w-[80vw] mx-auto bg-transparent py-7">
-          <div dir="rtl">
-            <h1 className="text-2xl font-bold text-red-500 mb-5">وصول مرفوض</h1>
-            <p className="text-white mb-5">
-              يجب تسجيل الدخول للوصول الى هذه الصفحة
-            </p>
-          </div>
-          <BackButton />
-        </div>
-      </div>
-    );
-  }
+  if (!token) return <Unauthorized />;
   return (
     <>
       <div
@@ -324,13 +136,6 @@ const SettingsPage = () => {
             : "relative min-h-[100vh]"
         }
       >
-        <div
-          className="absolute inset-0 bg-fixed bg-cover bg-center z-0"
-          style={{ backgroundImage: `url(${hero})`, opacity: 0.7 }}
-        ></div>
-
-        <div className="absolute inset-0 bg-black bg-opacity-80"></div>
-
         <div className="relative space-y-4 w-[90vw] mx-auto bg-transparent py-7">
           <BackButton />
           <div>
@@ -396,7 +201,7 @@ const SettingsPage = () => {
                 className={`text-white ml-2 p-1 rounded ${
                   loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
                 }`}
-                onClick={ChangeFacebookLink}
+                onClick={() => handleChangeLink("facebook", facebookLink)}
                 disabled={loading}
               >
                 {loading ? "loading" : "Save"}
@@ -417,7 +222,7 @@ const SettingsPage = () => {
                 className={`text-white ml-2 p-1 rounded ${
                   loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
                 }`}
-                onClick={ChangeTelegramLink}
+                onClick={() => handleChangeLink("telegram", telegramLink)}
                 disabled={loading}
               >
                 {loading ? "loading" : "Save"}
@@ -438,7 +243,9 @@ const SettingsPage = () => {
                 className={`text-white ml-2 p-1 rounded ${
                   loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
                 }`}
-                onClick={ChangeWhatsAppChannelLink}
+                onClick={() =>
+                  handleChangeLink("whatsapp_channel", whatsappChannelLink)
+                }
                 disabled={loading}
               >
                 {loading ? "loading" : "Save"}
@@ -459,7 +266,7 @@ const SettingsPage = () => {
                 className={`text-white ml-2 p-1 rounded ${
                   loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
                 }`}
-                onClick={ChangeInstagramLink}
+                onClick={() => handleChangeLink("instagram", instagramLink)}
                 disabled={loading}
               >
                 {loading ? "loading" : "Save"}
@@ -480,7 +287,7 @@ const SettingsPage = () => {
                 className={`text-white ml-2 p-1 rounded ${
                   loading ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
                 }`}
-                onClick={ChangeYoutubeLink}
+                onClick={() => handleChangeLink("youtube", youtubeLink)}
                 disabled={loading}
               >
                 {loading ? "loading" : "Save"}

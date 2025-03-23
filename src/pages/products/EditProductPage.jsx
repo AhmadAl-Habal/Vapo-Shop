@@ -6,12 +6,16 @@ import Unauthorized from "../../components/Unauthorized";
 import ImageField from "../../components/ImageField";
 import BulkImageUploadForm from "../../components/BulkImageUploadForm";
 import BackButton from "../../components/BackButton";
+import { getCategories, getProductDetails } from "../../api/axios";
+import { Switch } from "@radix-ui/react-switch";
 const EditProductPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
     reset,
   } = useForm();
@@ -21,29 +25,25 @@ const EditProductPage = () => {
   const [error, setError] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [loadingCategories, setLoadingCategories] = useState(false);
-  const [popupView, setPopupView] = useState(false);
+
   const [allCategories, setAllCategories] = useState([]);
-  const [categoryName, setCategoryName] = useState("");
-  const [deletedCategoryId, setDeletedCategoryId] = useState("");
+
   const [productDetails, setProductDetails] = useState({});
   const [refresh, setRefresh] = useState(false);
   const [allSubCategories, setAllSubCategories] = useState([]);
   const [filteredSubCategories, setFilteredSubCategories] = useState([]);
 
   useEffect(() => {
-    console.log("Refresh triggered:", refresh);
-  }, [refresh]);
-  useEffect(() => {
     setLoadingCategories(true);
+
     const fetchData = async () => {
       try {
-        const response = await axios.get("/category");
-        if (response.status == "200") {
-          setAllCategories(response.data.data);
-        } else setAllCategories(response.status);
+        const categories = await getCategories();
+        setAllCategories(categories);
+
         const response2 = await axios.get("/sub_category");
 
-        if (response2.status == "200") {
+        if (response2.status === 200) {
           setAllSubCategories(response2.data.data);
           setFilteredSubCategories(response2.data.data);
         }
@@ -53,48 +53,39 @@ const EditProductPage = () => {
         setLoadingCategories(false);
       }
     };
+
     fetchData();
-  }, [popupView]);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`/item/${id}`);
-        if (response.status === 200) {
-          const productData = response.data.data;
-          setProductDetails(productData);
+        const productData = await getProductDetails(id);
+        setProductDetails(productData);
 
-          reset({
-            name: productData.name || "",
-            price: productData.price || "",
-            discount: productData.discount || "",
-            description: productData.description || "",
-            main_category_id: productData.main_category_id?._id || "",
-            sub_category_id: productData.sub_category_id?._id || "",
-          });
+        reset({
+          name: productData.name || "",
+          price: productData.price || "",
+          discount: productData.discount || "",
+          description: productData.description || "",
+          main_category_id: productData.main_category_id?._id || "",
+          sub_category_id: productData.sub_category_id?._id || "",
+          is_hidden: productData.is_hidden || false,
+        });
 
-          const filtered = allSubCategories.filter(
-            (subCategory) =>
-              subCategory.main_category_id &&
-              subCategory.main_category_id._id ===
-                productData.main_category_id?._id
-          );
+        const filtered = allSubCategories.filter(
+          (subCategory) =>
+            subCategory.main_category_id &&
+            subCategory.main_category_id._id ===
+              productData.main_category_id?._id
+        );
 
-          setFilteredSubCategories(filtered);
+        setFilteredSubCategories(filtered);
 
-          // If product has a subcategory, select it; otherwise, clear the selection
-          if (productData.sub_category_id?._id) {
-            reset((prevData) => ({
-              ...prevData,
-              sub_category_id: productData.sub_category_id._id,
-            }));
-          } else {
-            reset((prevData) => ({
-              ...prevData,
-              sub_category_id: "",
-            }));
-          }
-        }
+        reset((prevData) => ({
+          ...prevData,
+          sub_category_id: productData.sub_category_id?._id || "",
+        }));
       } catch (err) {
         setError(err.message);
       } finally {
@@ -103,7 +94,7 @@ const EditProductPage = () => {
     };
 
     fetchData();
-  }, [refresh, allSubCategories]);
+  }, [id, reset, allSubCategories, setFilteredSubCategories]);
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -113,24 +104,29 @@ const EditProductPage = () => {
       const formData = new FormData();
       formData.append("name", data.name);
 
-      formData.append("price", data.price);
+      if (data.price) {
+        formData.append("price", data.price);
+      }
+
       if (data.discount) {
         formData.append("discount", data.discount);
       }
       if (data.description) {
         formData.append("description", data.description);
       }
-      formData.append("main_category_id", data.main_category_id);
-      // if (data.image.length >= 1) {
-      //   Array.from(data.image).forEach((file) => {
-      //     formData.append("image", file);
-      //   });
-      // }
 
+      if (data.main_category_id) {
+        formData.append("main_category_id", data.main_category_id);
+      }
       if (data.sub_category_id) {
         formData.append("sub_category_id", data.sub_category_id);
       }
-      const response = await axios.put(`/item/${id}`, formData, {});
+      formData.append("is_hidden", data.is_hidden);
+      const response = await axios.put(`/item/${id}`, formData, {
+        headers: {
+          auth: token,
+        },
+      });
 
       if (response.status === 200) {
         setStatusMessage("Product edited successfully!");
@@ -139,10 +135,10 @@ const EditProductPage = () => {
       }
     } catch (error) {
       console.error(
-        "Error creating product:",
+        "Error Editing product:",
         error.response?.data || error.message
       );
-      setStatusMessage("Error creating product. Please try again.");
+      setStatusMessage("Error Editing product. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -152,7 +148,6 @@ const EditProductPage = () => {
     const selectedCategoryId = e.target.value;
     setSelectedCategoryId(selectedCategoryId);
 
-    // Filter the subcategories based on the selected category
     const filtered = allSubCategories.filter(
       (subCategory) =>
         subCategory.main_category_id &&
@@ -160,7 +155,12 @@ const EditProductPage = () => {
     );
 
     setFilteredSubCategories(filtered);
-    reset({ ...productDetails, sub_category_id: "" }); // Reset subcategory selection
+
+    reset((prevValues) => ({
+      ...prevValues,
+      main_category_id: selectedCategoryId,
+      sub_category_id: "",
+    }));
   };
 
   useEffect(() => {
@@ -177,13 +177,7 @@ const EditProductPage = () => {
   if (!token) return <Unauthorized />;
   return (
     <>
-      <div
-        className={
-          popupView
-            ? "relative min-h-[100vh] bg-black bg-opacity-50 opacity-50"
-            : "relative min-h-[100vh]"
-        }
-      >
+      <div className={"relative min-h-[100vh]"}>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="relative space-y-4 w-[90vw] mx-auto bg-transparent py-7"
@@ -192,23 +186,32 @@ const EditProductPage = () => {
           <p className="text-center text-white font-bold">
             New Product Details
           </p>
-          <div className="flex items-center">
-            <label className="text-white font-bold w-1/4 text-sm">Name</label>
-            <textarea
-              {...register("name", { required: "Name is required" })}
-              className="border rounded p-2 w-3/4 bg-red-100 resize-none overflow-hidden"
-              rows={1}
-              onInput={(e) => {
-                e.target.style.height = "auto";
-                e.target.style.height = `${e.target.scrollHeight}px`;
-              }}
-            ></textarea>
+          <div>
+            <div className="flex items-center">
+              <label className="text-white font-bold w-1/4 text-sm">Name</label>
+              <textarea
+                dir="rtl"
+                {...register("name", { required: "Name is required" })}
+                className="border rounded p-2 w-3/4 bg-red-100 resize-none overflow-hidden"
+                rows={1}
+                onInput={(e) => {
+                  e.target.style.height = "auto";
+                  e.target.style.height = `${e.target.scrollHeight}px`;
+                }}
+              ></textarea>
+            </div>{" "}
+            {errors.name && (
+              <p className="mt-2 text-red-500 font-bold text-center">
+                {errors.name.message}
+              </p>
+            )}
           </div>
           <div className="flex items-center">
             <label className="text-white font-bold w-1/4 text-sm">
               Description
             </label>
             <textarea
+              dir="rtl"
               {...register("description")}
               className="border rounded p-2 w-3/4 bg-red-100 resize-none overflow-hidden"
               rows={1}
@@ -217,25 +220,15 @@ const EditProductPage = () => {
                 e.target.style.height = `${e.target.scrollHeight}px`;
               }}
             ></textarea>
-            {errors.name && (
-              <p className="mt-2 text-red-500 font-bold text-center">
-                {errors.name.description}
-              </p>
-            )}
           </div>
           <div className="flex items-center">
             <label className="text-white font-bold w-1/4 text-sm">Price</label>
             <input
               type="number"
               step="0.01"
-              {...register("price", { required: "Price is required" })}
+              {...register("price")}
               className="border rounded p-2 w-3/4 bg-red-100"
             />
-            {errors.price && (
-              <p className="mt-2 text-red-500 font-bold text-center">
-                {errors.price.message}
-              </p>
-            )}
           </div>
           <div className="flex items-center">
             <label className="text-white font-bold w-1/4 text-sm">
@@ -244,10 +237,7 @@ const EditProductPage = () => {
             <input
               type="number"
               step="0.01"
-              {...register(
-                "discount"
-                // , { required: "discount is required" }
-              )}
+              {...register("discount")}
               className="border rounded p-2 w-3/4 bg-red-100"
             />
           </div>
@@ -339,7 +329,28 @@ const EditProductPage = () => {
               </>
             )}
           </div>
-
+          <div>
+            <div className="flex items-center my-5">
+              <label className="text-white font-bold w-1/4 text-sm">
+                Hide Product
+              </label>
+              <div className="w-3/4 flex items-center">
+                <Switch
+                  checked={watch("is_hidden", false)}
+                  onCheckedChange={(value) => setValue("is_hidden", value)}
+                  className={`w-12 h-6 flex items-center bg-gray-300 rounded-full p-1 transition duration-300 ${
+                    watch("is_hidden") ? "bg-green-500" : "bg-red-500"
+                  }`}
+                >
+                  <div
+                    className={`w-5 h-5 bg-white rounded-full shadow-md transform transition ${
+                      watch("is_hidden") ? "translate-x-6" : "translate-x-0"
+                    }`}
+                  />
+                </Switch>
+              </div>
+            </div>
+          </div>
           <div>
             <div className="flex mt-5">
               <button
@@ -356,7 +367,7 @@ const EditProductPage = () => {
           </div>
         </form>
 
-        <div className="relative w-[80vw] mx-auto py-5">
+        <div className="relative w-[90vw] mx-auto py-5">
           {!loading && productDetails?.images && (
             <BulkImageUploadForm
               inputDetails={productDetails}

@@ -13,6 +13,7 @@
     "@mantine/carousel": "^7.16.1",
     "@mantine/core": "^7.16.1",
     "@mantine/hooks": "^7.16.1",
+    "@radix-ui/react-switch": "^1.1.3",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
     "embla-carousel-autoplay": "^8.5.2",

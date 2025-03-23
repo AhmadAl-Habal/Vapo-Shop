@@ -9,7 +9,7 @@ const ProductPage = () => {
   const { id } = useParams();
   const [productDetails, setProductDetails] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const token = localStorage.getItem("token");
   const [mainImage, setMainImage] = useState("");
   const storedDollarValue = sessionStorage.getItem("dollar_value") || 1;
   const [popupView, setPopupView] = useState(false);
@@ -156,7 +156,17 @@ const ProductPage = () => {
                     </span>
                   )}
                 </div>
-
+                {token && (
+                  <div dir="rtl" className="my-2">
+                    {" "}
+                    <Link
+                      className=" p-1 text-center bg-gray-500 hover:bg-gray-600 transition  text-white font-bold py-2 rounded-lg cursor-pointer"
+                      to={`/edit-product/${productDetails._id}`}
+                    >
+                      تعديل المنتج
+                    </Link>
+                  </div>
+                )}
                 <a
                   onClick={() => setPopupView(true)}
                   className="block text-center bg-red-500 hover:bg-red-600 transition duration-200 text-white font-bold py-2 rounded-lg cursor-pointer"
@@ -166,7 +176,7 @@ const ProductPage = () => {
               </div>
             </>
           ) : (
-            <p>No product details available.</p>
+            <p>لا يوجد معلومات للمنتج</p>
           )}
         </div>
       </div>
@@ -212,7 +222,7 @@ const ProductPage = () => {
                   </ul>
                 </>
               ) : (
-                <p>No accounts to show</p>
+                <p>لا يوجد معلومات لعرضها</p>
               )}
             </div>
           </div>

@@ -4,7 +4,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import axios from "../api/axios";
+import { getSettingsRequest } from "../api/axios";
 import WarnningMessage from "../components/WarnningMessage";
 import hero from "../assets/motion11.jpg";
 
@@ -12,22 +12,20 @@ const MainLayout = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const getSettings = async () => {
       try {
-        const response = await axios.get("/settings");
+        const settingsData = await getSettingsRequest();
 
-        if (response.status === 200) {
-          const settingsData = response.data.data[0];
-
+        if (settingsData) {
           sessionStorage.setItem("dollar_value", settingsData.dollar_price);
           sessionStorage.setItem("settings", JSON.stringify(settingsData));
         }
-      } catch (err) {
-        console.error("Error fetching settings:", err.message);
+      } catch (error) {
+        console.error("Error fetching settings:", error.message);
       }
     };
 
-    fetchData();
+    getSettings();
   }, []);
 
   return (

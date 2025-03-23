@@ -26,7 +26,9 @@ const ProductsPage = () => {
         const [categoryRes, subCategoryRes, itemsRes] = await Promise.all([
           axios.get(`/category/${id}`),
           axios.get("/sub_category"),
-          axios.get("/item", { params: { main_category_id: id } }),
+          axios.get("/item", {
+            params: { main_category_id: id, include_hidden: true },
+          }),
         ]);
 
         const categoryData = categoryRes.data.data;
@@ -52,7 +54,7 @@ const ProductsPage = () => {
   }, [id]);
 
   useEffect(() => {
-    if (!offersCategory) return; // Avoid unnecessary API calls
+    if (!offersCategory) return;
 
     setLoading(true);
     axios

@@ -1,20 +1,20 @@
 import React, { useState } from "react";
-import axios from "../api/axios";
+import { uploadImages } from "../api/axios";
 const ImageUploadForm = ({ inputDetails, endpoint, refresh, setRefresh }) => {
   const [images, setImages] = useState([]);
-  const [key, setKey] = useState(Date.now()); // Unique key for file input
+  const [key, setKey] = useState(Date.now());
   const [statusMessage, setStatusMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleFileChange = (event) => {
     const selectedFiles = Array.from(event.target.files);
     setImages(selectedFiles);
-    setStatusMessage(""); // Clear any existing messages
+    setStatusMessage("");
   };
-
+  const token = localStorage.getItem("token");
   const clearImages = () => {
     setImages([]);
-    setKey(Date.now()); // Update the key to force re-render of the input field
+    setKey(Date.now());
   };
 
   const handleSubmit = async (event) => {
@@ -28,22 +28,14 @@ const ImageUploadForm = ({ inputDetails, endpoint, refresh, setRefresh }) => {
     setLoading(true);
     setStatusMessage("");
 
-    const formData = new FormData();
-    images.forEach((image) => {
-      if (image) {
-        formData.append("image", image);
-      }
-    });
+    const token = localStorage.getItem("token");
 
     try {
-      const response = await axios.post(
-        `/${endpoint}/${inputDetails._id}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
+      const response = await uploadImages(
+        endpoint,
+        inputDetails._id,
+        images,
+        token
       );
 
       if (response.status === 201) {
@@ -60,7 +52,6 @@ const ImageUploadForm = ({ inputDetails, endpoint, refresh, setRefresh }) => {
       setLoading(false);
     }
   };
-
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="flex items-center">

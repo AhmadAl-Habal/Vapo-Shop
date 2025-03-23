@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "../api/axios";
+import { deleteImageRequest, editImageRequest } from "../api/axios";
 import { FaChevronDown, FaChevronUp, FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
@@ -11,14 +11,13 @@ const ImageField = ({ inputDetails, endpoint, name }) => {
   );
   const [inputKeys, setInputKeys] = useState(
     (inputDetails?.images || []).map(() => Date.now())
-  ); // Keys for resetting inputs
+  );
   const [visible, setVisible] = useState(false);
-
-  // Sync imagePreviews with inputDetails.images when inputDetails changes
+  const token = localStorage.getItem("token");
   useEffect(() => {
     if (inputDetails?.images) {
       setImagePreviews([...inputDetails.images]);
-      setInputKeys(inputDetails.images.map(() => Date.now())); // Reset keys
+      setInputKeys(inputDetails.images.map(() => Date.now()));
     }
   }, [inputDetails]);
 
@@ -27,7 +26,7 @@ const ImageField = ({ inputDetails, endpoint, name }) => {
     if (file) {
       setImagePreviews((prev) => {
         const updated = [...prev];
-        updated[index] = file; // Store the file object
+        updated[index] = file;
         return updated;
       });
     }
@@ -36,52 +35,55 @@ const ImageField = ({ inputDetails, endpoint, name }) => {
   const clearImage = (index) => {
     setImagePreviews((prev) => {
       const updated = [...prev];
-      updated[index] = inputDetails?.images?.[index] || null; // Reset to original image or null
+      updated[index] = inputDetails?.images?.[index] || null;
       return updated;
     });
 
     setInputKeys((prev) => {
       const updated = [...prev];
-      updated[index] = Date.now(); // Assign a new unique key to force re-render
+      updated[index] = Date.now();
       return updated;
     });
   };
 
   const deleteImage = async (index) => {
     try {
-      await axios.delete(`/${endpoint}/${inputDetails._id}/${index}`);
+      await deleteImageRequest(endpoint, inputDetails._id, index, token);
+
       setImagePreviews((prev) => {
         const updated = [...prev];
-        updated.splice(index, 1); // Remove the deleted image
+        updated.splice(index, 1);
         return updated;
       });
+
+      alert(`Image ${index + 1} deleted successfully`);
     } catch (error) {
-      console.error("Error deleting image:", error);
-      alert("Failed to delete image.");
+      console.error("Delete failed:", error.response?.data || error.message);
+      alert(`Failed to delete image ${index + 1} . Please try again.`);
     }
   };
 
   const editImage = async (index) => {
     const updatedFile = imagePreviews[index];
+
     if (!(updatedFile instanceof File)) {
       alert("Please select a new file to update.");
       return;
     }
 
     try {
-      const formData = new FormData();
-      formData.append("image", updatedFile);
-
-      await axios.put(`/${endpoint}/${inputDetails._id}/${index}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await editImageRequest(
+        endpoint,
+        inputDetails._id,
+        index,
+        updatedFile,
+        token
+      );
 
       alert(`Image ${index + 1} updated successfully.`);
     } catch (error) {
-      console.error("Error updating image:", error);
-      alert("Failed to update image.");
+      console.error("Delete failed:", error.response?.data || error.message);
+      alert(`Failed to edit image ${index + 1} . Please try again.`);
     }
   };
 

@@ -52,7 +52,7 @@ const Category = ({ category, removeCategory }) => {
           className="w-full h-full flex flex-col items-center"
         >
           <img
-            className="mb-3 rounded-full w-full h-full max-w-[140px] max-h-[140px]"
+            className="mb-3 rounded-full w-full h-full max-w-[140px] h-[140px]"
             src={category.image}
             alt=""
           />

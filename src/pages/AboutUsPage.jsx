@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import axios from "../api/axios";
+// import axios from "../api/axios";
 import Spinner from "../components/Spinner";
 
 import BackButton from "../components/BackButton";
@@ -13,26 +13,27 @@ const AboutUsPage = () => {
   const [aboutUs, setAboutUs] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get("/settings");
+    // const fetchData = async () => {
+    //   setLoading(true);
+    //   try {
+    //     const response = await axios.get("/settings");
 
-        if (response.status === 200) {
-          const settingsData = response.data.data[0];
+    //     if (response.status === 200) {
+    //       const settingsData = response.data.data[0];
 
-          setAboutUs(settingsData.about_us);
-          sessionStorage.setItem("dollar_value", settingsData.dollar_price);
-        }
-      } catch (err) {
-        console.error("Error fetching settings:", err.message);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+    //       setAboutUs(settingsData.about_us);
+    //       sessionStorage.setItem("dollar_value", settingsData.dollar_price);
+    //     }
+    //   } catch (err) {
+    //     console.error("Error fetching settings:", err.message);
+    //     setError(err.message);
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
 
-    fetchData();
+    // fetchData();
+    setAboutUs(JSON.parse(sessionStorage.getItem("settings")).about_us);
   }, []);
   return (
     <>

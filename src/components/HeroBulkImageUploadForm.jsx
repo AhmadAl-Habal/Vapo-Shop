@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "../api/axios";
+import { uploadHeroImages } from "../api/axios";
 const HeroBulkImageUploadForm = ({
   inputDetails,
   endpoint,
@@ -10,7 +10,7 @@ const HeroBulkImageUploadForm = ({
   const [key, setKey] = useState(Date.now()); // Unique key for file input
   const [statusMessage, setStatusMessage] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const token = localStorage.getItem("token");
   const handleFileChange = (event) => {
     const selectedFiles = Array.from(event.target.files);
     setImages(selectedFiles);
@@ -33,19 +33,8 @@ const HeroBulkImageUploadForm = ({
     setLoading(true);
     setStatusMessage("");
 
-    const formData = new FormData();
-    images.forEach((image) => {
-      if (image) {
-        formData.append("image", image);
-      }
-    });
-
     try {
-      const response = await axios.post(`/settings/${endpoint}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await uploadHeroImages(endpoint, images, token);
 
       if (response.status === 201) {
         setStatusMessage("Images uploaded successfully!");

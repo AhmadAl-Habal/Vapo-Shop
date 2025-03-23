@@ -19,7 +19,7 @@ const LoginPage = () => {
     setLoading(true);
     setLoginStatus("");
     try {
-      const response = await axios.post("/user/login/", {
+      const response = await axios.post("/user/login", {
         user_name: data.username,
         password: data.password,
       });

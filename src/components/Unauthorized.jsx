@@ -1,5 +1,5 @@
 import React from "react";
-import BackButton from "../components/BackButton"; // Adjust the import if needed
+import BackButton from "../components/BackButton";
 
 const Unauthorized = () => {
   return (

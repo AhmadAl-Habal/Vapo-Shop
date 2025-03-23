@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "../api/axios";
-import { FaChevronDown, FaChevronUp, FaEdit } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
+import { deleteItem } from "../api/axios";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-
+import {
+  getSubCategoriesForSingleCategory,
+  createSubCategory,
+} from "../api/axios";
 const SubcategoriesList = ({ refresh, setRefresh, category }) => {
   const [loadingSubCategories, setLoadingSubCategories] = useState(false);
   const [popupView, setPopupView] = useState(false);
@@ -12,6 +13,7 @@ const SubcategoriesList = ({ refresh, setRefresh, category }) => {
   const [allSubCategories, setAllSubCategories] = useState([]);
   const [statusMessage, setStatusMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const token = localStorage.getItem("token");
   const {
     register,
     handleSubmit,
@@ -22,43 +24,31 @@ const SubcategoriesList = ({ refresh, setRefresh, category }) => {
 
   useEffect(() => {
     setStatusMessage("");
-    setLoadingSubCategories(false); // Ensure the loader doesn't stay on for invalid cases
+    setLoadingSubCategories(false);
 
-    // Check if category is valid before executing the fetch request
     if (!category || Object.keys(category).length === 0) {
-      setAllSubCategories([]); // Clear any previously loaded subcategories
+      setAllSubCategories([]);
       return;
     }
 
     setLoadingSubCategories(true);
-    const fetchData = async () => {
+
+    const getSubCategories = async () => {
       try {
-        const response = await axios.get("/sub_category", {
-          params: { main_category_id: category._id },
-        });
+        const data = await getSubCategoriesForSingleCategory(category._id);
+        setAllSubCategories(data);
 
-        if (response.status === 200) {
-          setAllSubCategories(response.data.data);
-
-          // Handle the case when subcategories list is empty
-          if (response.data.data.length === 0) {
-            setStatusMessage(
-              "There is no Subcategories yet for this category."
-            );
-          }
-        }
-      } catch (err) {
-        if (err.response?.status === 404) {
+        if (data.length === 0) {
           setStatusMessage("There is no Subcategories yet for this category.");
-        } else {
-          setStatusMessage("Error fetching Subcategories. Please try again.");
         }
+      } catch (error) {
+        setStatusMessage(error.message);
       } finally {
         setLoadingSubCategories(false);
       }
     };
 
-    fetchData();
+    getSubCategories();
   }, [refresh, category]);
 
   const onSubmit = async (data) => {
@@ -66,39 +56,30 @@ const SubcategoriesList = ({ refresh, setRefresh, category }) => {
     setStatusMessage("");
 
     try {
-      const formData = new FormData();
-      formData.append("name", data.name);
-      if (data.description) {
-        formData.append("description", data.description);
-      }
-      formData.append("main_category_id", category._id);
-      const response = await axios.post("/sub_category", formData);
+      const response = await createSubCategory(data, category._id, token);
 
       if (response.status === 201) {
-        setStatusMessage("Catgegory created successfully!");
-
+        setStatusMessage("SubCategory created successfully!");
         setRefresh((prev) => !prev);
       } else {
-        setStatusMessage("Failed to create the Catgegory.");
+        setStatusMessage("Failed to create the SubCategory.");
       }
     } catch (error) {
-      console.error(
-        "Error creating Category:",
-        error.response?.data || error.message
-      );
-      console.log("Error response:", error.response);
-      setStatusMessage("Error creating Category. Please try again.");
+      console.error("Error creating SubCategory:", error);
+      setStatusMessage("Error creating SubCategory. Please try again.");
     } finally {
       setLoading(false);
     }
   };
+
   if (!category || Object.keys(category).length === 0) {
     return <></>;
   }
 
   const deleteSubCategory = async (subId) => {
     try {
-      const response = await axios.delete(`/sub_category/${subId}`);
+      await deleteItem("sub_category", subId, token);
+
       setPopupView(false);
       setAllSubCategories((prev) =>
         prev.filter((subCategory) => subCategory._id !== subId)

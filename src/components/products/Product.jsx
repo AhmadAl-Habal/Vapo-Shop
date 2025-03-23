@@ -2,16 +2,38 @@ import React, { useState, useEffect, useRef } from "react";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { deleteItem } from "../../api/axios";
-import { FaEdit } from "react-icons/fa";
-
+import { FaEdit, FaEye, FaEyeSlash } from "react-icons/fa";
+import { toggleHiddenStatus } from "../../api/axios.js";
 const Product = ({ product }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [popupView, setPopupView] = useState(false);
   const productRef = useRef(null);
 
+  const [hidden, setHidden] = useState(product.is_hidden ? true : false);
+  const [loading, setLoading] = useState(false);
   const storedDollarValue =
     parseFloat(sessionStorage.getItem("dollar_value")) || 1;
   const token = localStorage.getItem("token");
+  if (hidden && !token) {
+    return;
+  }
+
+  const hideItem = async () => {
+    if (!token) return;
+    setLoading(true);
+    try {
+      const updatedHiddenStatus = await toggleHiddenStatus(
+        product._id,
+        hidden,
+        token
+      );
+      setHidden(updatedHiddenStatus);
+    } catch (error) {
+      console.error("Error updating visibility:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -43,7 +65,7 @@ const Product = ({ product }) => {
         ref={productRef}
         className={`transform transition-all duration-500 ease-in-out ${
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-        } flex flex-col justify-center items-center border border-white rounded-lg bg-white p-2 shadow-lg`}
+        } flex flex-col justify-center items-center border border-white rounded-lg ${hidden ? "bg-gray-500 " : "bg-white"} p-2 shadow-lg`}
       >
         <Link to={`/product/${product._id}`}>
           <img
@@ -109,6 +131,7 @@ const Product = ({ product }) => {
                   onClick={() => setPopupView(true)}
                   size={30}
                 />
+
                 <Link to={`/edit-product/${product._id}`}>
                   <FaEdit
                     size={30}
@@ -116,6 +139,22 @@ const Product = ({ product }) => {
                     className="cursor-pointer"
                   />
                 </Link>
+
+                {hidden ? (
+                  <FaEyeSlash
+                    size={30}
+                    color="gray"
+                    className={`cursor-pointer ${loading ? "opacity-50" : ""}`}
+                    onClick={!loading ? hideItem : null}
+                  />
+                ) : (
+                  <FaEye
+                    size={30}
+                    color="green"
+                    className={`cursor-pointer ${loading ? "opacity-50" : ""}`}
+                    onClick={!loading ? hideItem : null}
+                  />
+                )}
               </div>
             )}
           </div>
