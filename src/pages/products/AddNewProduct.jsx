@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "../../api/axios";
+import {
+  createProduct,
+  getCategories,
+  getSubCategories,
+} from "../../api/axios";
 import { useNavigate, Link } from "react-router-dom";
 import { Switch } from "@radix-ui/react-switch";
 import BackButton from "../../components/BackButton";
@@ -35,31 +39,7 @@ const AddNewProduct = () => {
     setStatusMessage("");
 
     try {
-      const formData = new FormData();
-      formData.append("name", data.name);
-      if (data.description) {
-        formData.append("description", data.description);
-      }
-      formData.append("price", data.price);
-      if (data.discount) {
-        formData.append("discount", data.discount);
-      }
-      formData.append("main_category_id", data.main_category_id);
-      if (data.sub_category_id) {
-        formData.append("sub_category_id", data.sub_category_id);
-      }
-      Array.from(data.image).forEach((file) => {
-        formData.append("image", file);
-      });
-
-      formData.append("is_hidden", data.hidden);
-
-      const response = await axios.post("/item", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          auth: token,
-        },
-      });
+      const response = await createProduct(data, token);
 
       if (response.status === 201) {
         setStatusMessage("Product created successfully!, Redirecting...");
@@ -72,10 +52,7 @@ const AddNewProduct = () => {
         setStatusMessage("Failed to create the product.");
       }
     } catch (error) {
-      console.error(
-        "Error creating product:",
-        error.response?.data || error.message
-      );
+      console.error("Error creating product:", error);
       setStatusMessage("Error creating product. Please try again.");
     } finally {
       setLoading(false);
@@ -85,20 +62,15 @@ const AddNewProduct = () => {
     setLoadingCategories(true);
     const fetchData = async () => {
       try {
-        const response = await axios.get("/category");
-        if (response.status == "200") {
-          setAllCategories(response.data.data);
-        } else setAllCategories(response.status);
+        const categories = await getCategories();
+        setAllCategories(categories);
 
-        const response2 = await axios.get("/sub_category");
+        const response2 = await getSubCategories();
 
-        if (response2.status == "200") {
-          setAllSubCategories(response2.data.data);
-          setFilteredSubCategories(response2.data.data);
-        }
+        setAllSubCategories(response2);
+        setFilteredSubCategories(response2);
       } catch (err) {
-        console.log();
-        err.message;
+        setError(err.message);
       } finally {
         setLoadingCategories(false);
       }

@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import axios from "../api/axios";
-import { updateSocialMediaLink } from "../api/axios";
+
+import {
+  updateSocialMediaLink,
+  updateSettings,
+  getSettingsRequest,
+} from "../api/axios";
 
 import Whatsapp from "../components/social links/Whatsapp";
 import HeroImageField from "../components/HeroImageField";
 import HeroBulkImageUploadForm from "../components/HeroBulkImageUploadForm";
 import BackButton from "../components/BackButton";
 const SettingsPage = () => {
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    clearErrors,
-    formState: { errors },
-  } = useForm();
   const token = localStorage.getItem("token");
   const [dollarValue, setDollarValue] = useState("");
   const [settings, setSettings] = useState({});
@@ -24,118 +20,78 @@ const SettingsPage = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const [popupView, setPopupView] = useState(false);
-
   const [facebookLink, setFacebookLink] = useState("");
   const [telegramLink, setTelegramLink] = useState("");
   const [whatsappChannelLink, setWhatsappChannelLink] = useState("");
   const [instagramLink, setInstagramLink] = useState("");
   const [whatsappLink, setWhatsappLink] = useState("");
   const [youtubeLink, setYoutubeLink] = useState("");
-  const storedToken = localStorage.getItem("token");
+
   const [refresh, setRefresh] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/settings");
+        const settingsData = await getSettingsRequest();
 
-        if (response.status == "200") {
-          setDollarValue(response.data.data[0].dollar_price);
-          setAboutUs(response.data.data[0].about_us);
-          setFacebookLink(response.data.data[0].social_media.facebook);
-          setTelegramLink(response.data.data[0].social_media.telegram);
-          setWhatsappChannelLink(
-            response.data.data[0].social_media.whatsapp_channel
-          );
-          setInstagramLink(response.data.data[0].social_media.instagram);
-          setWhatsappLink(response.data.data[0].social_media.whatsapp);
-          setYoutubeLink(response.data.data[0].social_media.youtube);
+        if (settingsData) {
+          setDollarValue(settingsData.dollar_price);
+          setAboutUs(settingsData.about_us);
+          setFacebookLink(settingsData.social_media.facebook);
+          setTelegramLink(settingsData.social_media.telegram);
+          setWhatsappChannelLink(settingsData.social_media.whatsapp_channel);
+          setInstagramLink(settingsData.social_media.instagram);
+          setWhatsappLink(settingsData.social_media.whatsapp);
+          setYoutubeLink(settingsData.social_media.youtube);
 
-          setSettings(response.data.data[0]);
-          sessionStorage.setItem(
-            "settings",
-            JSON.stringify(response.data.data[0])
-          );
-        } else setSettings(response.status);
+          setSettings(settingsData);
+          sessionStorage.setItem("settings", JSON.stringify(settingsData));
+        }
       } catch (err) {
-        console.log("error");
+        console.error("Error fetching settings:", err.message);
       }
     };
+
     fetchData();
   }, [refresh]);
 
   const ChangeDollarValue = async () => {
     setStatusMessage("");
-
     setLoading(true);
 
     try {
-      const response = await axios.put(
-        "/settings/dollar",
-        { dollar_price: dollarValue },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.status == 200) {
-        setStatusMessage("Dollar price changed successfully!");
-        //
-      } else {
-        setStatusMessage("Failed to change Dollar price");
-        //
-      }
+      await updateSettings("dollar_price", dollarValue, token);
+      setStatusMessage("Dollar price changed successfully!");
     } catch (error) {
-      console.error("Change Failed", error.response.data);
+      console.error("Change Failed", error.response?.data);
+      setStatusMessage("Failed to change Dollar price");
     } finally {
       setLoading(false);
     }
-  };
-  const handleChangeLink = (platform, link) => {
-    updateSocialMediaLink(platform, link, setLoading, setStatusMessage);
   };
 
   const changeAboutUs = async () => {
     setStatusMessage("");
-
     setLoading(true);
 
     try {
-      const response = await axios.put(
-        "/settings/about_us",
-        { about_us: aboutUs },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.status == 200) {
-        setStatusMessage("About us changed successfully!");
-      } else {
-        setStatusMessage("Failed to change About Us");
-        //
-      }
+      await updateSettings("about_us", aboutUs, token);
+      setStatusMessage("About Us changed successfully!");
     } catch (error) {
-      console.error("Change Failed", error.response.data);
+      console.error("Change Failed", error.response?.data);
+      setStatusMessage("Failed to change About Us");
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleChangeLink = (platform, link) => {
+    updateSocialMediaLink(platform, link, setLoading, setStatusMessage, token);
   };
 
   if (!token) return <Unauthorized />;
   return (
     <>
-      <div
-        className={
-          popupView
-            ? "relative min-h-[100vh] bg-black bg-opacity-50 opacity-50"
-            : "relative min-h-[100vh]"
-        }
-      >
+      <div className={"relative min-h-[100vh]"}>
         <div className="relative space-y-4 w-[90vw] mx-auto bg-transparent py-7">
           <BackButton />
           <div>

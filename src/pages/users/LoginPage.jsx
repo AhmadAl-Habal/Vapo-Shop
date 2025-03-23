@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import axios from "../../api/axios";
+import { loginUser } from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 
 import BackButton from "../../components/BackButton";
@@ -18,21 +18,13 @@ const LoginPage = () => {
   const onSubmit = async (data) => {
     setLoading(true);
     setLoginStatus("");
+
     try {
-      const response = await axios.post("/user/login", {
-        user_name: data.username,
-        password: data.password,
-      });
-      console.log("Response received:", response.message);
-      if (response.status == 200) {
-        setAuthToken(response.data.data.token);
-        setLoginStatus("Login successful, redirecting...");
-      } else {
-        setLoginStatus(response.message);
-      }
+      const userData = await loginUser(data.username, data.password);
+      setAuthToken(userData.token);
+      setLoginStatus("Login successful, redirecting...");
     } catch (error) {
-      console.error("Login failed:", error.response.data);
-      setLoginStatus(error.response.data.message);
+      setLoginStatus(error.message || "Login failed, please try again.");
     } finally {
       setLoading(false);
     }

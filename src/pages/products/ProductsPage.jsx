@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import axios from "../../api/axios";
+import {
+  getCategoryById,
+  getSubCategories,
+  getProductsByCategory,
+  getDiscountedProductsRequest,
+} from "../../api/axios";
 import { Link, useParams } from "react-router-dom";
 import { CiCirclePlus } from "react-icons/ci";
 import Product from "../../components/products/Product";
@@ -8,12 +13,12 @@ import BackButton from "../../components/BackButton";
 
 const ProductsPage = () => {
   const { id } = useParams();
-  const token = localStorage.getItem("token") || ""; // Removed unnecessary state
+  const token = localStorage.getItem("token") || "";
   const [filteredSubCategory, setFilteredSubCategory] = useState("");
   const [allSubCategories, setAllSubCategories] = useState([]);
-  const [items, setItems] = useState([]); // Original items from API
-  const [discountedItems, setDiscountedItems] = useState([]); // Discounted items
-  const [filteredItems, setFilteredItems] = useState([]); // Items after filtering
+  const [items, setItems] = useState([]);
+  const [discountedItems, setDiscountedItems] = useState([]);
+  const [filteredItems, setFilteredItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [categoryDetails, setCategoryDetails] = useState({});
@@ -23,26 +28,23 @@ const ProductsPage = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const [categoryRes, subCategoryRes, itemsRes] = await Promise.all([
-          axios.get(`/category/${id}`),
-          axios.get("/sub_category"),
-          axios.get("/item", {
-            params: { main_category_id: id, include_hidden: true },
-          }),
+        const [categoryData, subCategories, items] = await Promise.all([
+          getCategoryById(id),
+          getSubCategories(),
+          getProductsByCategory(id),
         ]);
 
-        const categoryData = categoryRes.data.data;
         setCategoryDetails(categoryData);
         setOffersCategory(categoryData.name.includes("عروض"));
 
         setAllSubCategories(
-          subCategoryRes.data.data.filter(
+          subCategories.filter(
             (subCategory) => subCategory.main_category_id?._id === id
           )
         );
 
-        setItems(itemsRes.data.data.items);
-        setFilteredItems(itemsRes.data.data.items);
+        setItems(items);
+        setFilteredItems(items);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -56,12 +58,19 @@ const ProductsPage = () => {
   useEffect(() => {
     if (!offersCategory) return;
 
-    setLoading(true);
-    axios
-      .get("/item", { params: { discount: 1 } })
-      .then((response) => setDiscountedItems(response.data.data.items))
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
+    const fetchDiscountedProducts = async () => {
+      setLoading(true);
+      try {
+        const items = await getDiscountedProductsRequest();
+        setDiscountedItems(items);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDiscountedProducts();
   }, [offersCategory]);
 
   const handleFilterChange = (e) => {

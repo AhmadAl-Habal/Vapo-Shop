@@ -149,6 +149,24 @@ export const createSubCategory = async (data, categoryId, token) => {
 
 // General Requests
 
+export const loginUser = async (username, password) => {
+  try {
+    const response = await axiosInstance.post("/user/login", {
+      user_name: username,
+      password: password,
+    });
+
+    if (response.status === 200) {
+      return response.data.data;
+    } else {
+      throw new Error(response.message || "Login failed");
+    }
+  } catch (error) {
+    console.error("Login error:", error.response?.data || error.message);
+    throw error.response?.data || new Error("Unexpected error occurred");
+  }
+};
+
 export const deleteItem = async (endpoint, id, token) => {
   try {
     const response = await axiosInstance.delete(`/${endpoint}/${id}`, {
@@ -246,6 +264,95 @@ export const getProductDetails = async (id) => {
   }
 };
 
+export const getProductsByCategory = async (id) => {
+  try {
+    const response = await axiosInstance.get("/item", {
+      params: { main_category_id: id, include_hidden: true },
+    });
+
+    if (response.status === 200) {
+      return response.data.data.items;
+    } else {
+      throw new Error("Failed to fetch Products.");
+    }
+  } catch (error) {
+    console.error("Error fetching Products:", error);
+    throw error;
+  }
+};
+
+export const getDiscountedProductsRequest = async () => {
+  try {
+    const response = await axiosInstance.get("/item", {
+      params: { discount: 1 },
+    });
+
+    if (response.status === 200) {
+      return response.data.data.items;
+    } else {
+      throw new Error("Failed to fetch discounted Products.");
+    }
+  } catch (error) {
+    console.error("Error fetching discounted Products:", error);
+    throw error;
+  }
+};
+
+export const createProduct = async (data, token) => {
+  try {
+    const formData = new FormData();
+    formData.append("name", data.name);
+    if (data.description) formData.append("description", data.description);
+    formData.append("price", data.price);
+    if (data.discount) formData.append("discount", data.discount);
+    formData.append("main_category_id", data.main_category_id);
+    if (data.sub_category_id)
+      formData.append("sub_category_id", data.sub_category_id);
+
+    // Append images
+    Array.from(data.image).forEach((file) => {
+      formData.append("image", file);
+    });
+
+    formData.append("is_hidden", data.hidden);
+
+    const response = await axiosInstance.post("/item", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        auth: token,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+export const updateProduct = async (id, data, token) => {
+  try {
+    const formData = new FormData();
+    formData.append("name", data.name);
+
+    if (data.price) formData.append("price", data.price);
+    if (data.discount) formData.append("discount", data.discount);
+    if (data.description) formData.append("description", data.description);
+    if (data.main_category_id)
+      formData.append("main_category_id", data.main_category_id);
+    if (data.sub_category_id)
+      formData.append("sub_category_id", data.sub_category_id);
+    formData.append("is_hidden", data.is_hidden);
+
+    const response = await axiosInstance.put(`/item/${id}`, formData, {
+      headers: { auth: token },
+    });
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
 export const toggleHiddenStatus = async (productId, hidden, token) => {
   try {
     const newHiddenStatus = !hidden;
@@ -268,23 +375,19 @@ export const toggleHiddenStatus = async (productId, hidden, token) => {
 
 // Social Media Requests
 
-export const addWhatsappProfile = async (data) => {
+export const addWhatsappProfile = async (data, token) => {
   try {
     const formData = new FormData();
     formData.append("link", data.link);
     formData.append("phone_number", data.phone_number);
     formData.append("name", data.name);
 
-    const response = await axiosInstance.post(
-      "/settings/whatsapp",
-      formData
-      //    {
-      //   headers: {
-      //     "Content-Type": "multipart/form-data",
-      //   },
-      // }
-    );
-
+    const response = await axiosInstance.post("/settings/whatsapp", formData, {
+      headers: {
+        auth: token,
+      },
+    });
+    sessionStorage.setItem("settings", JSON.stringify(response.data.data));
     return response.data.data.social_media.whatsapp;
   } catch (error) {
     console.error("Error adding profile:", error);
@@ -315,6 +418,8 @@ export const updateSocialMediaLink = async (
     );
 
     if (response.status === 200) {
+      sessionStorage.setItem("settings", JSON.stringify(response.data.data));
+
       setStatusMessage(`${platform} link changed successfully!`);
     } else {
       setStatusMessage(`Failed to change ${platform} link.`);
@@ -420,10 +525,30 @@ export const getSettingsRequest = async () => {
     const response = await axiosInstance.get("/settings");
 
     if (response.status === 200) {
-      return response.data.data[0]; // Return the first settings object
+      return response.data.data[0];
     }
   } catch (error) {
     throw new Error(error.response?.data || "Error fetching settings");
+  }
+};
+
+export const updateSettings = async (field, value, token) => {
+  try {
+    const response = await axiosInstance.put(
+      `/settings/${field}`,
+      { [field]: value },
+      {
+        headers: { "Content-Type": "application/json", auth: token },
+      }
+    );
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error("Failed to update settings");
+    }
+  } catch (error) {
+    throw new Error(error.response?.data || "Error updating settings");
   }
 };
 

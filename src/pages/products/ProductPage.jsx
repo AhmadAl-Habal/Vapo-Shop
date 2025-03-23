@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import axios from "../../api/axios";
+import { getProductDetails } from "../../api/axios";
 import Spinner from "../../components/Spinner";
 
 import BackButton from "../../components/BackButton";
@@ -28,14 +28,11 @@ const ProductPage = () => {
     setLoading(true);
     const fetchData = async () => {
       try {
-        const response = await axios.get(`/item/${id}`);
+        const response = await getProductDetails(id);
 
-        if (response.status === 200) {
-          const data = response.data.data;
-          setProductDetails(data);
-          if (data.images?.length) {
-            setMainImage(data.images[0]);
-          }
+        setProductDetails(response);
+        if (response.images?.length) {
+          setMainImage(response.images[0]);
         }
       } catch (err) {
         console.log(err.message);

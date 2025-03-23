@@ -28,7 +28,7 @@ const Whatsapp = ({ accounts }) => {
   const addProfile = async (data) => {
     setLoading(true);
     try {
-      const newProfiles = await addWhatsappProfile(data);
+      const newProfiles = await addWhatsappProfile(data, token);
       setProfiles(newProfiles);
       reset();
     } catch (error) {

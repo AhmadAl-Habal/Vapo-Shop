@@ -60,6 +60,10 @@ const HeroImageField = ({ inputDetails, endpoint, name }) => {
   const editImage = async (index) => {
     try {
       const updatedFile = imagePreviews[index];
+      if (!updatedFile || typeof updatedFile === "string") {
+        alert("Please select an image before updating.");
+        return;
+      }
 
       await editHeroImages(endpoint, index, updatedFile, token);
 

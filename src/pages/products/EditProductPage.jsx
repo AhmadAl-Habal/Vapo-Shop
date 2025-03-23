@@ -6,7 +6,12 @@ import Unauthorized from "../../components/Unauthorized";
 import ImageField from "../../components/ImageField";
 import BulkImageUploadForm from "../../components/BulkImageUploadForm";
 import BackButton from "../../components/BackButton";
-import { getCategories, getProductDetails } from "../../api/axios";
+import {
+  getCategories,
+  getProductDetails,
+  updateProduct,
+  getSubCategories,
+} from "../../api/axios";
 import { Switch } from "@radix-ui/react-switch";
 const EditProductPage = () => {
   const navigate = useNavigate();
@@ -41,12 +46,10 @@ const EditProductPage = () => {
         const categories = await getCategories();
         setAllCategories(categories);
 
-        const response2 = await axios.get("/sub_category");
+        const response2 = await getSubCategories();
 
-        if (response2.status === 200) {
-          setAllSubCategories(response2.data.data);
-          setFilteredSubCategories(response2.data.data);
-        }
+        setAllSubCategories(response2);
+        setFilteredSubCategories(response2);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -73,13 +76,14 @@ const EditProductPage = () => {
           is_hidden: productData.is_hidden || false,
         });
 
+        setSelectedCategoryId(productData.main_category_id?._id || "");
+
         const filtered = allSubCategories.filter(
           (subCategory) =>
             subCategory.main_category_id &&
             subCategory.main_category_id._id ===
               productData.main_category_id?._id
         );
-
         setFilteredSubCategories(filtered);
 
         reset((prevData) => ({
@@ -101,49 +105,15 @@ const EditProductPage = () => {
     setStatusMessage("");
 
     try {
-      const formData = new FormData();
-      formData.append("name", data.name);
-
-      if (data.price) {
-        formData.append("price", data.price);
-      }
-
-      if (data.discount) {
-        formData.append("discount", data.discount);
-      }
-      if (data.description) {
-        formData.append("description", data.description);
-      }
-
-      if (data.main_category_id) {
-        formData.append("main_category_id", data.main_category_id);
-      }
-      if (data.sub_category_id) {
-        formData.append("sub_category_id", data.sub_category_id);
-      }
-      formData.append("is_hidden", data.is_hidden);
-      const response = await axios.put(`/item/${id}`, formData, {
-        headers: {
-          auth: token,
-        },
-      });
-
-      if (response.status === 200) {
-        setStatusMessage("Product edited successfully!");
-      } else {
-        setStatusMessage("Failed to edit the product.");
-      }
+      await updateProduct(id, data, token);
+      setStatusMessage("Product updated successfully!");
     } catch (error) {
-      console.error(
-        "Error Editing product:",
-        error.response?.data || error.message
-      );
-      setStatusMessage("Error Editing product. Please try again.");
+      console.error("Error updating Product:", error);
+      setStatusMessage("Failed to update Product.");
     } finally {
       setLoading(false);
     }
   };
-
   const handleCategoryChange = (e) => {
     const selectedCategoryId = e.target.value;
     setSelectedCategoryId(selectedCategoryId);
